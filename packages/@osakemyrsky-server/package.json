@@ -49,6 +49,7 @@
     "@types/node": "14.17.15",
     "@typescript-eslint/eslint-plugin": "5.0.0",
     "@typescript-eslint/parser": "5.0.0",
+    "audit-ci": "5.1.2",
     "eslint": "8.0.1",
     "eslint-config-prettier": "8.3.0",
     "eslint-import-resolver-typescript": "2.5.0",
@@ -61,6 +62,7 @@
   },
   "scripts": {
     "precommit": "lint-staged",
+    "audit-ci": "audit-ci --high --report-type=full",
     "prettify": "prettier --write .",
     "lint": "eslint **/*.ts",
     "migrate:make": "knex migrate:make",

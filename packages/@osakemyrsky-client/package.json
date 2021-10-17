@@ -28,6 +28,7 @@
     "@types/react": "17.0.30",
     "@typescript-eslint/eslint-plugin": "4.32.0",
     "@typescript-eslint/parser": "4.32.0",
+    "audit-ci": "5.1.2",
     "autoprefixer": "10.3.7",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
@@ -40,6 +41,7 @@
   },
   "scripts": {
     "precommit": "lint-staged",
+    "audit-ci": "audit-ci --high --report-type=full",
     "prettify": "prettier --write .",
     "lint": "NEXT_TELEMETRY_DISABLED=1 next lint",
     "dev": "NEXT_TELEMETRY_DISABLED=1 NODE_OPTIONS='--inspect' next dev -p 8080",

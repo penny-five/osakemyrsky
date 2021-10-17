@@ -10,6 +10,7 @@
   },
   "scripts": {
     "pre-commit": "lerna run --concurrency 1 --stream precommit --since HEAD --exclude-dependents",
+    "audit-ci": "lerna run --concurrency 1 --stream audit-ci --exclude-dependents",
     "prettify": "lerna run --concurrency 1 --stream prettify --exclude-dependents",
     "lint": "lerna run --concurrency 1 --stream lint --exclude-dependents",
     "prepare": "husky install || true",
