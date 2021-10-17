@@ -2,7 +2,7 @@
   "name": "osakemyrsky",
   "private": true,
   "engines": {
-    "node": "14"
+    "node": "16"
   },
   "devDependencies": {
     "husky": "7.0.2",

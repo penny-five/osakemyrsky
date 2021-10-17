@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import got from "got";
+import { gotScraping } from "got-scraping";
 
 import { NordnetSessionCache } from "./session-cache";
 import { NordnetInstrument, NordnetPaginatedResponse } from "./types";
@@ -12,15 +12,16 @@ export interface SearchInstrumentsParams {
 
 @Injectable()
 export class NordnetClient {
-  private httpClient: typeof got;
+  private httpClient: typeof gotScraping;
 
   private sessionCache: NordnetSessionCache = new NordnetSessionCache();
 
   constructor() {
-    this.httpClient = got.extend({
+    this.httpClient = gotScraping.extend({
       prefixUrl: "https://www.nordnet.fi/api/2",
       headers: {
-        "client-id": "NEXT"
+        "client-id": "NEXT",
+        referer: "https://www.nordnet.fi/"
       }
     });
   }

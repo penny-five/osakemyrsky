@@ -1,21 +1,20 @@
-import got from "got";
+import { gotScraping } from "got-scraping";
 import { CookieJar, Cookie } from "tough-cookie";
 
 export class NordnetSessionCache {
-  private httpClient: typeof got;
+  private httpClient: typeof gotScraping;
 
   private getSessionCookieTask: Promise<Cookie> | null = null;
 
   private sessionCookie: Cookie | null = null;
 
   constructor() {
-    this.httpClient = got.extend({
+    this.httpClient = gotScraping.extend({
       prefixUrl: "https://www.nordnet.fi/api/2",
       headers: {
-        accept: "*/*",
-        "client-id": "NEXT"
-      },
-      retry: 5
+        "client-id": "NEXT",
+        referer: "https://www.nordnet.fi/"
+      }
     });
   }
 
@@ -29,10 +28,7 @@ export class NordnetSessionCache {
         const cookieJar = new CookieJar();
 
         await this.httpClient.post("login/anonymous", {
-          cookieJar,
-          headers: {
-            "client-id": "NEXT"
-          }
+          cookieJar
         });
 
         const cookies = await cookieJar.getCookies("https://www.nordnet.fi");
