@@ -10,6 +10,8 @@ import { jwtConfig } from "./modules/config/jwt";
 import { DatabaseModule } from "./modules/database/database.module";
 import { DiagnosticsModule } from "./modules/diagnostics/diagnostics.module";
 import { LeagueModule } from "./modules/leagues/league.module";
+import { NordnetModule } from "./modules/nordnet/nordnet.module";
+import { StockModule } from "./modules/stocks/stock.module";
 import { UserModule } from "./modules/users/user.module";
 
 @Module({
@@ -39,6 +41,8 @@ import { UserModule } from "./modules/users/user.module";
     }),
     DiagnosticsModule,
     AuthModule,
+    NordnetModule,
+    StockModule,
     DatabaseModule,
     LeagueModule,
     UserModule
