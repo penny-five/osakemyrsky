@@ -1,0 +1,9 @@
+/.next/
+/build
+.gitignore
+.prettierignore
+.env.template
+Dockerfile.*
+*.ico
+*.svg
+yarn.lock

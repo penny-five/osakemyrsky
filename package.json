@@ -1,0 +1,21 @@
+{
+  "name": "osakemyrsky",
+  "private": true,
+  "engines": {
+    "node": "14"
+  },
+  "devDependencies": {
+    "husky": "7.0.2",
+    "lerna": "4.0.0"
+  },
+  "scripts": {
+    "pre-commit": "lerna run --concurrency 1 --stream precommit --since HEAD --exclude-dependents",
+    "prettify": "lerna run --concurrency 1 --stream prettify --exclude-dependents",
+    "lint": "lerna run --concurrency 1 --stream lint --exclude-dependents",
+    "prepare": "husky install || true",
+    "bootstrap": "lerna bootstrap",
+    "dev:start": "docker compose -p osakemyrsky up -d --build",
+    "dev:stop": "docker compose stop",
+    "dev:destroy": "docker compose down -v"
+  }
+}

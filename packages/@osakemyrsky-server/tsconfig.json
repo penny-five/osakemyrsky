@@ -1,0 +1,16 @@
+{
+  "extends": "@tsconfig/node14/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "typeRoots": ["./typings"]
+  },
+  "include": [
+    "./src/**/*.ts",
+    "./typings/**/*.d.ts",
+    "./migrations/**/*.ts",
+    "./migrations/migration.ts.stub",
+    "./knexfile.ts"
+  ]
+}

@@ -1,0 +1,5 @@
+.gitignore
+.prettierignore
+.env.template
+Dockerfile.*
+yarn.lock
