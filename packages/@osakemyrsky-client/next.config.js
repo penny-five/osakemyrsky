@@ -4,7 +4,8 @@
  * @type {import('next').NextConfig}
  */
 const config = {
-  reactStrictMode: true
+  reactStrictMode: true,
+  swcMinify: true
 };
 
 module.exports = config;
