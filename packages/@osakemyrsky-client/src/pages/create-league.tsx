@@ -3,11 +3,11 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { FunctionComponent } from "react";
 
+import Heading from "@/atoms/heading";
 import CreateLeagueForm, { CreateLeagueFormData } from "@/components/create-league-form";
 import LeagueList from "@/components/league-list";
-import Heading from "src/atoms/heading";
-import { useDefaultLeague } from "src/providers/default-league";
-import { League } from "src/types/league";
+import { useDefaultLeague } from "@/providers/default-league";
+import { League } from "@/types/league";
 
 interface CreateLeagueInput {
   data: {

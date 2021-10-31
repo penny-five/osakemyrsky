@@ -13,9 +13,9 @@ const Heading: FunctionComponent<HeadingProps> = ({ children, level }) => {
   return (
     <Tag
       className={classNames({
-        "text-4xl font-extrabold text-black-200": level === 1,
-        "text-3xl font-bold text-black-200": level === 2,
-        "text-xl font-extrabold text-black-200": level === 2
+        "text-4xl font-bold text-black-200": level === 1,
+        "text-5xl font-bold text-black-200": level === 2,
+        "text-xl font-extrabold text-black-200": level === 3
       })}
     >
       {children}

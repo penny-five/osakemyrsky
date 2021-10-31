@@ -50,8 +50,8 @@ const Navbar: FunctionComponent<NavbarProps> = ({ onSignOut }) => {
   };
 
   return (
-    <nav className="flex flex-col items-center w-full border-b-1 border-gray-100">
-      <div className="flex flex-grow items-stretch gap-4 py-5 px-8 w-full max-w-7xl">
+    <nav className="flex flex-col items-center w-full border-b-1 border-gray-200">
+      <div className="flex flex-grow items-stretch gap-4 py-5 px-8 w-full max-w-screen-desktop">
         <span className="w-14 h-14 bg-gray-200 rounded-full" />
         <Link href="/" passHref>
           <a className="flex items-center">
@@ -79,7 +79,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ onSignOut }) => {
         ) : null}
       </div>
       {defaultLeague && (
-        <ul className="flex flex-row flex-grow items-center px-8 w-full max-w-7xl">
+        <ul className="flex flex-row flex-grow items-center px-8 w-full max-w-screen-desktop">
           <NavbarNavigationLink target={`/leagues/${defaultLeague.id}`}>Liigapörssi</NavbarNavigationLink>
           <NavbarNavigationLink target="/my-portfolio">Oma salkku</NavbarNavigationLink>
           <NavbarNavigationLink target="/marketplace">Osta/myy osakkeita</NavbarNavigationLink>

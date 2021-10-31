@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
 
-import Heading from "src/atoms/heading";
+import Heading from "@/atoms/heading";
 
 const MyPortfolio: FunctionComponent = () => {
   return (

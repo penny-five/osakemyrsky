@@ -3,11 +3,16 @@
   "compilerOptions": {
     "strict": true,
     "baseUrl": ".",
+    "allowJs": true,
     "paths": {
-      "@/atoms/*": ["./src/atoms"],
+      "@/apollo/*": ["./src/apollo/*"],
+      "@/atoms/*": ["./src/atoms/*"],
       "@/components/*": ["./src/components/*"],
+      "@/layouts/*": ["./src/layouts/*"],
       "@/pages/*": ["./src/pages/*"],
-      "@/styles/*": ["./styles/*"]
+      "@/providers/*": ["./src/providers/*"],
+      "@/styles/*": ["./styles/*"],
+      "@/types/*": ["./src/types/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

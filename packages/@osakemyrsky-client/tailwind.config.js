@@ -14,6 +14,9 @@ module.exports = {
     fontFamily: {
       sans: "Inter"
     },
+    screens: {
+      desktop: "1400px"
+    },
     borderWidth: {
       DEFAULT: "1px",
       0: "0",
@@ -43,6 +46,9 @@ module.exports = {
         200: "#4E5EEA",
         100: "#C1C5EC"
       },
+      forest: {
+        300: "#486739"
+      },
       red: {
         200: "#EA4E4E",
         100: "#F59999"
@@ -50,7 +56,9 @@ module.exports = {
     },
     extend: {
       fontSize: {
-        base: ["0.9375rem", "1.5rem"]
+        base: ["0.9375rem", "1.5rem"],
+        lg: ["1rem", "1.75rem"],
+        "5xl": ["2.6rem", "1"]
       }
     }
   },
