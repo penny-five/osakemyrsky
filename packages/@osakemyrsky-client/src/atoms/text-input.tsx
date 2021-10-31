@@ -1,27 +1,39 @@
 import classNames from "classnames";
-import React, { FunctionComponent } from "react";
+import React, { ChangeEventHandler, FunctionComponent } from "react";
 
-export interface TextInputProps {
-  maxLength?: number;
-  placeholder?: string;
-  onChange: (value: string) => void;
-}
+export type TextInputProps =
+  | {
+      maxLength?: number;
+      placeholder?: string;
+    } & (
+      | { type?: "text"; value?: number | string; onChange?: (value: string) => void }
+      | { type?: "number"; value?: number; onChange?: (value: number) => void }
+    );
 
-const TextInput: FunctionComponent<TextInputProps> = ({ maxLength, placeholder, onChange }) => {
+const TextInput: FunctionComponent<TextInputProps> = ({ type, value, maxLength, placeholder, onChange }) => {
+  const onInputChange: ChangeEventHandler<HTMLInputElement> = event => {
+    if (onChange) {
+      const value = type === "number" ? parseInt(event.target.value, 10) : event.target.value;
+      onChange(value as never);
+    }
+  };
+
   return (
     <input
       className={classNames({
         "font-normal text-base placeholder-gray-400 border-black-100 rounded-md": true
       })}
-      type="text"
+      type={type}
+      value={value}
       maxLength={maxLength}
       placeholder={placeholder}
-      onChange={event => onChange(event.target.value)}
+      onChange={onInputChange}
     />
   );
 };
 
 TextInput.defaultProps = {
+  type: "text",
   onChange: () => {
     // noop
   }

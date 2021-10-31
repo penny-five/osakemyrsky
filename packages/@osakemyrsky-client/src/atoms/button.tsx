@@ -7,18 +7,21 @@ export enum ButtonPriority {
 }
 
 export interface ButtonProps {
+  className?: string;
   priority?: ButtonPriority;
+  type?: "button" | "submit";
   disabled?: boolean;
   onClick?: () => void;
   icon?: JSX.Element;
 }
 
-const Button: FunctionComponent<ButtonProps> = ({ children, priority, disabled, icon, onClick }) => {
+const Button: FunctionComponent<ButtonProps> = ({ children, className, priority, type, disabled, icon, onClick }) => {
   return (
     <button
+      type={type}
       disabled={disabled}
       onClick={onClick}
-      className={classNames({
+      className={classNames(className, {
         "flex items-center py-3 px-6 border-1 rounded-md border-transparent font-semibold ": true,
         "focus:ring-2 focus:ring-blue-200": true,
         "pl-4": icon != null,
@@ -41,6 +44,7 @@ const Button: FunctionComponent<ButtonProps> = ({ children, priority, disabled, 
 Button.defaultProps = {
   priority: ButtonPriority.PRIMARY,
   disabled: false,
+  type: "button",
   onClick: () => {
     /* noop */
   }

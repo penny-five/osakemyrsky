@@ -8,7 +8,7 @@ import Button, { ButtonPriority } from "../../atoms/button";
 import Heading from "../../atoms/heading";
 
 import NavbarLeagueSelector from "./navbar-league-selector";
-import NavbarNavigationLink from "./navbar-navigation-link";
+import NavbarNavigationLink from "./navbar-tab";
 import NavbarUserDropdown from "./navbar-user-dropdown";
 import NavbarUserDropdownItem from "./navbar-user-dropdown-item";
 

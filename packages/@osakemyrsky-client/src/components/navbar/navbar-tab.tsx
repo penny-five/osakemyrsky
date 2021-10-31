@@ -3,11 +3,11 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { FunctionComponent } from "react";
 
-export interface NavbarNavigationLinkProps {
+export interface NavbarTabProps {
   target: string;
 }
 
-const NavbarNavigationLink: FunctionComponent<NavbarNavigationLinkProps> = ({ children, target }) => {
+const NavbarTab: FunctionComponent<NavbarTabProps> = ({ children, target }) => {
   const router = useRouter();
 
   const isActive = router.asPath === target;
@@ -23,6 +23,7 @@ const NavbarNavigationLink: FunctionComponent<NavbarNavigationLinkProps> = ({ ch
         <a
           className={classNames({
             "relative py-2 text-sm font-semibold text-black-200 after:absolute after:border-b-2": true,
+            "after:transition-colors": true,
             "!text-bronze-200 after:top-full after:left-0 after:right-0 after:border-bronze-200": isActive
           })}
         >
@@ -33,4 +34,4 @@ const NavbarNavigationLink: FunctionComponent<NavbarNavigationLinkProps> = ({ ch
   );
 };
 
-export default NavbarNavigationLink;
+export default NavbarTab;

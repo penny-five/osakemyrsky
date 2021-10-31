@@ -26,7 +26,7 @@ export interface StockFinderProps {
   onSelect: (stock: Stock) => void;
 }
 
-const StockFinder: FunctionComponent<StockFinderProps> = ({}) => {
+const StockFinder: FunctionComponent<StockFinderProps> = ({ onSelect }) => {
   const [searchphrase, setSearchphrase] = useState("");
 
   const { data: session } = useSession();
@@ -50,7 +50,7 @@ const StockFinder: FunctionComponent<StockFinderProps> = ({}) => {
       {data?.stocks && data.stocks.length > 0 ? (
         <ul>
           {data?.stocks.map(stock => (
-            <SimpleStockItem key={stock.symbol} stock={stock} />
+            <SimpleStockItem key={stock.symbol} stock={stock} onClick={() => onSelect(stock)} />
           ))}
         </ul>
       ) : loading ? (
