@@ -7,15 +7,7 @@ COPY yarn.lock .
 
 RUN yarn install
 
-COPY tsconfig.json .
-COPY next-env.d.ts .
-COPY next.config.js .
-COPY postcss.config.js .
-COPY tailwind.config.js .
-COPY public public
-COPY styles styles
-COPY typings typings
-COPY src src
+COPY . .
 
 RUN yarn build
 

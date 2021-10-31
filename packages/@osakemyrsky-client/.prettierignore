@@ -2,6 +2,7 @@
 /build
 .gitignore
 .prettierignore
+.dockerignore
 .env.template
 Dockerfile.*
 *.ico

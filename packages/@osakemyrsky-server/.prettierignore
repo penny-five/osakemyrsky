@@ -1,5 +1,6 @@
 .gitignore
 .prettierignore
+.dockerignore
 .env.template
 Dockerfile.*
 yarn.lock

@@ -7,10 +7,7 @@ COPY yarn.lock .
 
 RUN yarn install
 
-COPY tsconfig.json .
-COPY src src
-COPY migrations migrations
-COPY typings typings
+COPY . .
 
 RUN yarn build
 
