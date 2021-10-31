@@ -12,9 +12,10 @@ import NavbarNavigationLink from "./navbar-navigation-link";
 import NavbarUserDropdown from "./navbar-user-dropdown";
 import NavbarUserDropdownItem from "./navbar-user-dropdown-item";
 
-import { useDefaultLeague } from "src/providers/default-league";
-import { useUser } from "src/providers/user";
-import { League } from "src/types/league";
+import Logo from "@/atoms/logo";
+import { useDefaultLeague } from "@/providers/default-league";
+import { useUser } from "@/providers/user";
+import { League } from "@/types/league";
 
 export interface NavbarProps {
   onSignOut: () => void;
@@ -52,7 +53,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ onSignOut }) => {
   return (
     <nav className="flex flex-col items-center w-full border-b-1 border-gray-200">
       <div className="flex flex-grow items-stretch gap-4 py-5 px-8 w-full max-w-screen-desktop">
-        <span className="w-14 h-14 bg-gray-200 rounded-full" />
+        <Logo />
         <Link href="/" passHref>
           <a className="flex items-center">
             <Heading level={1}>Osakemyrsky</Heading>
