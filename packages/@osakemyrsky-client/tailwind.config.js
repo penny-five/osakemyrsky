@@ -3,7 +3,12 @@
  */
 module.exports = {
   mode: "jit",
-  purge: ["./src/pages/**/*.{ts,tsx}", "./src/components/**/*.{ts,tsx}"],
+  purge: [
+    "./src/atoms/**/*.{ts,tsx}",
+    "./src/components/**/*.{ts,tsx}",
+    "./src/layouts/**/*.{ts,tsx}",
+    "./src/pages/**/*.{ts,tsx}"
+  ],
   darkMode: false,
   theme: {
     fontFamily: {
@@ -23,12 +28,15 @@ module.exports = {
       },
       white: "#FFFFFF",
       gray: {
-        300: "#7D7D7D",
-        200: "#BFBFBF",
-        100: "#ECECEC"
+        500: "#575757",
+        400: "#7D7D7D",
+        300: "#BFBFBF",
+        200: "#ECECEC",
+        100: "#F5F5F5"
       },
       bronze: {
-        200: "#CC7752",
+        300: "#B15730",
+        200: "#D48562",
         100: "#E4B5A1"
       },
       blue: {
@@ -36,13 +44,15 @@ module.exports = {
         100: "#C1C5EC"
       },
       red: {
-        200: "#EA4E4E"
+        200: "#EA4E4E",
+        100: "#F59999"
       }
     },
-    extend: {}
-  },
-  variants: {
-    extend: {}
+    extend: {
+      fontSize: {
+        base: ["0.9375rem", "1.5rem"]
+      }
+    }
   },
   plugins: [require("@tailwindcss/forms")]
 };

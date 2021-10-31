@@ -11,7 +11,7 @@ const LeagueListItem: FunctionComponent<LeagueListItemProps> = props => {
   return (
     <Link
       href={{
-        pathname: "/league/[id]",
+        pathname: "/leagues/[id]",
         query: { id: props.league.id }
       }}
       passHref

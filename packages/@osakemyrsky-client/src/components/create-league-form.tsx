@@ -1,8 +1,7 @@
 import { format } from "date-fns";
 import { FunctionComponent, SyntheticEvent, useState } from "react";
 
-import Button from "./button";
-import Heading from "./common/heading";
+import Button from "../atoms/button";
 
 export interface CreateLeagueFormData {
   name: string;
@@ -30,7 +29,6 @@ const CreateLeagueForm: FunctionComponent<CreateLeagueFormProps> = props => {
 
   return (
     <form className="flex flex-col gap-4" onSubmit={onSubmit}>
-      <Heading level={2}>Lisää uusi liiga</Heading>
       <label htmlFor="league-name">Liigan nimi</label>
       <input id="league-name" type="text" value={name} onChange={event => setName(event.target.value)}></input>
       <label htmlFor="league-start-date">Alkupäivämäärä</label>
