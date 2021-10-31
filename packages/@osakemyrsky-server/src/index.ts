@@ -13,6 +13,7 @@ const migrateLatest = async (knex: Knex) =>
     try {
       await knex.migrate.latest();
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error(err);
       throw err;
     }

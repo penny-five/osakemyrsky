@@ -20,6 +20,7 @@
   },
   "rules": {
     "lines-between-class-members": "off",
+    "no-console": "error",
     "@typescript-eslint/no-floating-promises": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/lines-between-class-members": "error",

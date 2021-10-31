@@ -62,18 +62,26 @@ export class LeagueService extends CrudService<League, LeaguesOrderBy> {
       const league = await this.findById(leagueId, trx2);
 
       if (league == null) {
-        throw new Error("League doesn't exist");
+        throw new Error("League not found");
       }
 
       if (league.hasEndedOn(new Date())) {
         throw new Error("League has already ended");
       }
 
-      return this.memberModel.query(trx2).insertAndFetch({
+      const user = await this.userModel.query(trx2).findById(params.userId);
+
+      if (user == null) {
+        throw new Error("User not found");
+      }
+
+      await this.memberModel.query(trx2).insertAndFetch({
         leagueId: leagueId,
         userId: params.userId,
         companyName: params.companyName
       });
+
+      return user.$relatedQuery("leagues", trx2).where(League.ref("id"), leagueId).first();
     });
   }
 }

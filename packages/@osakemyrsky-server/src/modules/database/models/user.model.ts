@@ -21,14 +21,15 @@ export class User extends BaseModel {
   static relationMappings = {
     leagues: {
       relation: BaseModel.ManyToManyRelation,
-      modelClass: League,
+      modelClass: "league.model",
       join: {
         from: "user.id",
         through: {
           from: "member.userId",
           to: "member.leagueId"
         },
-        to: "league.id"
+        to: "league.id",
+        extra: ["companyName"]
       }
     }
   };

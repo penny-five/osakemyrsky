@@ -16,12 +16,12 @@ export class Member extends BaseModel {
 
   userId!: string;
 
-  @Field(() => User)
+  @Field(() => User, { nullable: true })
   user!: User;
 
   leagueId!: string;
 
-  @Field(() => League)
+  @Field(() => League, { nullable: true })
   league!: League;
 
   static relationMappings = {

@@ -29,6 +29,9 @@ export class League extends BaseModel {
   @Field(() => [User])
   members!: User;
 
+  @Field({ nullable: true })
+  companyName!: string;
+
   hasEndedOn(date: Date | string) {
     return isAfter(date, this.endDate);
   }
