@@ -1,10 +1,9 @@
-import { League } from "./league";
+import { Member } from "./member";
 
 export interface User {
   id: string;
   createdAt: string;
   updatedAt: string;
   name: string;
-
-  leagues: League[];
+  memberships: Member[];
 }

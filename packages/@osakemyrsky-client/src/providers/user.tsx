@@ -12,10 +12,18 @@ const GET_ME = gql`
       createdAt
       updatedAt
 
-      leagues {
+      memberships {
         id
-        name
         companyName
+        createdAt
+        updatedAt
+
+        league {
+          id
+          name
+          createdAt
+          updatedAt
+        }
       }
     }
   }

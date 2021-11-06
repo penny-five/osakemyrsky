@@ -6,7 +6,7 @@ import { FunctionComponent } from "react";
 import Heading from "@/atoms/heading";
 import CreateLeagueForm, { CreateLeagueFormData } from "@/components/create-league-form";
 import LeagueList from "@/components/league-list";
-import { useDefaultLeague } from "@/providers/default-league";
+import { useActiveLeague } from "@/providers/active-league";
 import { League } from "@/types/league";
 
 interface CreateLeagueInput {
@@ -23,7 +23,7 @@ interface CreateLeagueResult {
 
 const CREATE_LEAGUE = gql`
   mutation CreateLeague($data: CreateLeagueInput!) {
-    createLeague(createLeagueData: $data) {
+    createLeague(createLeagueInput: $data) {
       id
       name
     }
@@ -36,7 +36,7 @@ const Home: FunctionComponent = () => {
 
   const { data: session, status } = useSession();
 
-  const { setDefaultLeagueId } = useDefaultLeague();
+  const { setActiveLeagueId } = useActiveLeague();
 
   const onCreateLeague = async (data: CreateLeagueFormData) => {
     const result = await client.mutate<CreateLeagueResult, CreateLeagueInput>({
@@ -45,7 +45,7 @@ const Home: FunctionComponent = () => {
       context: { session }
     });
 
-    setDefaultLeagueId(result.data!.createLeague.id);
+    setActiveLeagueId(result.data!.createLeague.id);
 
     router.push({
       pathname: "/leagues/[id]",

@@ -18,21 +18,20 @@ const GET_LEAGUE = gql`
   }
 `;
 
-interface RegisterMemberInput {
+interface JoinLeagueInput {
   data: {
     leagueId: string;
-    userId: string;
     companyName: string;
   };
 }
 
-const REGISTER_MEMBER = gql`
-  mutation registerMember($data: RegisterMemberInput!) {
-    registerMember(registerMemberData: $data) {
+const JOIN_LEAGUE = gql`
+  mutation JoinLeague($data: JoinLeagueInput!) {
+    joinLeague(joinLeagueInput: $data) {
       id
-      name
       createdAt
       updatedAt
+      companyName
     }
   }
 `;
@@ -56,12 +55,12 @@ const LeaguePage: FunctionComponent = () => {
     skip: status !== "authenticated"
   });
 
-  const isLeagueMember = user?.leagues.some(league => league.id === leagueId);
+  const isLeagueMember = user?.memberships.some(membership => membership.league.id === leagueId);
 
   const onRegisterMember = async () => {
-    await client.mutate<void, RegisterMemberInput>({
-      mutation: REGISTER_MEMBER,
-      variables: { data: { leagueId, userId: user!.id, companyName: "Omnicorp" } },
+    await client.mutate<void, JoinLeagueInput>({
+      mutation: JOIN_LEAGUE,
+      variables: { data: { leagueId, companyName: "Omnicorp" } },
       context: { session }
     });
   };

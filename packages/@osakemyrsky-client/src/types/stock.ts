@@ -6,16 +6,10 @@ export enum StockTradingStatus {
 
 export interface Stock {
   name: string;
-
   symbol: string;
-
   exchangeCountry: string;
-
   price: number | null;
-
   priceDiff: number | null;
-
   priceDiffPct: number | null;
-
   tradingStatus: StockTradingStatus | null;
 }

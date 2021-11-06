@@ -21,7 +21,7 @@ interface CreateLeagueResult {
 
 const CREATE_LEAGUE = gql`
   mutation CreateLeague($data: CreateLeagueInput!) {
-    createLeague(createLeagueData: $data) {
+    createLeague(createLeagueInput: $data) {
       id
       name
     }
@@ -42,7 +42,7 @@ const Home: FunctionComponent = () => {
     });
 
     router.push({
-      pathname: "/league/[id]",
+      pathname: "/leagues/[id]",
       query: {
         id: result.data?.createLeague.id
       }

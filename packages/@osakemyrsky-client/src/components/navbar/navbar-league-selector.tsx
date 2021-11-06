@@ -4,15 +4,20 @@ import { FunctionComponent, useState } from "react";
 
 import NavbarLeagueSelectorItem from "./navbar-league-selector-item";
 
+import { Member } from "@/types/member";
 import { League } from "src/types/league";
 
 export interface NavbarLeagueSelectorProps {
-  defaultLeague: League;
-  leagues: League[];
+  activeLeague: League;
+  memberships: Member[];
   onSelect: (league: League) => void;
 }
 
-const NavbarLeagueSelector: FunctionComponent<NavbarLeagueSelectorProps> = ({ defaultLeague, leagues, onSelect }) => {
+const NavbarLeagueSelector: FunctionComponent<NavbarLeagueSelectorProps> = ({
+  activeLeague,
+  memberships,
+  onSelect
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const onSelectLeague = (league: League) => {
@@ -29,7 +34,7 @@ const NavbarLeagueSelector: FunctionComponent<NavbarLeagueSelectorProps> = ({ de
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
     >
-      <span className="flex-grow mx-3 truncate font-semibold select-none">{defaultLeague.name}</span>
+      <span className="flex-grow mx-3 truncate font-semibold select-none">{activeLeague.name}</span>
       <ChevronDownIcon className="w-5  flex-shrink-0 text-gray-300" />
       <div
         className={classNames({
@@ -40,8 +45,12 @@ const NavbarLeagueSelector: FunctionComponent<NavbarLeagueSelectorProps> = ({ de
         })}
       >
         <ul>
-          {leagues.map(league => (
-            <NavbarLeagueSelectorItem key={league.id} league={league} onClick={() => onSelectLeague(league)} />
+          {memberships.map(membership => (
+            <NavbarLeagueSelectorItem
+              key={membership.id}
+              league={membership.league}
+              onClick={() => onSelectLeague(membership.league)}
+            />
           ))}
         </ul>
       </div>

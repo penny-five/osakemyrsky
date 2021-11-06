@@ -13,7 +13,7 @@ import NavbarUserDropdown from "./navbar-user-dropdown";
 import NavbarUserDropdownItem from "./navbar-user-dropdown-item";
 
 import Logo from "@/atoms/logo";
-import { useDefaultLeague } from "@/providers/default-league";
+import { useActiveLeague } from "@/providers/active-league";
 import { useUser } from "@/providers/user";
 import { League } from "@/types/league";
 
@@ -26,20 +26,20 @@ const Navbar: FunctionComponent<NavbarProps> = ({ onSignOut }) => {
 
   const { user, status } = useUser();
 
-  const { defaultLeagueId, setDefaultLeagueId } = useDefaultLeague();
+  const { activeLeagueId, setActiveLeagueId } = useActiveLeague();
 
-  let defaultLeague: League | null = null;
+  let activeLeague: League | null = null;
 
-  if (user != null && defaultLeagueId != null) {
-    defaultLeague = user.leagues.find(league => league.id === defaultLeagueId) ?? null;
+  if (user != null && activeLeagueId != null) {
+    activeLeague = user.memberships.find(membership => membership.id === activeLeagueId)?.league ?? null;
 
-    if (defaultLeague == null && user.leagues.length > 0) {
-      defaultLeague = user.leagues[0];
-      setDefaultLeagueId(defaultLeague.id);
+    if (activeLeague == null && user.memberships.length > 0) {
+      activeLeague = user.memberships[0].league;
+      setActiveLeagueId(activeLeague.id);
     }
   }
 
-  const onSelectDefaultLeague = (league: League) => {
+  const onSelectActiveLeague = (league: League) => {
     router.push({
       pathname: "/leagues/[id]",
       query: {
@@ -47,7 +47,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ onSignOut }) => {
       }
     });
 
-    setDefaultLeagueId(league.id);
+    setActiveLeagueId(league.id);
   };
 
   return (
@@ -60,11 +60,11 @@ const Navbar: FunctionComponent<NavbarProps> = ({ onSignOut }) => {
           </a>
         </Link>
         <span className="flex-grow"></span>
-        {user && defaultLeague && (
+        {user && activeLeague && (
           <NavbarLeagueSelector
-            defaultLeague={user.leagues.find(league => league.id === defaultLeagueId)!}
-            leagues={user.leagues}
-            onSelect={onSelectDefaultLeague}
+            activeLeague={activeLeague}
+            memberships={user.memberships}
+            onSelect={onSelectActiveLeague}
           />
         )}
         {user ? (
@@ -79,9 +79,9 @@ const Navbar: FunctionComponent<NavbarProps> = ({ onSignOut }) => {
           </Button>
         ) : null}
       </div>
-      {defaultLeague && (
+      {activeLeague && (
         <ul className="flex flex-row flex-grow items-center px-8 w-full max-w-screen-desktop">
-          <NavbarNavigationLink target={`/leagues/${defaultLeague.id}`}>Liigapörssi</NavbarNavigationLink>
+          <NavbarNavigationLink target={`/leagues/${activeLeague.id}`}>Liigapörssi</NavbarNavigationLink>
           <NavbarNavigationLink target="/my-portfolio">Oma salkku</NavbarNavigationLink>
           <NavbarNavigationLink target="/marketplace">Osta/myy osakkeita</NavbarNavigationLink>
         </ul>

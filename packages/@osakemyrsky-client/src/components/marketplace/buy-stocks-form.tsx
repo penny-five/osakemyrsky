@@ -8,7 +8,7 @@ import { Stock } from "@/types/stock";
 
 export interface BuyStocksFormProps {
   stock: Stock;
-  onSubmit: (order: { count: number; price: number }) => void;
+  onSubmit: (order: { stockCount: number; stockPriceCents: number; expirationDate: string }) => void;
 }
 
 const BuyStocksForm: FunctionComponent<BuyStocksFormProps> = ({ stock, onSubmit }) => {
@@ -18,8 +18,9 @@ const BuyStocksForm: FunctionComponent<BuyStocksFormProps> = ({ stock, onSubmit 
   const onSubmitForm: FormEventHandler = event => {
     event.preventDefault();
     onSubmit({
-      count,
-      price
+      stockCount: count,
+      stockPriceCents: price * 100,
+      expirationDate: "2022-01-01"
     });
   };
 
@@ -35,7 +36,7 @@ const BuyStocksForm: FunctionComponent<BuyStocksFormProps> = ({ stock, onSubmit 
       </div>
 
       <form className="flex flex-col items-stretch" onSubmit={onSubmitForm}>
-        <FormInput id="deadline" label="Voimassa" subLabel="Voimassaolo päättyy vuorokauden loputtua">
+        <FormInput id="expirationDate" label="Voimassa" subLabel="Voimassaolo päättyy vuorokauden loputtua">
           <TextInput />
         </FormInput>
         <FormInput id="count" label="Määrä, kpl">

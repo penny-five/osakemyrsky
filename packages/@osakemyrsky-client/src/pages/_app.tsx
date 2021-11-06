@@ -5,11 +5,12 @@ import Head from "next/head";
 import { FunctionComponent } from "react";
 
 import "@/styles/globals.css";
-import { client } from "src/apollo/client";
-import DefaultLayout from "src/layouts/default";
-import LeagueSelectionRedirect from "src/layouts/league-redirect";
-import { DefaultLeagueProvider } from "src/providers/default-league";
-import { UserProvider } from "src/providers/user";
+import { client } from "@/apollo/client";
+import DefaultLayout from "@/layouts/default";
+import LeagueSelectionRedirect from "@/layouts/league-redirect";
+import { ActiveLeagueProvider } from "@/providers/active-league";
+import { ActiveMembershipProvider } from "@/providers/active-membership";
+import { UserProvider } from "@/providers/user";
 
 const OsakemyrskyApp: FunctionComponent<AppProps> = ({ Component, pageProps: { session, ...pageProps } }) => {
   return (
@@ -21,13 +22,15 @@ const OsakemyrskyApp: FunctionComponent<AppProps> = ({ Component, pageProps: { s
       </Head>
       <SessionProvider session={session}>
         <UserProvider>
-          <DefaultLeagueProvider>
+          <ActiveLeagueProvider>
             <LeagueSelectionRedirect>
-              <DefaultLayout>
-                <Component {...pageProps} />
-              </DefaultLayout>
+              <ActiveMembershipProvider>
+                <DefaultLayout>
+                  <Component {...pageProps} />
+                </DefaultLayout>
+              </ActiveMembershipProvider>
             </LeagueSelectionRedirect>
-          </DefaultLeagueProvider>
+          </ActiveLeagueProvider>
         </UserProvider>
       </SessionProvider>
     </ApolloProvider>

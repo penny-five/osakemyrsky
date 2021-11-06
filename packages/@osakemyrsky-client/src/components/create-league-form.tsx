@@ -15,15 +15,15 @@ export interface CreateLeagueFormProps {
 
 const CreateLeagueForm: FunctionComponent<CreateLeagueFormProps> = props => {
   const [name, setName] = useState("");
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState<Date>();
+  const [startDate, setStartDate] = useState(format(new Date(), "yyyy-MM-dd"));
+  const [endDate, setEndDate] = useState<string>();
 
   const onSubmit = (event: SyntheticEvent) => {
     event.preventDefault();
     props.onSubmit!({
       name,
-      startDate: startDate.toISOString(),
-      endDate: endDate!.toISOString()
+      startDate: startDate,
+      endDate: endDate!
     });
   };
 
@@ -35,17 +35,17 @@ const CreateLeagueForm: FunctionComponent<CreateLeagueFormProps> = props => {
       <input
         id="league-start-date"
         type="date"
-        value={format(startDate, "yyyy-MM-dd")}
-        onChange={event => setStartDate(new Date(event.target.value))}
+        value={startDate}
+        onChange={event => setStartDate(format(new Date(event.target.value), "yyyy-MM-dd"))}
       ></input>
       <label htmlFor="league-end-date">Loppupäivämäärä</label>
       <input
         id="league-end-date"
         type="date"
-        value={endDate != null ? format(endDate, "yyyy-MM-dd") : undefined}
-        onChange={event => setEndDate(new Date(event.target.value))}
+        value={endDate}
+        onChange={event => setEndDate(format(new Date(event.target.value), "yyyy-MM-dd"))}
       ></input>
-      <Button>Lisää</Button>
+      <Button type="submit">Lisää</Button>
     </form>
   );
 };
