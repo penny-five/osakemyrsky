@@ -11,7 +11,8 @@
   "scripts": {
     "pre-commit": "lerna run --concurrency 1 --stream precommit --since HEAD --exclude-dependents",
     "audit-ci": "lerna run --concurrency 1 --stream audit-ci --exclude-dependents",
-    "prettify": "lerna run --concurrency 1 --stream prettify --exclude-dependents",
+    "prettier:write": "lerna run --concurrency 1 --stream prettier:write --exclude-dependents",
+    "prettier:check": "lerna run --concurrency 1 --stream prettier:check --exclude-dependents",
     "lint": "lerna run --concurrency 1 --stream lint --exclude-dependents",
     "prepare": "husky install || true",
     "bootstrap": "lerna bootstrap",
