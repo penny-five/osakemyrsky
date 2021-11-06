@@ -7,13 +7,19 @@ TODO
 ### Prerequisites
 
 - Docker
-- Node 14.x.x
+- Node 16
 
 ### Getting started
 
-Bootstrap the development environment with:
+Install necessary dependencies with:
 
+```sh
+yarn install
 ```
+
+Then bootstrap the development environment with:
+
+```sh
 yarn bootstrap
 ```
 
