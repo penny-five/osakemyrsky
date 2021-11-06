@@ -1,0 +1,30 @@
+name: verify
+on: push
+
+jobs:
+  check_formatting:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Bootstrap project
+        run: yarn bootstrap
+      - name: Run prettier
+        run: yarn prettier:check
+  lint:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Bootstrap project
+        run: yarn bootstrap
+      - name: Run linters
+        run: yarn lint

@@ -66,7 +66,8 @@
   "scripts": {
     "precommit": "lint-staged",
     "audit-ci": "audit-ci --high --report-type=full",
-    "prettify": "prettier --write .",
+    "prettier:write": "prettier --write .",
+    "prettier:check": "prettier --check .",
     "lint": "eslint **/*.ts",
     "migrate:make": "knex migrate:make",
     "migrate:rollback": "knex migrate:rollback",
