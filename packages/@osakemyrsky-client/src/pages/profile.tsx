@@ -23,8 +23,6 @@ const Profile: FunctionComponent = () => {
     skip: status !== "authenticated"
   });
 
-  console.log(data, loading);
-
   return (
     <div>
       {!loading && (
