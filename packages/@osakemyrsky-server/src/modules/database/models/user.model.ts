@@ -1,13 +1,14 @@
-import { Field, ID, ObjectType } from "@nestjs/graphql";
+import { Field, ObjectType } from "@nestjs/graphql";
+import { GraphQLUUID } from "graphql-scalars";
 
 import { BaseModel } from "./base/base.model";
-import { League } from "./league.model";
+import { Member } from "./member.model";
 
 @ObjectType()
 export class User extends BaseModel {
   static tableName = "user";
 
-  @Field(() => ID, { nullable: false })
+  @Field(() => GraphQLUUID, { nullable: false })
   readonly id!: string;
 
   @Field({ nullable: false })
@@ -15,21 +16,16 @@ export class User extends BaseModel {
 
   email!: string;
 
-  @Field(() => [League])
-  leagues!: League[];
+  @Field(() => [Member])
+  memberships!: Member[];
 
   static relationMappings = {
-    leagues: {
-      relation: BaseModel.ManyToManyRelation,
-      modelClass: "league.model",
+    memberships: {
+      relation: BaseModel.HasManyRelation,
+      modelClass: "member.model",
       join: {
         from: "user.id",
-        through: {
-          from: "member.userId",
-          to: "member.leagueId"
-        },
-        to: "league.id",
-        extra: ["companyName"]
+        to: "member.userId"
       }
     }
   };

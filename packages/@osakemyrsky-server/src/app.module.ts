@@ -11,6 +11,7 @@ import { DatabaseModule } from "./modules/database/database.module";
 import { DiagnosticsModule } from "./modules/diagnostics/diagnostics.module";
 import { LeagueModule } from "./modules/leagues/league.module";
 import { NordnetModule } from "./modules/nordnet/nordnet.module";
+import { OrderModule } from "./modules/orders/order.module";
 import { StockModule } from "./modules/stocks/stock.module";
 import { UserModule } from "./modules/users/user.module";
 
@@ -42,8 +43,9 @@ import { UserModule } from "./modules/users/user.module";
     DiagnosticsModule,
     AuthModule,
     NordnetModule,
-    StockModule,
     DatabaseModule,
+    StockModule,
+    OrderModule,
     LeagueModule,
     UserModule
   ]

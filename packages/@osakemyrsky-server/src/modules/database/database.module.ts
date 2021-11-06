@@ -7,6 +7,7 @@ import { DatabaseConfig } from "../config/database";
 
 import { League } from "./models/league.model";
 import { Member } from "./models/member.model";
+import { Order } from "./models/order.model";
 import { User } from "./models/user.model";
 import "./pg.config";
 
@@ -24,7 +25,7 @@ import "./pg.config";
       inject: [ConfigService],
       imports: [ConfigModule]
     }),
-    ObjectionModule.forFeature([League, Member, User])
+    ObjectionModule.forFeature([League, Member, Order, User])
   ],
   exports: [ObjectionModule]
 })

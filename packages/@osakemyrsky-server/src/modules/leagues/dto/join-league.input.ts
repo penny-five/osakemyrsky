@@ -1,12 +1,10 @@
 import { Field, InputType } from "@nestjs/graphql";
+import { GraphQLUUID } from "graphql-scalars";
 
 @InputType()
-export class RegisterMemberInput {
-  @Field({ nullable: false })
+export class JoinLeagueInput {
+  @Field(() => GraphQLUUID, { nullable: false })
   leagueId!: string;
-
-  @Field({ nullable: false })
-  userId!: string;
 
   @Field({ nullable: false })
   companyName!: string;

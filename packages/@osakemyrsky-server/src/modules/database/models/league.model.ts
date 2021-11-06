@@ -1,4 +1,5 @@
-import { Field, ID, ObjectType } from "@nestjs/graphql";
+import { Field, ObjectType } from "@nestjs/graphql";
+import { GraphQLDate, GraphQLUUID } from "graphql-scalars";
 
 import { isAfter } from "../../../utils/dates";
 
@@ -9,7 +10,7 @@ import { User } from "./user.model";
 export class League extends BaseModel {
   static tableName = "league";
 
-  @Field(() => ID, { nullable: false })
+  @Field(() => GraphQLUUID, { nullable: false })
   readonly id!: string;
 
   @Field({ nullable: false })
@@ -20,17 +21,14 @@ export class League extends BaseModel {
   @Field(() => User)
   creator!: User;
 
-  @Field({ nullable: false })
+  @Field(() => GraphQLDate, { nullable: false })
   startDate!: string;
 
-  @Field({ nullable: false })
+  @Field(() => GraphQLDate, { nullable: false })
   endDate!: string;
 
   @Field(() => [User])
   members!: User;
-
-  @Field({ nullable: true })
-  companyName!: string;
 
   hasEndedOn(date: Date | string) {
     return isAfter(date, this.endDate);
@@ -54,15 +52,11 @@ export class League extends BaseModel {
       }
     },
     members: {
-      relation: BaseModel.ManyToManyRelation,
-      modelClass: "user.model",
+      relation: BaseModel.HasManyRelation,
+      modelClass: "member.model",
       join: {
         from: "league.id",
-        through: {
-          from: "member.leagueId",
-          to: "member.userId"
-        },
-        to: "user.id"
+        to: "member.leagueId"
       }
     }
   };

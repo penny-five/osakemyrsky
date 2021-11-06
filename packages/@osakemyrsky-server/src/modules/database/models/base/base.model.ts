@@ -1,6 +1,7 @@
 import path from "path";
 
 import { Field, ObjectType } from "@nestjs/graphql";
+import { GraphQLDateTime } from "graphql-scalars";
 import { Model, QueryBuilder, ReferenceBuilder } from "objection";
 
 @ObjectType({ isAbstract: true })
@@ -9,10 +10,10 @@ export class BaseModel extends Model {
 
   static readonly modelPaths = [path.resolve(__dirname, "..")];
 
-  @Field()
+  @Field(() => GraphQLDateTime, { nullable: false })
   createdAt!: string;
 
-  @Field()
+  @Field(() => GraphQLDateTime, { nullable: false })
   updatedAt!: string;
 
   $beforeUpdate() {

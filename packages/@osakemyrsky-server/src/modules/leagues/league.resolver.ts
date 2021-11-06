@@ -5,10 +5,11 @@ import { AuthenticationToken } from "../authentication/authentication.types";
 import { Token } from "../authentication/decorators/token.decorator";
 import { GqlJwtAuthGuard } from "../authentication/guards/qgl.jwt.guard";
 import { League } from "../database/models/league.model";
+import { Member } from "../database/models/member.model";
 
 import { CreateLeagueInput } from "./dto/create-league.input";
 import { GetLeaguesArgs } from "./dto/get-leagues.args";
-import { RegisterMemberInput } from "./dto/register-member.input";
+import { JoinLeagueInput } from "./dto/join-league.input";
 import { LeagueService } from "./league.service";
 
 @Resolver(() => League)
@@ -34,22 +35,22 @@ export class LeagueResolver {
   @Mutation(() => League)
   async createLeague(
     @Token() token: AuthenticationToken,
-    @Args("createLeagueData") createLeagueData: CreateLeagueInput
+    @Args("createLeagueInput") createLeagueInput: CreateLeagueInput
   ) {
     return this.leagueService.createLeague({
       creatorId: token.sub,
-      name: createLeagueData.name,
-      startDate: createLeagueData.startDate,
-      endDate: createLeagueData.endDate
+      name: createLeagueInput.name,
+      startDate: createLeagueInput.startDate,
+      endDate: createLeagueInput.endDate
     });
   }
 
   @UseGuards(GqlJwtAuthGuard)
-  @Mutation(() => League)
-  async registerMember(@Args("registerMemberData") registerMemberData: RegisterMemberInput) {
-    return this.leagueService.registerMember(registerMemberData.leagueId, {
-      userId: registerMemberData.userId,
-      companyName: registerMemberData.companyName
+  @Mutation(() => Member)
+  async joinLeague(@Token() token: AuthenticationToken, @Args("joinLeagueInput") joinLeagueInput: JoinLeagueInput) {
+    return this.leagueService.registerMember(joinLeagueInput.leagueId, {
+      userId: token.sub,
+      companyName: joinLeagueInput.companyName
     });
   }
 }

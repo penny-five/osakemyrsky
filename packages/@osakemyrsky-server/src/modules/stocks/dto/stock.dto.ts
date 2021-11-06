@@ -1,4 +1,5 @@
 import { Field, Float, ID, ObjectType, registerEnumType } from "@nestjs/graphql";
+import { GraphQLPositiveInt } from "graphql-scalars";
 
 export enum StockTradingStatus {
   OPEN = "OPEN",
@@ -19,7 +20,7 @@ export class Stock {
   @Field()
   exchangeCountry!: string;
 
-  @Field(() => Float, { nullable: true })
+  @Field(() => GraphQLPositiveInt, { nullable: true })
   price!: number | null;
 
   @Field(() => Float, { nullable: true })

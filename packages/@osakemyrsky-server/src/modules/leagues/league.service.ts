@@ -35,14 +35,22 @@ export class LeagueService extends CrudService<League, LeaguesOrderBy> {
     super(leagueModel);
   }
 
-  async findUserLeagues(userId: string, trx?: Transaction) {
-    const leagues = await this.userModel.relatedQuery("leagues", trx).for(userId);
-    return leagues;
+  async findUserMemberships(userId: string, trx?: Transaction) {
+    const memberships = await this.userModel.relatedQuery("memberships", trx).for(userId).withGraphFetched({
+      league: true
+    });
+
+    return memberships;
   }
 
   async findLeagueMembers(leagueId: string, trx?: Transaction) {
     const members = await this.model.relatedQuery("members", trx).for(leagueId);
     return members;
+  }
+
+  async findMemberById(memberId: string, trx?: Transaction) {
+    const member = await this.memberModel.query(trx).findById(memberId);
+    return member;
   }
 
   async createLeague(params: CreateLeagueParams, trx?: Transaction) {
@@ -54,7 +62,12 @@ export class LeagueService extends CrudService<League, LeaguesOrderBy> {
       throw new Error("League cannot start and end on the same day");
     }
 
-    return this.model.query(trx).insertAndFetch(params);
+    return this.model.query(trx).insertAndFetch({
+      name: params.name,
+      creatorId: params.creatorId,
+      startDate: params.startDate,
+      endDate: params.endDate
+    });
   }
 
   async registerMember(leagueId: string, params: RegisterMemberParams, trx?: Transaction) {
@@ -75,13 +88,13 @@ export class LeagueService extends CrudService<League, LeaguesOrderBy> {
         throw new Error("User not found");
       }
 
-      await this.memberModel.query(trx2).insertAndFetch({
+      const membership = await this.memberModel.query(trx2).insertAndFetch({
         leagueId: leagueId,
         userId: params.userId,
         companyName: params.companyName
       });
 
-      return user.$relatedQuery("leagues", trx2).where(League.ref("id"), leagueId).first();
+      return membership;
     });
   }
 }

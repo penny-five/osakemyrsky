@@ -1,5 +1,5 @@
 import { types } from "pg";
 
-// Do not convert timestamps into Dates
-types.setTypeParser(types.builtins.TIMESTAMP, value => value);
-types.setTypeParser(types.builtins.TIMESTAMPTZ, value => value);
+// Use `Date#toISOString` to make timestamps adhere to ISO-8601-1:2019 standard
+types.setTypeParser(types.builtins.TIMESTAMP, value => new Date(value).toISOString());
+types.setTypeParser(types.builtins.TIMESTAMPTZ, value => new Date(value).toISOString());

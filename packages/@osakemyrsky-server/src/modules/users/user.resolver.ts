@@ -31,7 +31,7 @@ export class UserResolver {
   }
 
   @ResolveField()
-  async leagues(@Parent() user: User) {
-    return this.leagueService.findUserLeagues(user.id);
+  async memberships(@Parent() user: User) {
+    return this.leagueService.findUserMemberships(user.id);
   }
 }

@@ -34,30 +34,41 @@ export const up = async (knex: Knex) => {
     table.dateTime("created_at").defaultTo(knex.fn.now()).notNullable();
     table.dateTime("updated_at").defaultTo(knex.fn.now()).notNullable();
     table.uuid("member_id").notNullable().references("id").inTable("member").onDelete("cascade");
-    table.integer("sum_eur").notNullable();
+    table.integer("sum_cents").notNullable();
   });
 
-  await knex.raw("ALTER TABLE deposit ADD CONSTRAINT sum_eur CHECK (sum_eur >= 0)");
+  await knex.raw("ALTER TABLE deposit ADD CONSTRAINT sum_cents CHECK (sum_cents > 0)");
 
   await knex.schema.createTable("transaction", table => {
     table.uuid("id").primary().defaultTo(knex.raw("gen_random_uuid()"));
     table.dateTime("created_at").defaultTo(knex.fn.now()).notNullable();
     table.dateTime("updated_at").defaultTo(knex.fn.now()).notNullable();
-    table.uuid("member_id").notNullable().references("id").inTable("user").onDelete("cascade");
-    table.text("stock_name").notNullable();
-    table.integer("stock_price_eur").notNullable();
+    table.uuid("member_id").notNullable().references("id").inTable("member").onDelete("cascade");
+    table.text("stock_symbol").notNullable();
+    table.integer("stock_price_cents").notNullable();
     table.integer("stock_share_change").unsigned().notNullable();
   });
 
-  await knex.raw("ALTER TABLE transaction ADD CONSTRAINT stock_price_eur CHECK (stock_price_eur >= 0)");
+  await knex.raw("ALTER TABLE transaction ADD CONSTRAINT stock_price_cents CHECK (stock_price_cents > 0)");
 
   await knex.schema.createTable("order", table => {
     table.uuid("id").primary().defaultTo(knex.raw("gen_random_uuid()"));
     table.dateTime("created_at").defaultTo(knex.fn.now()).notNullable();
     table.dateTime("updated_at").defaultTo(knex.fn.now()).notNullable();
-    table.text("email").notNullable();
-    table.text("name").notNullable();
+    table.uuid("member_id").notNullable().references("id").inTable("member").onDelete("cascade");
+    table.enum("type", ["BUY", "SELL"], { useNative: true, enumName: "OrderType" }).notNullable();
+    table
+      .enum("status", ["ACTIVE", "COMPLETED", "FAILED", "EXPIRED"], { useNative: true, enumName: "OrderStatus" })
+      .defaultTo("ACTIVE")
+      .notNullable();
+    table.text("stock_symbol").notNullable();
+    table.integer("stock_price_cents").notNullable();
+    table.integer("stock_count").notNullable();
+    table.date("expiration_date").notNullable();
   });
+
+  await knex.raw('ALTER TABLE "order" ADD CONSTRAINT stock_count CHECK (stock_count > 0)');
+  await knex.raw(`ALTER TABLE "order" ADD CONSTRAINT stock_price_cents CHECK (stock_price_cents > 0)`);
 };
 
 export const down = async (knex: Knex) => {

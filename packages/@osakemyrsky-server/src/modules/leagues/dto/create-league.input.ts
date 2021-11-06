@@ -1,17 +1,14 @@
-import { Field, InputType, registerEnumType } from "@nestjs/graphql";
-
-import { LeaguesOrderBy } from "../league.service";
-
-registerEnumType(LeaguesOrderBy, { name: "LeaguesOrderBy" });
+import { Field, InputType } from "@nestjs/graphql";
+import { GraphQLDate } from "graphql-scalars";
 
 @InputType()
 export class CreateLeagueInput {
   @Field({ nullable: false })
   name!: string;
 
-  @Field({ nullable: false })
+  @Field(() => GraphQLDate, { nullable: false })
   startDate!: string;
 
-  @Field({ nullable: false })
+  @Field(() => GraphQLDate, { nullable: false })
   endDate!: string;
 }

@@ -1,5 +1,6 @@
 import { Type } from "@nestjs/common";
-import { Field, ArgsType, Int } from "@nestjs/graphql";
+import { Field, ArgsType } from "@nestjs/graphql";
+import { GraphQLPositiveInt, GraphQLNonNegativeInt } from "graphql-scalars";
 
 import { EmptyArgs } from "./empty.args";
 
@@ -7,10 +8,10 @@ export const Paginable = <T>(classRef: Type<T> = EmptyArgs as Type<T>) => {
   @ArgsType()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   abstract class PaginableType extends (classRef as any) {
-    @Field(() => Int, { nullable: true })
+    @Field(() => GraphQLNonNegativeInt, { nullable: true })
     offset?: number;
 
-    @Field(() => Int, { nullable: true })
+    @Field(() => GraphQLPositiveInt, { nullable: true })
     limit?: number;
   }
 
