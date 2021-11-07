@@ -9,8 +9,8 @@ export class AuthResolver {
   constructor(private readonly authService: AuthenticationService) {}
 
   @Mutation(() => AuthenticationResult)
-  async signIn(@Args("signInData") signInData: SignInInput): Promise<AuthenticationResult> {
-    const token = await this.authService.signIn(signInData.issuerID, signInData.token);
+  async signIn(@Args("data") data: SignInInput): Promise<AuthenticationResult> {
+    const token = await this.authService.signIn(data.issuerID, data.token);
 
     return {
       token

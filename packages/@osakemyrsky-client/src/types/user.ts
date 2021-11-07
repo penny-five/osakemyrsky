@@ -5,5 +5,6 @@ export interface User {
   createdAt: string;
   updatedAt: string;
   name: string;
+  picture: string | null;
   memberships: Member[];
 }

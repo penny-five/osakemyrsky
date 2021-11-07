@@ -5,8 +5,9 @@ export const up = async (knex: Knex) => {
     table.uuid("id").primary().defaultTo(knex.raw("gen_random_uuid()"));
     table.dateTime("created_at").defaultTo(knex.fn.now()).notNullable();
     table.dateTime("updated_at").defaultTo(knex.fn.now()).notNullable();
+    table.string("name").notNullable();
     table.text("email").unique().notNullable();
-    table.string("name", 128).notNullable();
+    table.text("picture").nullable();
   });
 
   await knex.schema.createTable("league", table => {

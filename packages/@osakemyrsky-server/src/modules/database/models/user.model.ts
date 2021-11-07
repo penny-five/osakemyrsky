@@ -16,6 +16,9 @@ export class User extends BaseModel {
 
   email!: string;
 
+  @Field(() => String, { nullable: true })
+  picture!: string | null;
+
   @Field(() => [Member])
   memberships!: Member[];
 

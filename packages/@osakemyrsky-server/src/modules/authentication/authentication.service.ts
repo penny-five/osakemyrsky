@@ -39,10 +39,11 @@ export class AuthenticationService {
     if (user == null) {
       user = await this.userService.createAndFetchOne({
         name: userInfo.name,
-        email: userInfo.email
+        email: userInfo.email,
+        picture: userInfo.picture
       });
     } else {
-      await this.userService.updateOne(user.id, { name: userInfo.name });
+      await this.userService.updateOne(user.id, { name: userInfo.name, picture: userInfo.picture });
     }
 
     const token = this.jwtService.sign(

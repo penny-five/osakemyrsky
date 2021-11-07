@@ -8,21 +8,22 @@ const GET_ME = gql`
   query GetMe {
     me {
       id
-      name
       createdAt
       updatedAt
+      name
+      picture
 
       memberships {
         id
-        companyName
         createdAt
         updatedAt
+        companyName
 
         league {
           id
-          name
           createdAt
           updatedAt
+          name
         }
       }
     }

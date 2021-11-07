@@ -21,7 +21,7 @@ interface SignInResult {
 
 const SIGN_IN = gql`
   mutation SignIn($data: SignInInput!) {
-    signIn(signInData: $data) {
+    signIn(data: $data) {
       token
     }
   }

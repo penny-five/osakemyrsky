@@ -17,7 +17,7 @@ const NavbarUserDropdown: FunctionComponent<NavbarUserDropdownProps> = ({ user, 
         "hover:rounded-bl-none hover:rounded-br-none hover: hover:border-b-transparent": true
       })}
     >
-      <Avatar />
+      <Avatar url={user.picture} />
       <span className="flex-grow truncate mx-3 font-semibold select-none">{user.name}</span>
       <ChevronDownIcon className="w-5 flex-shrink-0 text-gray-300" />
       <div
