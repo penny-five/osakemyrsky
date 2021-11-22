@@ -21,7 +21,7 @@ const TextInput: FunctionComponent<TextInputProps> = ({ type, value, maxLength, 
   return (
     <input
       className={classNames({
-        "font-normal text-base placeholder-gray-400 border-black-100 rounded-md": true
+        "py-3 px-4 font-normal text-base placeholder-gray-400 border-black-100 rounded-lg shadow-inner": true
       })}
       type={type}
       value={value}

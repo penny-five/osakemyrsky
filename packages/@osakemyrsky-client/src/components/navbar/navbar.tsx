@@ -51,14 +51,16 @@ const Navbar: FunctionComponent<NavbarProps> = ({ onSignOut }) => {
   };
 
   return (
-    <nav className="flex flex-col items-center w-full border-b-1 border-gray-200">
-      <div className="flex flex-grow items-stretch gap-4 py-5 px-8 w-full max-w-screen-desktop">
-        <Logo />
-        <Link href="/" passHref>
-          <a className="flex items-center">
-            <Heading level={1}>Osakemyrsky</Heading>
-          </a>
-        </Link>
+    <nav className="flex flex-col items-center w-full border-b-1 border-gray-200 shadow-lg">
+      <div className="flex flex-grow items-end gap-4 pt-6 pb-4 px-8 w-full max-w-screen-desktop">
+        <div className="flex flex-row gap-3">
+          <Logo />
+          <Link href="/" passHref>
+            <a className="flex items-center">
+              <Heading level={1}>Osakemyrsky</Heading>
+            </a>
+          </Link>
+        </div>
         <span className="flex-grow"></span>
         {user && activeLeague && (
           <NavbarLeagueSelector

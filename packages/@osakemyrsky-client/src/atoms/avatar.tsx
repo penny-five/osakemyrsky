@@ -13,9 +13,9 @@ const Avatar: FunctionComponent<AvatarProps> = ({ url, size }) => {
     <div
       className={classNames({
         "rounded-full bg-gray-200 bg-cover": true,
-        "w-8 min-w-[2rem] h-8": size === "sm",
-        "w-10 min-w-[2.5rem] h-10": size === "md",
-        "w-16 min-w-[4rem] h-16": size === "lg"
+        "w-[2rem] min-w-[2rem] min-h-[2rem]": size === "sm",
+        "w-[2.3rem] min-w-[2.3rem] min-h-[2.3rem]": size === "md",
+        "w-[4rem] min-w-[4rem] min-h-[4rem]": size === "lg"
       })}
       style={{ backgroundImage: url != null ? `url(${url})` : "" }}
     ></div>

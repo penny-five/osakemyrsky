@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { FunctionComponent } from "react";
 
 export interface NavbarUserDropdownItemProps {
@@ -6,7 +7,12 @@ export interface NavbarUserDropdownItemProps {
 
 const NavbarUserDropdownItem: FunctionComponent<NavbarUserDropdownItemProps> = ({ children, onClick }) => {
   return (
-    <li className="py-3 px-4 select-none cursor-pointer hover:bg-gray-100" onClick={onClick}>
+    <li
+      className={classNames({
+        "py-3 px-4 select-none cursor-pointer hover:bg-gray-100 last-of-type:rounded-b-lg": true
+      })}
+      onClick={onClick}
+    >
       {children}
     </li>
   );

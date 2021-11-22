@@ -9,7 +9,10 @@ export interface NavbarLeagueSelectorItemProps {
 
 const NavbarLeagueSelectorItem: FunctionComponent<NavbarLeagueSelectorItemProps> = ({ league, onClick }) => {
   return (
-    <li className="py-3 px-4 truncate select-none cursor-pointer hover:bg-gray-100" onClick={onClick}>
+    <li
+      className="py-3 px-4 truncate select-none cursor-pointer hover:bg-gray-100 last-of-type:rounded-b-lg"
+      onClick={onClick}
+    >
       {league.name}
     </li>
   );

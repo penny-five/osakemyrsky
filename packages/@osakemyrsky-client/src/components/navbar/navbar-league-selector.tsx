@@ -28,17 +28,17 @@ const NavbarLeagueSelector: FunctionComponent<NavbarLeagueSelectorProps> = ({
   return (
     <div
       className={classNames({
-        "group flex flex-row items-center relative w-[220px] border-gray-200 border-1 py-2 px-3 rounded-lg": true,
+        "group flex flex-row items-center relative w-[220px] h-[55px] border-gray-200 border-1 px-3 rounded-xl": true,
         "hover:rounded-bl-none hover:rounded-br-none hover: hover:border-b-transparent": true
       })}
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
     >
       <span className="flex-grow mx-3 truncate font-semibold select-none">{activeLeague.name}</span>
-      <ChevronDownIcon className="w-5  flex-shrink-0 text-gray-300" />
+      <ChevronDownIcon className="w-5 flex-shrink-0 text-gray-300 transition-transform group-hover:rotate-180" />
       <div
         className={classNames({
-          "absolute top-full mt-[-1px] left-[-1px] right-[-1px] bg-white": true,
+          "absolute top-full mt-[-1px] left-[-1px] right-[-1px] bg-white shadow-lg": true,
           "border-gray-200 rounded-bl-lg rounded-br-lg border-t-transparent border-1": true,
           invisible: !isOpen,
           visible: isOpen

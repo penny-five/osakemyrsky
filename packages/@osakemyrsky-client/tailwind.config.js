@@ -59,6 +59,9 @@ module.exports = {
         base: ["0.9375rem", "1.5rem"],
         lg: ["1rem", "1.75rem"],
         "5xl": ["2.6rem", "1"]
+      },
+      boxShadow: {
+        lg: "0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.08)"
       }
     }
   },

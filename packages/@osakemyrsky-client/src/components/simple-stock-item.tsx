@@ -12,7 +12,7 @@ export interface SimpleStockItemProps {
 const SimpleStockItem: FunctionComponent<SimpleStockItemProps> = ({ stock, onClick }) => {
   return (
     <li className="flex items-center py-4 px-4 odd:bg-white cursor-pointer hover:bg-gray-200" onClick={onClick}>
-      <div className="flex flex-col flex-grow">
+      <div className="flex flex-col flex-grow min-w-0">
         <div className="flex flex-row items-center gap-2">
           <CountryFlag size="sm" countryCode={stock.exchangeCountry} />
           <span className="text-base font-semibold truncate">{stock.name}</span>

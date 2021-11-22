@@ -22,7 +22,7 @@ const Button: FunctionComponent<ButtonProps> = ({ children, className, priority,
       disabled={disabled}
       onClick={onClick}
       className={classNames(className, {
-        "flex items-center py-3 px-6 border-1 rounded-md border-transparent font-semibold ": true,
+        "flex items-center py-3 px-6 border-1 rounded-lg border-transparent font-semibold shadow-lg": true,
         "focus:ring-2 focus:ring-blue-200": true,
         "pl-4": icon != null,
         "bg-black-100 text-white hover:text-bronze-200": priority === ButtonPriority.PRIMARY && !disabled,

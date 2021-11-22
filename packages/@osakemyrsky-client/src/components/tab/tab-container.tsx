@@ -17,10 +17,10 @@ const TabContainer: FunctionComponent<TabContainerProps> = ({ children }) => {
           <li
             key={index}
             className={classNames({
-              "flex-grow py-4 px-4 text-center truncate cursor-pointer transition-colors": true,
+              "flex-grow py-4 px-4 font-bold text-center truncate cursor-pointer transition-colors": true,
               "first:rounded-l-md last:rounded-r-md": true,
-              "text-white font-bold bg-black-100": index === activeTab,
-              "text-black-200 font-medium bg-gray-200": index !== activeTab
+              "text-white bg-black-100": index === activeTab,
+              "text-black-200 bg-gray-200": index !== activeTab
             })}
             onClick={() => setActiveTab(index)}
           >

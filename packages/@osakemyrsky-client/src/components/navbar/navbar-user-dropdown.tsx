@@ -13,18 +13,17 @@ const NavbarUserDropdown: FunctionComponent<NavbarUserDropdownProps> = ({ user, 
   return (
     <div
       className={classNames({
-        "group flex flex-row items-center relative w-[220px] border-gray-200 border-1 py-2 px-3 rounded-lg": true,
+        "group flex flex-row items-center relative w-[220px] border-gray-200 border-1 py-2 px-3 rounded-xl": true,
         "hover:rounded-bl-none hover:rounded-br-none hover: hover:border-b-transparent": true
       })}
     >
       <Avatar url={user.picture} />
       <span className="flex-grow truncate mx-3 font-semibold select-none">{user.name}</span>
-      <ChevronDownIcon className="w-5 flex-shrink-0 text-gray-300" />
+      <ChevronDownIcon className="w-5 flex-shrink-0 text-gray-300 transition-transform group-hover:rotate-180" />
       <div
         className={classNames({
-          "absolute top-full mt-[-1px] left-[-1px] right-[-1px] border-gray-200 rounded-bl-lg rounded-br-lg bg-white":
-            true,
-          "border-t-transparent border-1": true,
+          "absolute top-full mt-[-1px] left-[-1px] right-[-1px] ": true,
+          "border-gray-200 rounded-bl-lg rounded-br-lg bg-white border-t-transparent border-1 shadow-lg": true,
           "invisible group-hover:visible": true
         })}
       >

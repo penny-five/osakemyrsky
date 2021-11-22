@@ -25,7 +25,7 @@ const BuyStocksForm: FunctionComponent<BuyStocksFormProps> = ({ stock, onSubmit 
   };
 
   return (
-    <div className="grid grid-cols-2 gap-8 py-6">
+    <div className="grid grid-cols-[5fr,4fr] gap-8 py-6">
       <div>
         <p>
           Tekemäsi ostotoimeksiannot käsitellään kerran tunnissa niinä ajankohtina, jolloin kaupankäynti osakkeella on
