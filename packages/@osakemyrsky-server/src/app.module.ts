@@ -27,7 +27,11 @@ import { UserModule } from "./modules/users/user.module";
         }
 
         return {
-          pinoHttp: [{ prettyPrint: true }]
+          pinoHttp: [
+            {
+              transport: { target: "pino-pretty", options: { colorize: true } }
+            }
+          ]
         };
       }
     }),
