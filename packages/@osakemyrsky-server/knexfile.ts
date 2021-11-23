@@ -1,8 +1,8 @@
 import path from "path";
 
-import { Config } from "knex";
+import { Knex } from "knex";
 
-const config: Config = {
+const config: Knex.Config = {
   client: "pg",
   migrations: {
     extension: process.env.NODE_ENV === "production" ? "js" : "ts",

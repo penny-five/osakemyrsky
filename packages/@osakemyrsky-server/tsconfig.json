@@ -5,6 +5,7 @@
     "outDir": "dist",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
     "typeRoots": ["./typings"]
   },
   "include": [

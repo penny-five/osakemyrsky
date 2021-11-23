@@ -41,9 +41,11 @@ import { UserModule } from "./modules/users/user.module";
       load: [databaseConfig, jwtConfig]
     }),
     DiagnosticsModule,
+    DatabaseModule.forRootAsync({
+      connectionString: process.env.PG_CONNECTION_STRING
+    }),
     AuthModule,
     NordnetModule,
-    DatabaseModule,
     StockModule,
     OrderModule,
     LeagueModule,
