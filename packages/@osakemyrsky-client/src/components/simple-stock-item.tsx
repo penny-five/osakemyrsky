@@ -12,7 +12,7 @@ export interface SimpleStockItemProps {
 const SimpleStockItem: FunctionComponent<SimpleStockItemProps> = ({ stock, onClick }) => {
   return (
     <li
-      className="flex items-center py-5 px-4 bg-gray-200 rounded-xl cursor-pointer hover:bg-gray-300"
+      className="flex items-center py-4 px-4 bg-gray-200 rounded-xl cursor-pointer hover:bg-gray-300"
       onClick={onClick}
     >
       <div className="flex flex-col flex-grow min-w-0 gap-2">

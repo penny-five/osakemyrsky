@@ -57,7 +57,7 @@ const MyPortfolio: FunctionComponent = () => {
   };
 
   return (
-    <div className="flex-grow">
+    <div className="flex flex-col flex-grow">
       <PageHeader
         title="Osta/myy osakkeita"
         leagueName={activeMembership?.leagueName ?? ""}
@@ -67,12 +67,12 @@ const MyPortfolio: FunctionComponent = () => {
       />
       <div className="px-10 pb-8">
         <Panel title="Hae osakkeita">
-          <div className="flex gap-8 min-h-[800px]">
-            <div className="w-[35%]">
+          <div className="grid grid-cols-[400px,1px,1fr] gap-8 min-h-[800px]">
+            <div>
               <StockFinder onSelect={stock => setSelectedStock(stock)} />
             </div>
             <div className="border-r-1 border-gray-300"></div>
-            <div className="w-[65%]">
+            <div>
               {selectedStock ? (
                 <OrderBuilder stock={selectedStock} onSubmit={onSubmitOrder} />
               ) : (

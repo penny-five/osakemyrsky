@@ -23,7 +23,7 @@ const NavbarTab: FunctionComponent<NavbarTabProps> = ({ children, target }) => {
         <a
           className={classNames({
             "relative py-2 text-sm font-semibold text-gray-500 after:absolute after:border-b-3": true,
-            "after:transition-colors": true,
+            "transition-colors hover:text-black-100": true,
             "!text-black-100 after:top-full after:left-0 after:right-0 after:border-blue-200": isActive
           })}
         >

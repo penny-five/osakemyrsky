@@ -8,11 +8,13 @@
       "@/apollo/*": ["./src/apollo/*"],
       "@/atoms/*": ["./src/atoms/*"],
       "@/components/*": ["./src/components/*"],
+      "@/hooks/*": ["./src/hooks/*"],
       "@/layouts/*": ["./src/layouts/*"],
       "@/pages/*": ["./src/pages/*"],
       "@/providers/*": ["./src/providers/*"],
       "@/styles/*": ["./styles/*"],
-      "@/types/*": ["./src/types/*"]
+      "@/types/*": ["./src/types/*"],
+      "@/utils/*": ["./src/utils/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

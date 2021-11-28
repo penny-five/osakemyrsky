@@ -5,6 +5,7 @@ import SellStocksForm from "./sell-stocks-form";
 
 import CountryFlag from "@/atoms/country-flag";
 import Heading from "@/atoms/heading";
+import StockPriceChart from "@/components/charts/stock-price-chart";
 import Tab from "@/components/tab/tab";
 import TabContainer from "@/components/tab/tab-container";
 import { OrderType } from "@/types/order";
@@ -39,7 +40,7 @@ const OrderBuilder: FunctionComponent<OrderBuilderProps> = ({ stock, onSubmit })
         <span className="text-xl font-bold whitespace-nowrap">{stock.price} €</span>
       </div>
       <span className="text-xs font-medium text-gray-500 truncate">{stock.symbol} / MARKET INFORMATION</span>
-      <div className="min-h-[400px] my-4 bg-gray-200 rounded-lg" />
+      <StockPriceChart />
       <TabContainer>
         <Tab title="Osta osakkeita">
           <BuyStocksForm
