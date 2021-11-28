@@ -44,7 +44,7 @@ const SellStocksForm: FunctionComponent<SellStocksFormProps> = ({ stock, onSubmi
         <FormInput id="price" label="Hinta, €">
           <TextInput type="number" value={price} onChange={setPrice} />
         </FormInput>
-        <span className="mt-4 mb-2 text-gray-400 text-lg text-right">
+        <span className="mt-4 mb-2 text-gray-500 text-lg text-right">
           {count} x {price} € = <span className="font-bold text-black-200">{(price * count).toFixed(2)} €</span>
         </span>
         <Button type="submit" icon={<UploadIcon />} className="mt-4 self-end">

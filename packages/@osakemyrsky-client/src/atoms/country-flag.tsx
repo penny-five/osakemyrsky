@@ -23,7 +23,7 @@ const CountryFlag: FunctionComponent<CountryFlagProps> = ({ countryCode, size })
   }
 
   return (
-    <div className="inline-flex flex-shrink-0 border-gray-200 border-1">
+    <div className="inline-flex flex-shrink-0 border-gray-300 border-1">
       <Image alt={countryCode} src={`/flags/${countryCode.toUpperCase()}.svg`} width={width} height={width * 0.75} />
     </div>
   );

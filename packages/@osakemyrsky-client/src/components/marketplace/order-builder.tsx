@@ -30,7 +30,7 @@ const OrderBuilder: FunctionComponent<OrderBuilderProps> = ({ stock, onSubmit })
   };
 
   return (
-    <div className="flex flex-col py-6 px-8">
+    <div className="flex flex-col">
       <div className="flex items-center gap-2">
         <CountryFlag countryCode={stock.exchangeCountry} />
         <Heading level={3} className="flex-grow truncate">
@@ -38,7 +38,7 @@ const OrderBuilder: FunctionComponent<OrderBuilderProps> = ({ stock, onSubmit })
         </Heading>
         <span className="text-xl font-bold whitespace-nowrap">{stock.price} €</span>
       </div>
-      <span className="text-xs font-medium text-gray-400 truncate">{stock.symbol} / MARKET INFORMATION</span>
+      <span className="text-xs font-medium text-gray-500 truncate">{stock.symbol} / MARKET INFORMATION</span>
       <div className="min-h-[400px] my-4 bg-gray-200 rounded-lg" />
       <TabContainer>
         <Tab title="Osta osakkeita">

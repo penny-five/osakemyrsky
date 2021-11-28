@@ -5,7 +5,6 @@ import { FunctionComponent, useState } from "react";
 import SearchField from "../search-field";
 import SimpleStockItem from "../simple-stock-item";
 
-import Heading from "@/atoms/heading";
 import { Stock } from "@/types/stock";
 
 const SEARCH_STOCKS = gql`
@@ -44,11 +43,10 @@ const StockFinder: FunctionComponent<StockFinderProps> = ({ onSelect }) => {
   };
 
   return (
-    <div className="flex flex-col gap-4 py-6 px-8">
-      <Heading level={3}>Hae osakkeita</Heading>
+    <div className="flex flex-col gap-4">
       <SearchField placeholder="Hae osakkeita tai instrumentteja" onSearch={onSearchChange} />
       {data?.stocks && data.stocks.length > 0 ? (
-        <ul>
+        <ul className="space-y-4">
           {data?.stocks.map(stock => (
             <SimpleStockItem key={stock.symbol} stock={stock} onClick={() => onSelect(stock)} />
           ))}

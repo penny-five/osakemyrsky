@@ -1,11 +1,14 @@
 import { gql, useQuery, useApolloClient } from "@apollo/client";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/dist/client/router";
+import Image from "next/image";
 import { FunctionComponent } from "react";
 
-import Button from "src/atoms/button";
-import { useUser } from "src/providers/user";
-import { League } from "src/types/league";
+import Button from "@/atoms/button";
+import Panel from "@/atoms/panel";
+import PageHeader from "@/components/page-header";
+import { useUser } from "@/providers/user";
+import { League } from "@/types/league";
 
 const GET_LEAGUE = gql`
   query GetLeague($id: String!) {
@@ -62,17 +65,23 @@ const LeaguePage: FunctionComponent = () => {
     });
   };
 
+  if (loading || data?.league == null) {
+    return <></>;
+  }
+
   return (
-    <div>
-      {!loading && (
-        <dl>
-          <dt className="font-bold text-sm">ID</dt>
-          <dd>{data?.league.id}</dd>
-          <dt className="font-bold text-sm mt-4">Nimi</dt>
-          <dd>{data?.league.name}</dd>
-          {!isLeagueMember && <Button onClick={onRegisterMember}>Liity liigaan</Button>}
-        </dl>
-      )}
+    <div className="flex-grow">
+      <PageHeader
+        title="Liigapörssi"
+        leagueName={data.league.name}
+        illustration={<Image src="/images/page-header-league.svg" alt="illustration" width="220px" height="220px" />}
+      />
+      {!isLeagueMember && <Button onClick={onRegisterMember}>Liity liigaan</Button>}
+      <div className="flex flex-col gap-10 px-10 pb-8">
+        <Panel title="Tilanne"></Panel>
+        <Panel title="Jäsenet"></Panel>
+        <Panel title="Viimeksi toteutuneet kaupat"></Panel>
+      </div>
     </div>
   );
 };

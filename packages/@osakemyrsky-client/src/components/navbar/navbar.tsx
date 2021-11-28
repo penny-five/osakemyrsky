@@ -58,7 +58,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ onSignOut }) => {
   };
 
   return (
-    <nav className="flex flex-col items-center w-full border-b-1 border-gray-200 shadow-lg">
+    <nav className="flex flex-col items-center w-full bg-white border-b-1 border-gray-400 shadow-lg z-10">
       <div className="flex flex-grow items-end gap-4 pt-6 pb-4 px-8 w-full max-w-screen-desktop">
         <div className="flex flex-row gap-3">
           <Logo />

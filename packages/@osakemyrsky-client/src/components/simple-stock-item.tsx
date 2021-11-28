@@ -11,13 +11,16 @@ export interface SimpleStockItemProps {
 
 const SimpleStockItem: FunctionComponent<SimpleStockItemProps> = ({ stock, onClick }) => {
   return (
-    <li className="flex items-center py-4 px-4 odd:bg-white cursor-pointer hover:bg-gray-200" onClick={onClick}>
-      <div className="flex flex-col flex-grow min-w-0">
+    <li
+      className="flex items-center py-5 px-4 bg-gray-200 rounded-xl cursor-pointer hover:bg-gray-300"
+      onClick={onClick}
+    >
+      <div className="flex flex-col flex-grow min-w-0 gap-2">
         <div className="flex flex-row items-center gap-2">
           <CountryFlag size="sm" countryCode={stock.exchangeCountry} />
-          <span className="text-base font-semibold truncate">{stock.name}</span>
+          <span className="text-lg font-semibold truncate">{stock.name}</span>
         </div>
-        <span className="text-xs font-medium text-gray-400 truncate">{stock.symbol} / MARKET INFORMATION</span>
+        <span className="text-xs font-medium text-gray-500 truncate">{stock.symbol} / MARKET INFORMATION</span>
       </div>
       <div className="flex flex-col items-end flex-shrink-0">
         <span

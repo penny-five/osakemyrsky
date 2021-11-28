@@ -45,6 +45,7 @@ module.exports = {
         100: "#E4B5A1"
       },
       blue: {
+        300: "#104EDB",
         200: "#407BFF",
         100: "#C5D7FF"
       },
@@ -66,6 +67,7 @@ module.exports = {
         "5xl": ["2.6rem", "1"]
       },
       boxShadow: {
+        md: "0px 2px 21px rgba(0, 0, 0, 0.05)",
         lg: "0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.08)"
       }
     }

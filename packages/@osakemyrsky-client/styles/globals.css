@@ -6,7 +6,7 @@
 
 @layer base {
   body {
-    @apply font-normal text-base text-black-100 overflow-y-scroll;
+    @apply font-normal text-base text-black-100 bg-gray-100 overflow-y-scroll;
   }
 
   p {
