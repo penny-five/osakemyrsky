@@ -21,21 +21,23 @@ module.exports = {
       DEFAULT: "1px",
       0: "0",
       1: "1px",
-      2: "2px"
+      2: "2px",
+      3: "3px"
     },
     colors: {
       transparent: "transparent",
       black: {
-        100: "#2F2F2F",
+        100: "#263238",
         200: "#171717"
       },
       white: "#FFFFFF",
       gray: {
-        500: "#575757",
-        400: "#7D7D7D",
-        300: "#BFBFBF",
-        200: "#ECECEC",
-        100: "#F5F5F5"
+        600: "#575757",
+        500: "#A9A9A9",
+        400: "#DADADA",
+        300: "#ECECEC",
+        200: "#F5F5F5",
+        100: "#FAFAFA"
       },
       bronze: {
         300: "#B15730",
@@ -43,14 +45,17 @@ module.exports = {
         100: "#E4B5A1"
       },
       blue: {
-        200: "#4E5EEA",
-        100: "#C1C5EC"
+        200: "#407BFF",
+        100: "#C5D7FF"
+      },
+      green: {
+        200: "#42BC4E"
       },
       forest: {
         300: "#486739"
       },
       red: {
-        200: "#EA4E4E",
+        200: "#F84646",
         100: "#F59999"
       }
     },
