@@ -40,10 +40,9 @@ services:
     environment:
       PORT: 8080
       NODE_ENV: development
-      PG_CONNECTION_STRING: postgres://osakemyrsky-user:osakemyrsky-pw@database/osakemyrsky-db
       FIRESTORE_HOST_URL: firebase-emulator
       FIRESTORE_HOST_PORT: 8080
-      GOOGLE_APPLICATION_CREDENTIALS: /tmp/keys/google-sa-credentials.json
+      GOOGLE_APPLICATION_CREDENTIALS: /tmp/keys/google-credentials.json
       # Private JWK for signing tokens in local environment. DON'T USE IN PRODUCTION.
       JWT_SIGNING_KEY: '{"kty":"EC","kid":"wYV089pb2dk6TpKG-LXZamIklfOQQGPIKO0BYT-Ck3s","alg":"ES256","crv":"P-256","x":"7z-tXKboXsZ1tjL-BoxgPHXaOrEgS2zzwtBMQyPUi0s","y":"z6XYL3vtbNbD9skucrPeWqpxBDX1sqslRqaQrwpPs6Y","d":"R902EY9oQk1HMr2fZmfGrSAaKuBEp_xXn4zhmTIzJ2o"}'
     env_file:
@@ -52,12 +51,10 @@ services:
       - 127.0.0.1:8095:8080
     volumes:
       - "./packages/@osakemyrsky-server/src:/app/src"
-      - "./packages/@osakemyrsky-server/migrations:/app/migrations"
       - "./packages/@osakemyrsky-server/typings:/app/typings"
-      - "./packages/@osakemyrsky-server/google-sa-credentials.json:/tmp/keys/go\
-        ogle-sa-credentials.json"
+      - "./packages/@osakemyrsky-server/google-credentials.json:/tmp/keys/googl\
+        e-credentials.json"
     depends_on:
-      - database
       - firebase-emulator
 
   firebase-emulator:
@@ -70,23 +67,9 @@ services:
     ports:
       - 127.0.0.1:8080:8080
       - 127.0.0.1:4000:4000
-      - 127.0.0.1:44295:44295
     volumes:
-      - "./packages/@osakemyrsky-firebase-emulator/.cache:/firebase/.cache"
-
-  database:
-    container_name: osakemyrsky-database
-    image: postgres:13.4-alpine
-    restart: always
-    environment:
-      POSTGRES_USER: osakemyrsky-user
-      POSTGRES_PASSWORD: osakemyrsky-pw
-      POSTGRES_DB: osakemyrsky-db
-    ports:
-      - 127.0.0.1:8099:5432
-    volumes:
-      - "db:/var/lib/postgresql/data"
+      - "emulator:/firebase/.cache"
 
 volumes:
-  db:
+  emulator:
     driver: local
