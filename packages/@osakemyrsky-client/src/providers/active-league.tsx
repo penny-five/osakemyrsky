@@ -5,11 +5,11 @@ import { isBrowser } from "src/utils/next";
 const LOCAL_STORAGE_KEY = "activeLeagueId";
 
 const ActiveLeagueContext = createContext<{
-  activeLeagueId: string | null;
-  setActiveLeagueId: (id: string) => void;
+  activeLeague: string | null;
+  setActiveLeague: (id: string) => void;
 }>({
-  activeLeagueId: null,
-  setActiveLeagueId: (_id: string) => {
+  activeLeague: null,
+  setActiveLeague: (_id: string) => {
     /* noop */
   }
 });
@@ -21,7 +21,7 @@ export const ActiveLeagueProvider = ({ children }: PropsWithChildren<unknown>) =
     setValue(localStorage.getItem(LOCAL_STORAGE_KEY));
   }
 
-  const setActiveLeagueId = (id: string) => {
+  const setActiveLeague = (id: string) => {
     if (isBrowser()) {
       localStorage.setItem(LOCAL_STORAGE_KEY, id);
     }
@@ -29,7 +29,7 @@ export const ActiveLeagueProvider = ({ children }: PropsWithChildren<unknown>) =
   };
 
   return (
-    <ActiveLeagueContext.Provider value={{ activeLeagueId: value!, setActiveLeagueId }}>
+    <ActiveLeagueContext.Provider value={{ activeLeague: value!, setActiveLeague }}>
       {children}
     </ActiveLeagueContext.Provider>
   );

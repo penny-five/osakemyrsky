@@ -1,59 +1,72 @@
-import { Inject, Injectable } from "@nestjs/common";
-import { Transaction } from "objection";
+import { Firestore } from "@google-cloud/firestore";
+import { Injectable } from "@nestjs/common";
+import { v4 as uuid } from "uuid";
 
+import { Editor } from "../../common/editor";
 import { isAfter, isSameDay } from "../../utils/dates";
-import { CrudService } from "../database/common/service/crud.service";
-import { League } from "../database/models/league.model";
-import { Member } from "../database/models/member.model";
-import { User } from "../database/models/user.model";
+import { League, leagueConverter } from "../firestore/models/league.model";
+import { Member, memberConverter } from "../firestore/models/member.model";
+import { membershipConverter } from "../firestore/models/membership.model";
+import { UserService } from "../users/user.service";
 
 export enum LeaguesOrderBy {
   NAME = "name"
 }
 
-export interface CreateLeagueParams {
-  creatorId: string;
-  name: string;
-  startDate: string;
-  endDate: string;
-}
-
-export interface RegisterMemberParams {
-  userId: string;
-  companyName: string;
-}
-
 @Injectable()
-export class LeagueService extends CrudService<League, LeaguesOrderBy> {
-  static searchColumn = "name";
+export class LeagueService {
+  constructor(private readonly firestore: Firestore, private readonly userService: UserService) {}
 
-  constructor(
-    @Inject(League) leagueModel: typeof League,
-    @Inject(Member) private readonly memberModel: typeof Member,
-    @Inject(User) private readonly userModel: typeof User
-  ) {
-    super(leagueModel);
+  async findLeagueById(leagueId: string) {
+    const res = await this.firestore.collection("leagues").withConverter(leagueConverter).doc(leagueId).get();
+    return res.data();
   }
 
-  async findUserMemberships(userId: string, trx?: Transaction) {
-    const memberships = await this.userModel.relatedQuery("memberships", trx).for(userId).withGraphFetched({
-      league: true
-    });
+  async findMemberByUserId(leagueId: string, userId: string) {
+    const res = await this.firestore
+      .collection("leagues")
+      .doc(leagueId)
+      .collection("members")
+      .withConverter(memberConverter)
+      .where("userId", "==", userId)
+      .get();
 
-    return memberships;
+    return res.empty ? undefined : res.docs[0];
   }
 
-  async findLeagueMembers(leagueId: string, trx?: Transaction) {
-    const members = await this.model.relatedQuery("members", trx).for(leagueId);
-    return members;
+  async findMemberLeague(memberId: string) {
+    const res = await this.firestore.collection("members").withConverter(leagueConverter).doc(memberId).parent.get();
+    return res.empty ? undefined : res.docs[0];
   }
 
-  async findMemberById(memberId: string, trx?: Transaction) {
-    const member = await this.memberModel.query(trx).findById(memberId);
-    return member;
+  async findAll(orderBy = LeaguesOrderBy.NAME) {
+    const res = await this.firestore.collection("leagues").withConverter(leagueConverter).orderBy(orderBy).get();
+    return res.docs.map(doc => doc.data());
   }
 
-  async createLeague(params: CreateLeagueParams, trx?: Transaction) {
+  async findUserMemberships(id: string) {
+    const res = await this.firestore
+      .collection("users")
+      .doc(id)
+      .collection("memberships")
+      .withConverter(membershipConverter)
+      .get();
+
+    return res.docs.map(doc => doc.data());
+  }
+
+  async findLeagueMembers(leagueId: string) {
+    const res = await this.firestore
+      .collection("leagues")
+      .doc(leagueId)
+      .collection("members")
+      .withConverter(membershipConverter)
+      .get();
+
+    return res.docs.map(doc => doc.data());
+  }
+
+  async createLeague(params: Pick<League, "name" | "startDate" | "endDate">, editor: Editor) {
     if (isAfter(params.startDate, params.endDate)) {
       throw new Error("League end date cannot be before league start date");
     }
@@ -62,39 +75,97 @@ export class LeagueService extends CrudService<League, LeaguesOrderBy> {
       throw new Error("League cannot start and end on the same day");
     }
 
-    return this.model.query(trx).insertAndFetch({
-      name: params.name,
-      creatorId: params.creatorId,
-      startDate: params.startDate,
-      endDate: params.endDate
-    });
-  }
+    const user = await this.userService.findUserById(editor.userId);
 
-  async registerMember(leagueId: string, params: RegisterMemberParams, trx?: Transaction) {
-    return this.model.transaction(trx!, async trx2 => {
-      const league = await this.findById(leagueId, trx2);
+    if (user == null) {
+      throw new Error("User not found");
+    }
 
-      if (league == null) {
-        throw new Error("League not found");
-      }
+    const id = uuid();
 
-      if (league.hasEndedOn(new Date())) {
-        throw new Error("League has already ended");
-      }
-
-      const user = await this.userModel.query(trx2).findById(params.userId);
-
-      if (user == null) {
-        throw new Error("User not found");
-      }
-
-      const membership = await this.memberModel.query(trx2).insertAndFetch({
-        leagueId: leagueId,
-        userId: params.userId,
-        companyName: params.companyName
+    await this.firestore
+      .collection("leagues")
+      .doc(id)
+      .withConverter(leagueConverter)
+      .create({
+        name: params.name,
+        startDate: params.startDate,
+        endDate: params.endDate,
+        creator: {
+          name: user.name,
+          picture: user.picture,
+          userId: user.id!
+        }
       });
 
-      return membership;
+    return this.findLeagueById(id);
+  }
+
+  async registerMember(leagueId: string, userId: string, params: Pick<Member, "companyName">) {
+    const league = await this.findLeagueById(leagueId);
+
+    if (league == null) {
+      throw new Error("League not found");
+    }
+
+    if (this.hasLeagueEndedOn(league, new Date())) {
+      throw new Error("League has already ended");
+    }
+
+    const user = await this.userService.findUserById(userId);
+
+    if (user == null) {
+      throw new Error("User not found");
+    }
+
+    const memberId = uuid();
+    const membershipId = uuid();
+
+    const memberRef = this.firestore
+      .collection("leagues")
+      .doc(leagueId)
+      .collection("members")
+      .withConverter(memberConverter)
+      .doc(memberId);
+
+    const membershipRef = this.firestore
+      .collection("users")
+      .doc(user.id!)
+      .collection("memberships")
+      .withConverter(membershipConverter)
+      .doc(membershipId);
+
+    // eslint-disable-next-line @typescript-eslint/require-await
+    await this.firestore.runTransaction<void>(async trx => {
+      trx
+        .create(memberRef, {
+          ...user,
+          userId: user.id!,
+          companyName: params.companyName
+        })
+        .create(membershipRef, {
+          companyName: params.companyName,
+          leagueId: league.id!,
+          leagueName: league.name
+        });
     });
+
+    const res = await membershipRef.get();
+    return res.data();
+  }
+
+  async isLeagueOngoing(leagueId: string) {
+    const league = await this.findLeagueById(leagueId);
+    const now = new Date();
+
+    return league != null && this.hasLeagueStartedOn(league, now) && !this.hasLeagueEndedOn(league, now);
+  }
+
+  private hasLeagueEndedOn(league: League, date: Date | string) {
+    return isAfter(date, league.endDate);
+  }
+
+  private hasLeagueStartedOn(league: League, date: Date | string) {
+    return isAfter(date, league.startDate);
   }
 }

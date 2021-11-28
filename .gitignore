@@ -1,5 +1,7 @@
 node_modules
+.cache
 .DS_Store
 *.code-workspace
 *.log
+google-sa-credentials.json
 .env

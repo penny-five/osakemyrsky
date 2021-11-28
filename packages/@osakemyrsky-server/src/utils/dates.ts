@@ -1,6 +1,11 @@
 import * as dateFns from "date-fns";
 
-const parse = (date: string | Date) => (date instanceof Date ? date : dateFns.parseISO(date));
+export const parse = (date: string | Date) => (date instanceof Date ? date : dateFns.parseISO(date));
+
+export const formatISODate = (date: string | Date) => {
+  const parsedDate = date instanceof Date ? date : parse(date);
+  return dateFns.format(parsedDate, "yyyy-MM-dd");
+};
 
 export const isBefore = (date: string | Date, compareTo: string | Date) => {
   return dateFns.isBefore(parse(date), parse(compareTo));

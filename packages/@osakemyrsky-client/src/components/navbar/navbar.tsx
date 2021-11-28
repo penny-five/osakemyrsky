@@ -15,7 +15,7 @@ import NavbarUserDropdownItem from "./navbar-user-dropdown-item";
 import Logo from "@/atoms/logo";
 import { useActiveLeague } from "@/providers/active-league";
 import { useUser } from "@/providers/user";
-import { League } from "@/types/league";
+import { Membership } from "@/types/membership";
 
 export interface NavbarProps {
   onSignOut: () => void;
@@ -26,28 +26,34 @@ const Navbar: FunctionComponent<NavbarProps> = ({ onSignOut }) => {
 
   const { user, status } = useUser();
 
-  const { activeLeagueId, setActiveLeagueId } = useActiveLeague();
+  const { activeLeague, setActiveLeague } = useActiveLeague();
 
-  let activeLeague: League | null = null;
+  let activeMembership: Membership | null = null;
 
-  if (user != null && activeLeagueId != null) {
-    activeLeague = user.memberships.find(membership => membership.id === activeLeagueId)?.league ?? null;
-
+  if (user != null) {
     if (activeLeague == null && user.memberships.length > 0) {
-      activeLeague = user.memberships[0].league;
-      setActiveLeagueId(activeLeague.id);
+      setActiveLeague(user.memberships[0].leagueId);
+    }
+
+    if (activeLeague != null) {
+      activeMembership = user.memberships.find(membership => membership.leagueId === activeLeague) ?? null;
+
+      if (activeMembership == null && user.memberships.length > 0) {
+        activeMembership = user.memberships[0];
+        setActiveLeague(activeMembership.leagueId);
+      }
     }
   }
 
-  const onSelectActiveLeague = (league: League) => {
+  const onSelectActiveLeague = (leagueId: string) => {
     router.push({
       pathname: "/leagues/[id]",
       query: {
-        id: league.id
+        id: leagueId
       }
     });
 
-    setActiveLeagueId(league.id);
+    setActiveLeague(leagueId);
   };
 
   return (
@@ -62,9 +68,9 @@ const Navbar: FunctionComponent<NavbarProps> = ({ onSignOut }) => {
           </Link>
         </div>
         <span className="flex-grow"></span>
-        {user && activeLeague && (
+        {user && activeMembership && (
           <NavbarLeagueSelector
-            activeLeague={activeLeague}
+            activeMembership={activeMembership}
             memberships={user.memberships}
             onSelect={onSelectActiveLeague}
           />
@@ -83,7 +89,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ onSignOut }) => {
       </div>
       {activeLeague && (
         <ul className="flex flex-row flex-grow items-center px-8 w-full max-w-screen-desktop">
-          <NavbarNavigationLink target={`/leagues/${activeLeague.id}`}>Liigapörssi</NavbarNavigationLink>
+          <NavbarNavigationLink target={`/leagues/${activeLeague}`}>Liigapörssi</NavbarNavigationLink>
           <NavbarNavigationLink target="/my-portfolio">Oma salkku</NavbarNavigationLink>
           <NavbarNavigationLink target="/marketplace">Osta/myy osakkeita</NavbarNavigationLink>
         </ul>

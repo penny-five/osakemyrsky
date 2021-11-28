@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 
+import { User } from "../firestore/models/user.model";
 import { UserService } from "../users/user.service";
 
 import { Issuer, IssuerID } from "./issuers";
@@ -34,16 +35,17 @@ export class AuthenticationService {
       throw new Error("Invalid token");
     }
 
-    let user = await this.userService.findByEmail(userInfo.email);
+    let user: User | undefined = await this.userService.findBySub(userInfo.sub);
 
     if (user == null) {
-      user = await this.userService.createAndFetchOne({
+      user = await this.userService.createUser({
+        sub: userInfo.sub,
         name: userInfo.name,
         email: userInfo.email,
         picture: userInfo.picture
       });
     } else {
-      await this.userService.updateOne(user.id, { name: userInfo.name, picture: userInfo.picture });
+      await this.userService.updateUser(user.id!, { name: userInfo.name, picture: userInfo.picture });
     }
 
     const token = this.jwtService.sign(

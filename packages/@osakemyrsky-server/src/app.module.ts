@@ -5,10 +5,10 @@ import { Request } from "express";
 import { LoggerModule } from "nestjs-pino";
 
 import { AuthModule } from "./modules/authentication/authentication.module";
-import { databaseConfig } from "./modules/config/database";
+import { firestoreConfig } from "./modules/config/firestore";
 import { jwtConfig } from "./modules/config/jwt";
-import { DatabaseModule } from "./modules/database/database.module";
 import { DiagnosticsModule } from "./modules/diagnostics/diagnostics.module";
+import { FirestoreModule } from "./modules/firestore/firestore.module";
 import { LeagueModule } from "./modules/leagues/league.module";
 import { NordnetModule } from "./modules/nordnet/nordnet.module";
 import { OrderModule } from "./modules/orders/order.module";
@@ -42,12 +42,10 @@ import { UserModule } from "./modules/users/user.module";
     }),
     ConfigModule.forRoot({
       ignoreEnvFile: true,
-      load: [databaseConfig, jwtConfig]
+      load: [firestoreConfig, jwtConfig]
     }),
     DiagnosticsModule,
-    DatabaseModule.forRootAsync({
-      connectionString: process.env.PG_CONNECTION_STRING
-    }),
+    FirestoreModule,
     AuthModule,
     NordnetModule,
     StockModule,

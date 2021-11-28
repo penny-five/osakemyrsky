@@ -4,8 +4,9 @@ import { Query, Resolver, Args, ResolveField, Parent, Mutation } from "@nestjs/g
 import { AuthenticationToken } from "../authentication/authentication.types";
 import { Token } from "../authentication/decorators/token.decorator";
 import { GqlJwtAuthGuard } from "../authentication/guards/qgl.jwt.guard";
-import { League } from "../database/models/league.model";
-import { Member } from "../database/models/member.model";
+import { League } from "../firestore/models/league.model";
+import { Member } from "../firestore/models/member.model";
+import { Membership } from "../firestore/models/membership.model";
 
 import { CreateLeagueInput } from "./dto/create-league.input";
 import { GetLeaguesArgs } from "./dto/get-leagues.args";
@@ -18,17 +19,17 @@ export class LeagueResolver {
 
   @Query(() => League)
   league(@Args("id") id: string) {
-    return this.leagueService.findById(id);
+    return this.leagueService.findLeagueById(id);
   }
 
   @Query(() => [League])
   leagues(@Args() args: GetLeaguesArgs) {
-    return this.leagueService.findAll(args);
+    return this.leagueService.findAll(args.orderBy);
   }
 
-  @ResolveField()
+  @ResolveField(() => [Member])
   async members(@Parent() league: League) {
-    return this.leagueService.findLeagueMembers(league.id);
+    return this.leagueService.findLeagueMembers(league.id!);
   }
 
   @UseGuards(GqlJwtAuthGuard)
@@ -37,19 +38,20 @@ export class LeagueResolver {
     @Token() token: AuthenticationToken,
     @Args("createLeagueInput") createLeagueInput: CreateLeagueInput
   ) {
-    return this.leagueService.createLeague({
-      creatorId: token.sub,
-      name: createLeagueInput.name,
-      startDate: createLeagueInput.startDate,
-      endDate: createLeagueInput.endDate
-    });
+    return this.leagueService.createLeague(
+      {
+        name: createLeagueInput.name,
+        startDate: createLeagueInput.startDate,
+        endDate: createLeagueInput.endDate
+      },
+      { userId: token.sub }
+    );
   }
 
   @UseGuards(GqlJwtAuthGuard)
-  @Mutation(() => Member)
+  @Mutation(() => Membership)
   async joinLeague(@Token() token: AuthenticationToken, @Args("joinLeagueInput") joinLeagueInput: JoinLeagueInput) {
-    return this.leagueService.registerMember(joinLeagueInput.leagueId, {
-      userId: token.sub,
+    return this.leagueService.registerMember(joinLeagueInput.leagueId, token.sub, {
       companyName: joinLeagueInput.companyName
     });
   }

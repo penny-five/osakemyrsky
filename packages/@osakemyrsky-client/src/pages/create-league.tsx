@@ -36,7 +36,7 @@ const Home: FunctionComponent = () => {
 
   const { data: session, status } = useSession();
 
-  const { setActiveLeagueId } = useActiveLeague();
+  const { setActiveLeague } = useActiveLeague();
 
   const onCreateLeague = async (data: CreateLeagueFormData) => {
     const result = await client.mutate<CreateLeagueResult, CreateLeagueInput>({
@@ -45,7 +45,7 @@ const Home: FunctionComponent = () => {
       context: { session }
     });
 
-    setActiveLeagueId(result.data!.createLeague.id);
+    setActiveLeague(result.data!.createLeague.id);
 
     router.push({
       pathname: "/leagues/[id]",

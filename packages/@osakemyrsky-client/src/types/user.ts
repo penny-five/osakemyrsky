@@ -1,4 +1,4 @@
-import { Member } from "./member";
+import { Membership } from "./membership";
 
 export interface User {
   id: string;
@@ -6,5 +6,5 @@ export interface User {
   updatedAt: string;
   name: string;
   picture: string | null;
-  memberships: Member[];
+  memberships: Membership[];
 }

@@ -1,26 +1,51 @@
-import { Inject, Injectable } from "@nestjs/common";
-import { Transaction } from "objection";
+import { Firestore } from "@google-cloud/firestore";
+import { Injectable } from "@nestjs/common";
+import { v4 as uuid } from "uuid";
 
-import { CrudService } from "../database/common/service/crud.service";
-import { User } from "../database/models/user.model";
+import { membershipConverter } from "../firestore/models/membership.model";
+import { User, userConverter } from "../firestore/models/user.model";
 
 export enum UsersOrderBy {
   NAME = "name"
 }
 
 @Injectable()
-export class UserService extends CrudService<User, UsersOrderBy> {
-  static searchColumn = "name";
+export class UserService {
+  constructor(private readonly firestore: Firestore) {}
 
-  constructor(@Inject(User) userModel: typeof User) {
-    super(userModel);
+  async createUser(params: Pick<User, "sub" | "name" | "email" | "picture">) {
+    const id = uuid();
+    await this.firestore.collection("users").withConverter(userConverter).doc(id).create(params);
+    return (await this.findUserById(id))!;
   }
 
-  findByEmail(email: string, trx?: Transaction) {
-    return this.model.query(trx).findOne({ email });
+  async findUserById(id: string) {
+    const res = await this.firestore.collection("users").withConverter(userConverter).doc(id).get();
+    return res.data();
   }
 
-  findBySub(sub: string, trx?: Transaction) {
-    return this.model.query(trx).findOne({ sub });
+  async updateUser(id: string, user: Partial<Pick<User, "sub" | "name" | "email" | "picture">>) {
+    await this.firestore.collection("users").withConverter(userConverter).doc(id).update(user);
+  }
+
+  async findUserByEmail(email: string) {
+    const res = await this.firestore.collection("users").withConverter(userConverter).where("email", "==", email).get();
+    return res.empty ? undefined : res.docs[0];
+  }
+
+  async findBySub(sub: string) {
+    const res = await this.firestore.collection("users").withConverter(userConverter).where("sub", "==", sub).get();
+    return res.empty ? undefined : res.docs[0];
+  }
+
+  async findUserMemberships(userId: string) {
+    const res = await this.firestore
+      .collection("users")
+      .doc(userId)
+      .collection("memberships")
+      .withConverter(membershipConverter)
+      .get();
+
+    return res.docs.map(doc => doc.data());
   }
 }

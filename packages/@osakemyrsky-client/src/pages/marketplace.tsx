@@ -11,12 +11,12 @@ import { Stock } from "@/types/stock";
 
 interface PlaceOrderInput {
   data: {
-    type: OrderType;
-    memberId: string;
+    leagueId: string;
     stockSymbol: string;
     stockCount: number;
     stockPriceCents: number;
     expirationDate: string;
+    type: OrderType;
   };
 }
 
@@ -47,7 +47,7 @@ const MyPortfolio: FunctionComponent = () => {
       variables: {
         data: {
           ...order,
-          memberId: activeMembership!.id
+          leagueId: activeMembership!.leagueId
         }
       },
       context: { session }

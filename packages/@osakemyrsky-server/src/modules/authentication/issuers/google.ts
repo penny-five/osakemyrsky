@@ -21,13 +21,14 @@ export class GoogleIssuer implements Issuer {
         return false;
       }
 
-      const { name, email, picture } = payload;
+      const { sub, name, email, picture } = payload;
 
-      if (name == null || email == null) {
+      if (sub == null || name == null || email == null) {
         return false;
       }
 
       return {
+        sub,
         name,
         email,
         picture: picture ?? null

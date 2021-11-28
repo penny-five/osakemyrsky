@@ -29,9 +29,6 @@ const JOIN_LEAGUE = gql`
   mutation JoinLeague($data: JoinLeagueInput!) {
     joinLeague(joinLeagueInput: $data) {
       id
-      createdAt
-      updatedAt
-      companyName
     }
   }
 `;
@@ -55,7 +52,7 @@ const LeaguePage: FunctionComponent = () => {
     skip: status !== "authenticated"
   });
 
-  const isLeagueMember = user?.memberships.some(membership => membership.league.id === leagueId);
+  const isLeagueMember = user?.memberships.some(membership => membership.leagueId === leagueId);
 
   const onRegisterMember = async () => {
     await client.mutate<void, JoinLeagueInput>({

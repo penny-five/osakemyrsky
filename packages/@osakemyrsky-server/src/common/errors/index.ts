@@ -8,8 +8,8 @@ export class AuthorizationError extends UnauthorizedException {
   }
 }
 
-export class EntityNotFoundError extends NotFoundException {
-  constructor(type: string, id: string | number) {
-    super(`${capitalize(type)} with id ${id} not found`);
+export class DocumentNotFoundError extends NotFoundException {
+  constructor(type: string, id?: string | number) {
+    super(id != null ? `${capitalize(type)} with id ${id} not found` : `${capitalize(type)} not found`);
   }
 }

@@ -1,8 +1,10 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Firestore } from "@google-cloud/firestore";
+import { Injectable } from "@nestjs/common";
+import { v4 as uuid } from "uuid";
 
-import { AuthorizationError, EntityNotFoundError } from "../../common/errors";
-import { CrudService } from "../database/common/service/crud.service";
-import { Order, OrderType } from "../database/models/order.model";
+import { Editor } from "../../common/editor";
+import { DocumentNotFoundError } from "../../common/errors";
+import { Order, orderConverter } from "../firestore/models/order.model";
 import { LeagueService } from "../leagues/league.service";
 
 export enum OrdersOrderBy {
@@ -10,46 +12,55 @@ export enum OrdersOrderBy {
   CREATED_AT = "created_at"
 }
 
-export interface PlaceOrderParams {
-  stockSymbol: string;
-  stockCount: number;
-  stockPriceCents: number;
-  type: OrderType;
-  expirationDate: string;
-}
-
 @Injectable()
-export class OrderService extends CrudService<Order, OrdersOrderBy> {
-  constructor(@Inject(Order) orderModel: typeof Order, private readonly leagueService: LeagueService) {
-    super(orderModel);
+export class OrderService {
+  constructor(private readonly firestore: Firestore, private readonly leagueService: LeagueService) {}
+
+  async findOrderById(orderId: string) {
+    const res = await this.firestore
+      .collectionGroup("orders")
+      .withConverter(orderConverter)
+      .where("id", "==", orderId)
+      .get();
+
+    return res.size > 0 ? res.docs[0] : undefined;
   }
 
   async findMemberOrders(memberId: string) {
-    return this.model.query().where({
-      memberId
-    });
+    const res = await this.firestore
+      .collectionGroup("orders")
+      .withConverter(orderConverter)
+      .where("memberId", "==", memberId)
+      .get();
+
+    return res.docs.map(doc => doc.data());
   }
 
-  async placeOrder(userId: string, memberId: string, params: PlaceOrderParams) {
-    const member = await this.leagueService.findMemberById(memberId);
+  async placeOrder(
+    leagueId: string,
+    order: Pick<Order, "stockSymbol" | "stockCount" | "stockPriceCents" | "type" | "expirationDate">,
+    editor: Editor
+  ) {
+    const member = await this.leagueService.findMemberByUserId(leagueId, editor.userId);
 
     if (member == null) {
-      throw new EntityNotFoundError("member", userId);
+      throw new DocumentNotFoundError("member");
     }
 
-    if (member.userId != userId) {
-      throw new AuthorizationError();
-    }
+    const id = uuid();
 
-    const order = await super.createAndFetchOne({
-      memberId,
-      stockSymbol: params.stockSymbol,
-      stockCount: params.stockCount,
-      stockPriceCents: params.stockPriceCents,
-      type: params.type,
-      expirationDate: params.expirationDate
-    });
+    const orderRef = this.firestore
+      .collection("leagues")
+      .doc(leagueId)
+      .collection("members")
+      .doc(member.id)
+      .collection("orders")
+      .withConverter(orderConverter)
+      .doc(id);
 
-    return order;
+    await orderRef.set({ id, ...order });
+
+    const res = await orderRef.get();
+    return res.data();
   }
 }

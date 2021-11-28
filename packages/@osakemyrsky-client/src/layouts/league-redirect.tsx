@@ -7,12 +7,12 @@ import { useActiveLeague } from "src/providers/active-league";
 const LeagueSelectionRedirect: FunctionComponent = ({ children }) => {
   const router = useRouter();
 
-  const { activeLeagueId } = useActiveLeague();
+  const { activeLeague } = useActiveLeague();
 
   const { status: sessionStatus } = useSession();
 
-  if (sessionStatus === "authenticated" && activeLeagueId == null) {
-    if (!["/leagues", "/league/[id]", "/create-league"].includes(router.pathname)) {
+  if (sessionStatus === "authenticated" && activeLeague == null) {
+    if (!["/leagues", "/leagues/[id]", "/create-league"].includes(router.pathname)) {
       router.push("/leagues");
     }
   }

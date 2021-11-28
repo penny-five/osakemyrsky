@@ -1,12 +1,12 @@
 import { Field, InputType } from "@nestjs/graphql";
 import { GraphQLDate, GraphQLUUID, GraphQLPositiveInt } from "graphql-scalars";
 
-import { OrderType } from "../../database/models/order.model";
+import { OrderType } from "../../firestore/models/order.model";
 
 @InputType()
 export class PlaceOrderInput {
   @Field(() => GraphQLUUID, { nullable: false })
-  memberId!: string;
+  leagueId!: string;
 
   @Field({ nullable: false })
   stockSymbol!: string;

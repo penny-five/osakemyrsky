@@ -4,7 +4,7 @@ import { Query, Resolver, Args, Mutation } from "@nestjs/graphql";
 import { AuthenticationToken } from "../authentication/authentication.types";
 import { Token } from "../authentication/decorators/token.decorator";
 import { GqlJwtAuthGuard } from "../authentication/guards/qgl.jwt.guard";
-import { Order } from "../database/models/order.model";
+import { Order } from "../firestore/models/order.model";
 
 import { PlaceOrderInput } from "./dto/place-order.input";
 import { OrderService } from "./order.service";
@@ -20,12 +20,22 @@ export class OrderResolver {
 
   @Query(() => Order)
   order(@Args("id") id: string) {
-    return this.orderService.findById(id);
+    return this.orderService.findOrderById(id);
   }
 
   @UseGuards(GqlJwtAuthGuard)
   @Mutation(() => Order)
-  async placeOrder(@Token() token: AuthenticationToken, @Args("placeOrderInput") placeOrderInput: PlaceOrderInput) {
-    return this.orderService.placeOrder(token.sub, placeOrderInput.memberId, placeOrderInput);
+  placeOrder(@Token() token: AuthenticationToken, @Args("placeOrderInput") placeOrderInput: PlaceOrderInput) {
+    return this.orderService.placeOrder(
+      placeOrderInput.leagueId,
+      {
+        expirationDate: placeOrderInput.expirationDate,
+        stockCount: placeOrderInput.stockCount,
+        stockPriceCents: placeOrderInput.stockPriceCents,
+        stockSymbol: placeOrderInput.stockSymbol,
+        type: placeOrderInput.type
+      },
+      { userId: token.sub }
+    );
   }
 }
