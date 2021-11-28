@@ -9,7 +9,7 @@ const NavbarUserDropdownItem: FunctionComponent<NavbarUserDropdownItemProps> = (
   return (
     <li
       className={classNames({
-        "py-3 px-4 select-none cursor-pointer hover:bg-gray-100 last-of-type:rounded-b-lg": true
+        "py-3 px-4 select-none cursor-pointer hover:bg-gray-100 last-of-type:rounded-b-3xl": true
       })}
       onClick={onClick}
     >

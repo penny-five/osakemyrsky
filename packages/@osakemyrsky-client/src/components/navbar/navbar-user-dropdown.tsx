@@ -1,6 +1,6 @@
-import { ChevronDownIcon } from "@heroicons/react/solid";
-import classNames from "classnames";
 import { FunctionComponent } from "react";
+
+import NavbarDropdown from "./navbar-dropdown";
 
 import Avatar from "src/atoms/avatar";
 import { User } from "src/types/user";
@@ -11,25 +11,15 @@ export interface NavbarUserDropdownProps {
 
 const NavbarUserDropdown: FunctionComponent<NavbarUserDropdownProps> = ({ user, children }) => {
   return (
-    <div
-      className={classNames({
-        "group flex flex-row items-center relative w-[220px] border-gray-200 border-1 py-2 px-3 rounded-xl": true,
-        "hover:rounded-bl-none hover:rounded-br-none hover: hover:border-b-transparent": true
-      })}
-    >
-      <Avatar url={user.picture} />
-      <span className="flex-grow truncate mx-3 font-semibold select-none">{user.name}</span>
-      <ChevronDownIcon className="w-5 flex-shrink-0 text-gray-300 transition-transform group-hover:rotate-180" />
-      <div
-        className={classNames({
-          "absolute top-full mt-[-1px] left-[-1px] right-[-1px] ": true,
-          "border-gray-200 rounded-bl-lg rounded-br-lg bg-white border-t-transparent border-1 shadow-lg": true,
-          "invisible group-hover:visible": true
-        })}
-      >
-        <ul>{children}</ul>
-      </div>
-    </div>
+    <NavbarDropdown
+      content={
+        <div className="flex items-center">
+          <Avatar url={user.picture} />
+          <span className="flex-grow truncate mx-3 font-semibold select-none">{user.name}</span>
+        </div>
+      }
+      dropdownContent={<ul>{children}</ul>}
+    />
   );
 };
 

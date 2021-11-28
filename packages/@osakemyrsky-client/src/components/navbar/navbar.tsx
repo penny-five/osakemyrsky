@@ -7,8 +7,9 @@ import { FunctionComponent } from "react";
 import Button, { ButtonPriority } from "../../atoms/button";
 import Heading from "../../atoms/heading";
 
-import NavbarLeagueSelector from "./navbar-league-selector";
-import NavbarNavigationLink from "./navbar-tab";
+import NavbarLeagueDropdown from "./navbar-league-dropdown";
+import NavbarLeagueDropdownItem from "./navbar-league-dropdown-item";
+import NavbarTab from "./navbar-tab";
 import NavbarUserDropdown from "./navbar-user-dropdown";
 import NavbarUserDropdownItem from "./navbar-user-dropdown-item";
 
@@ -69,11 +70,15 @@ const Navbar: FunctionComponent<NavbarProps> = ({ onSignOut }) => {
         </div>
         <span className="flex-grow"></span>
         {user && activeMembership && (
-          <NavbarLeagueSelector
-            activeMembership={activeMembership}
-            memberships={user.memberships}
-            onSelect={onSelectActiveLeague}
-          />
+          <NavbarLeagueDropdown activeMembership={activeMembership}>
+            {user.memberships.map(membership => (
+              <NavbarLeagueDropdownItem
+                key={membership.id}
+                leagueName={membership.leagueName}
+                onClick={() => onSelectActiveLeague(membership.leagueId)}
+              />
+            ))}
+          </NavbarLeagueDropdown>
         )}
         {user ? (
           <div>
@@ -89,9 +94,9 @@ const Navbar: FunctionComponent<NavbarProps> = ({ onSignOut }) => {
       </div>
       {activeLeague && (
         <ul className="flex flex-row flex-grow items-center px-8 w-full max-w-screen-desktop">
-          <NavbarNavigationLink target={`/leagues/${activeLeague}`}>Liigapörssi</NavbarNavigationLink>
-          <NavbarNavigationLink target="/my-portfolio">Oma salkku</NavbarNavigationLink>
-          <NavbarNavigationLink target="/marketplace">Osta/myy osakkeita</NavbarNavigationLink>
+          <NavbarTab target={`/leagues/${activeLeague}`}>Liigapörssi</NavbarTab>
+          <NavbarTab target="/my-portfolio">Oma salkku</NavbarTab>
+          <NavbarTab target="/marketplace">Osta/myy osakkeita</NavbarTab>
         </ul>
       )}
     </nav>
