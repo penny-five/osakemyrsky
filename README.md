@@ -5,10 +5,10 @@
   <img height="40" width="50" src="https://cdn.svgporn.com/logos/nextjs-icon.svg"/>
   <img height="40" width="50" src="https://cdn.svgporn.com/logos/tailwindcss-icon.svg"/>
   <img height="40" width="50" src="https://cdn.svgporn.com/logos/nestjs.svg"/>
-    <img height="40" width="50" src="https://cdn.svgporn.com/logos/graphql.svg"/>
-        <img height="40" width="50" src="https://cdn.svgporn.com/logos/apollostack.svg"/>
+  <img height="40" width="50" src="https://cdn.svgporn.com/logos/graphql.svg"/>
+  <img height="40" width="50" src="https://cdn.svgporn.com/logos/apollostack.svg"/>
   <img height="40" width="50" src="https://cdn.svgporn.com/logos/firebase.svg"/>
-    <img height="40" width="50" src="https://cdn.svgporn.com/logos/google-cloud.svg"/>
+  <img height="40" width="50" src="https://cdn.svgporn.com/logos/google-cloud.svg"/>
 </div>
 
 <br>
@@ -22,7 +22,7 @@ Very, very much **work in progress**.
 ### Prerequisites
 
 - Docker
-- Node 16
+- Node.js 16
 
 ### Getting started
 
@@ -38,6 +38,17 @@ Then bootstrap the development environment with:
 yarn bootstrap
 ```
 
+Finally, in each package under `./packages` directory, copy `.env.template` as `.env` and fill in all the missing values.
+
+### Local port mappings
+
+| Service                     | Address          |
+| --------------------------- | ---------------- |
+| @osakemyrsky/client         | `127.0.0.1:8000` |
+| @osakemyrsky/server         | `127.0.0.1:8020` |
+| Firebase emulator UI        | `127.0.0.1:4000` |
+| Firebase Firestore emulator | `127.0.0.1:4040` |
+
 ### Commands
 
 #### Start development environment
@@ -45,14 +56,6 @@ yarn bootstrap
 ```sh
 yarn dev:start
 ```
-
-Local port mappings:
-
-| Service              | Address          |
-| -------------------- | ---------------- |
-| @osakemyrsky/client  | `127.0.0.1:8090` |
-| @osakemyrsky/server  | `127.0.0.1:8095` |
-| Firebase emulator UI | `127.0.0.1:4000` |
 
 #### Stop development environment
 
