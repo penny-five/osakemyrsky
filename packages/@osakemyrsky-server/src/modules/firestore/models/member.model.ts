@@ -5,6 +5,7 @@ import { BaseModel } from "./base";
 
 @ObjectType()
 export class Member extends BaseModel {
+  @Field({ nullable: false })
   userId!: string;
 
   @Field({ nullable: false })
