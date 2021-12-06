@@ -64,8 +64,8 @@ export interface NordnetInstrumentPriceInfo {
   ask_volume: number;
   high: NordnetInstrumentPriceValue;
   low: NordnetInstrumentPriceValue;
-  diff: NordnetInstrumentDiffValue;
-  diff_pct: number;
+  diff?: NordnetInstrumentDiffValue;
+  diff_pct?: number;
   spread: NordnetInstrumentPriceValue;
   spread_pct: number;
   tick_timestamp: number;

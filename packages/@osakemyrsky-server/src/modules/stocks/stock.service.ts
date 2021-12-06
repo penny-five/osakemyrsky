@@ -26,9 +26,9 @@ export class StockService {
     dto.name = instrument.instrument_info.name;
     dto.symbol = instrument.instrument_info.symbol;
     dto.exchangeCountry = instrument.exchange_info.exchange_country;
-    dto.price = instrument.price_info.last.price;
-    dto.priceDiff = instrument.price_info.diff.diff;
-    dto.priceDiffPct = instrument.price_info.diff_pct;
+    dto.price = instrument.price_info.last.price || instrument.price_info.close.price;
+    dto.priceDiff = instrument.price_info.diff?.diff ?? 0.0;
+    dto.priceDiffPct = instrument.price_info.diff_pct ?? 0.0;
 
     switch (instrument.status_info.trading_status) {
       case NordnetInstrumentTradingStatus.OPEN:
