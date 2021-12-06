@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&display=swap");
+@import "~react-day-picker/style.css";
 
 @tailwind base;
 @tailwind components;
@@ -12,4 +13,10 @@
   p {
     @apply mb-7 last-of-type:mb-0;
   }
+}
+
+:root {
+  /* Override variables used by react-day-picker */
+  --rdp-accent-color: #407bff;
+  --rdp-background-color: #c5d7ff;
 }

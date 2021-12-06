@@ -1,11 +1,17 @@
-import { gql, useQuery } from "@apollo/client";
+import { gql, useApolloClient, useQuery } from "@apollo/client";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
-import { FunctionComponent } from "react";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { FunctionComponent, useState } from "react";
 
-import LeagueListItem from "@/components/league-list-item";
-import Button from "src/atoms/button";
-import { League } from "src/types/league";
+import Button from "@/atoms/button";
+import Panel from "@/atoms/panel";
+import CreateLeagueModal, { SubmitCreateLeagueModalInputs } from "@/components/leagues/create-league-modal";
+import LeagueListItem from "@/components/leagues/league-list-item";
+import PageHeader from "@/components/page-header";
+import { useActiveLeague } from "@/providers/active-league";
+import { useUser } from "@/providers/user";
+import { League } from "@/types/league";
 
 const GET_LEAGUES = gql`
   query GetLeagues {
@@ -16,29 +22,106 @@ const GET_LEAGUES = gql`
       updatedAt
       startDate
       endDate
+
+      members {
+        name
+        picture
+      }
     }
   }
 `;
 
+const CREATE_LEAGUE = gql`
+  mutation CreateLeague($data: CreateLeagueInput!) {
+    createLeague(createLeagueInput: $data) {
+      id
+      name
+    }
+  }
+`;
+
+interface CreateLeagueInput {
+  data: {
+    name: string;
+    startDate: string;
+    endDate: string;
+  };
+}
+
+interface CreateLeagueResult {
+  createLeague: League;
+}
+
 const LeagueList: FunctionComponent = () => {
+  const router = useRouter();
+  const client = useApolloClient();
+  const { user } = useUser();
   const { data: session } = useSession();
+
+  const { setActiveLeague } = useActiveLeague();
 
   const { data, loading } = useQuery<{ leagues: League[] }>(GET_LEAGUES, {
     context: { session }
   });
 
+  const [isCreateLeagueModalOpen, setIsCreateLeagueModalOpen] = useState(false);
+
+  if (data == null) {
+    return <></>;
+  }
+
+  const numLeagues = data.leagues.length;
+  const numMembers = data.leagues.flatMap(league => league.members!).length;
+
+  const onCreateLeague = async (data: SubmitCreateLeagueModalInputs) => {
+    const result = await client.mutate<CreateLeagueResult, CreateLeagueInput>({
+      mutation: CREATE_LEAGUE,
+      variables: { data },
+      context: { session }
+    });
+
+    setActiveLeague(result.data!.createLeague.id);
+
+    router.push({
+      pathname: "/leagues/[id]",
+      query: {
+        id: result.data!.createLeague.id
+      }
+    });
+  };
+
   return (
-    <div>
-      <h2>Liigat</h2>
-      <Link href="/create-league" passHref>
-        <Button>Lisää uusi liiga</Button>
-      </Link>
+    <div className="flex flex-col flex-grow">
+      <PageHeader
+        title="Liigat"
+        illustration={<Image src="/images/page-header-leagues.svg" alt="illustration" width="275px" height="275px" />}
+        info={
+          <dl className="flex gap-6">
+            <div className="flex flex-col">
+              <dt className="text-lg text-gray-500 font-semibold">Perustettuja liigoja</dt>
+              <dd className="text-4xl font-extrabold">{numLeagues}</dd>
+            </div>
+            <div className="flex flex-col">
+              <dt className="text-lg text-gray-500 font-semibold">Jäseniä</dt>
+              <dd className="text-4xl font-extrabold">{numMembers}</dd>
+            </div>
+          </dl>
+        }
+        actions={user != null && <Button onClick={() => setIsCreateLeagueModalOpen(true)}>Perusta uusi liiga</Button>}
+      />
       {!loading && (
-        <ul>
-          {data?.leagues.map(league => (
-            <LeagueListItem key={league.id} league={league} />
-          ))}
-        </ul>
+        <div className="px-10 pb-8">
+          <Panel>
+            <ul>
+              {data?.leagues.map(league => (
+                <LeagueListItem key={league.id} league={league} />
+              ))}
+            </ul>
+          </Panel>
+        </div>
+      )}
+      {isCreateLeagueModalOpen && (
+        <CreateLeagueModal onSubmit={onCreateLeague} onClose={() => setIsCreateLeagueModalOpen(false)} />
       )}
     </div>
   );

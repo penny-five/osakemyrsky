@@ -34,6 +34,9 @@ export default NextAuth({
       clientSecret: process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_SECRET
     })
   ],
+  session: {
+    maxAge: 60 * 60
+  },
   callbacks: {
     session({ token }) {
       const serverToken = token.serverToken as string;

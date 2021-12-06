@@ -2,7 +2,7 @@ import { gql, useQuery } from "@apollo/client";
 import { useSession } from "next-auth/react";
 import { FunctionComponent } from "react";
 
-import LeagueListItem from "./league-list-item";
+import LeagueListItem from "./leagues/league-list-item";
 
 import { League } from "src/types/league";
 

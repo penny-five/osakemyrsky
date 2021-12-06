@@ -292,6 +292,26 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@floating-ui/core@^0.1.5":
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-0.1.5.tgz#58c6216258f7484f5584d197859a2519062169f7"
+  integrity sha512-9eF/oNboOx4J3O6mDhSks68u0QIk87LC+S9ZSFIOlSSXmYbMstVbUk1u87wxKHtcUmQ14ZafXajT8J4vSXGwSg==
+
+"@floating-ui/dom@^0.1.5":
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-0.1.5.tgz#dbc2d50307d0f9a5a179494e7dd62532b85a2604"
+  integrity sha512-jZk7K84L+rjMvQzRvqoC9Id2BIVND2yjSjXYRaUJ8ImphXJPV+Vs0nNTiI35Cd0UTHxJuA9dmaoTW1OWSZD+Ig==
+  dependencies:
+    "@floating-ui/core" "^0.1.5"
+
+"@floating-ui/react-dom@0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@floating-ui/react-dom/-/react-dom-0.3.0.tgz#a8829853fbd8fb44bb790ba8dca22efb9e43304c"
+  integrity sha512-/OhZoyy8Hub8gtcIp7HTkTJs35dvMo+T2zYCfisqnxWC6qnba704dQL/3Cxf59SdtVjf4j56hf/B02TdohAxWQ==
+  dependencies:
+    "@floating-ui/dom" "^0.1.5"
+    use-isomorphic-layout-effect "^1.1.1"
+
 "@graphql-typed-document-node/core@^3.0.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@graphql-typed-document-node/core/-/core-3.1.0.tgz#0eee6373e11418bfe0b5638f654df7a4ca6a3950"
@@ -579,6 +599,22 @@
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/@types/raf-schd/-/raf-schd-4.0.1.tgz#1f9e03736f277fe9c7b82102bf18570a6ee19f82"
   integrity sha512-Ha+EnKHFIh9EKW0/XZJPUd3EGDFisEvauaBd4VVCRPKeOqUxNEc9TodiY2Zhk33XCgzJucoFEcaoNcBAPHTQ2A==
+
+"@types/react-dom@17.0.11":
+  version "17.0.11"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-17.0.11.tgz#e1eadc3c5e86bdb5f7684e00274ae228e7bcc466"
+  integrity sha512-f96K3k+24RaLGVu/Y2Ng3e1EbZ8/cVJvypZWd7cy0ofCBaf2lcM46xNhycMZ2xGwbBjRql7hOlZ+e2WlJ5MH3Q==
+  dependencies:
+    "@types/react" "*"
+
+"@types/react@*":
+  version "17.0.37"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.37.tgz#6884d0aa402605935c397ae689deed115caad959"
+  integrity sha512-2FS1oTqBGcH/s0E+CjrCCR9+JMpsu9b69RTFO+40ua43ZqP5MmQ4iUde/dMjWR909KxZwmOQIFq6AV6NjEG5xg==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/scheduler" "*"
+    csstype "^3.0.2"
 
 "@types/react@17.0.34":
   version "17.0.34"
@@ -3827,6 +3863,11 @@ react-apexcharts@1.3.9:
   dependencies:
     prop-types "^15.5.7"
 
+react-day-picker@8.0.0-beta.33:
+  version "8.0.0-beta.33"
+  resolved "https://registry.yarnpkg.com/react-day-picker/-/react-day-picker-8.0.0-beta.33.tgz#7be0efe5af5375cf44cf5148b12ba8ce9884d6f2"
+  integrity sha512-3Q7oljtscutCcTxPE68z05kYW5JAILzZbhqVmd1T566vVnLPAvC9R6rLLd8+z3u/KpJ6+WHuiC+d7pUgcuWEUw==
+
 react-dom@17.0.2:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-17.0.2.tgz#ecffb6845e3ad8dbfcdc498f0d0a939736502c23"
@@ -3835,6 +3876,11 @@ react-dom@17.0.2:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     scheduler "^0.20.2"
+
+react-hook-form@7.20.5:
+  version "7.20.5"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.20.5.tgz#69d563c9cceafb2d4449bd3c28d17342b57b5830"
+  integrity sha512-xYeBmQW6oqxDYAYVWIoZYC7tRD6lJBJt9b8Rr1Mv/VhZ+ZUCy2IuXlm2YA9i0/zl0TKKxqBWQOxGEb3qyVIhMg==
 
 react-is@17.0.2:
   version "17.0.2"
@@ -4658,6 +4704,11 @@ uri-js@^4.2.2:
   integrity sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==
   dependencies:
     punycode "^2.1.0"
+
+use-isomorphic-layout-effect@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/use-isomorphic-layout-effect/-/use-isomorphic-layout-effect-1.1.1.tgz#7bb6589170cd2987a152042f9084f9effb75c225"
+  integrity sha512-L7Evj8FGcwo/wpbv/qvSfrkHFtOpCzvM5yl2KVyDJoylVuSvzphiiasmjgQPttIGBAy2WKiBNR98q8w7PiNgKQ==
 
 use-subscription@1.5.1:
   version "1.5.1"

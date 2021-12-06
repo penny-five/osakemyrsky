@@ -1,7 +1,7 @@
 import { FunctionComponent } from "react";
 
-import BuyStocksForm from "./buy-stocks-form";
-import SellStocksForm from "./sell-stocks-form";
+import BuyStocksForm, { SubmitBuyOrderInput } from "./buy-stocks-form";
+import SellStocksForm, { SubmitSellOrderInput } from "./sell-stocks-form";
 
 import CountryFlag from "@/atoms/country-flag";
 import Heading from "@/atoms/heading";
@@ -11,23 +11,34 @@ import TabContainer from "@/components/tab/tab-container";
 import { OrderType } from "@/types/order";
 import { Stock } from "@/types/stock";
 
-export interface OrderBuilderOrder {
-  type: OrderType;
-  stockSymbol: string;
-  stockPriceCents: number;
-  stockCount: number;
+export interface OrderBuilderInput {
+  symbol: string;
+  price: number;
+  count: number;
   expirationDate: string;
+  type: OrderType;
 }
 
 export interface OrderBuilderProps {
   stock: Stock;
-  onSubmit: (order: OrderBuilderOrder) => void;
+  onSubmit: (order: OrderBuilderInput) => void;
 }
 
 const OrderBuilder: FunctionComponent<OrderBuilderProps> = ({ stock, onSubmit }) => {
-  const onSubmitSellOrder = (order: { count: number; price: number }) => {
-    // eslint-disable-next-line no-console
-    console.log(order);
+  const onSubmitBuyOrder = (order: SubmitBuyOrderInput) => {
+    onSubmit({
+      ...order,
+      symbol: stock.symbol,
+      type: OrderType.BUY
+    });
+  };
+
+  const onSubmitSellOrder = (order: SubmitSellOrderInput) => {
+    onSubmit({
+      ...order,
+      symbol: stock.symbol,
+      type: OrderType.SELL
+    });
   };
 
   return (
@@ -43,10 +54,7 @@ const OrderBuilder: FunctionComponent<OrderBuilderProps> = ({ stock, onSubmit })
       <StockPriceChart />
       <TabContainer>
         <Tab title="Osta osakkeita">
-          <BuyStocksForm
-            stock={stock}
-            onSubmit={order => onSubmit({ ...order, stockSymbol: stock.symbol, type: OrderType.BUY })}
-          />
+          <BuyStocksForm stock={stock} onSubmit={onSubmitBuyOrder} />
         </Tab>
         <Tab title="Myy osakkeita">
           <SellStocksForm stock={stock} onSubmit={onSubmitSellOrder} />

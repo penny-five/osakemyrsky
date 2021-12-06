@@ -73,8 +73,8 @@ const LeaguePage: FunctionComponent = () => {
     <div className="flex-grow">
       <PageHeader
         title="Liigapörssi"
-        leagueName={data.league.name}
-        illustration={<Image src="/images/page-header-league.svg" alt="illustration" width="220px" height="220px" />}
+        subtitle={data.league.name}
+        illustration={<Image src="/images/page-header-league.svg" alt="illustration" width="250px" height="250px" />}
       />
       {!isLeagueMember && <Button onClick={onRegisterMember}>Liity liigaan</Button>}
       <div className="flex flex-col gap-10 px-10 pb-8">

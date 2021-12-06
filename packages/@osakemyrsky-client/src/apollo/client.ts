@@ -2,7 +2,7 @@ import { ApolloClient, InMemoryCache, HttpLink, from } from "@apollo/client";
 
 import { authLink } from "./links/auth";
 
-import { isBrowser } from "src/utils/next";
+import { isBrowser } from "src/utils/nextjs";
 
 export const client = new ApolloClient({
   cache: new InMemoryCache(),

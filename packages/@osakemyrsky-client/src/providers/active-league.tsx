@@ -1,6 +1,6 @@
 import { useState, createContext, useContext, PropsWithChildren } from "react";
 
-import { isBrowser } from "src/utils/next";
+import { isBrowser } from "src/utils/nextjs";
 
 const LOCAL_STORAGE_KEY = "activeLeagueId";
 

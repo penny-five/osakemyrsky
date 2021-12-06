@@ -4,7 +4,7 @@ import Image from "next/image";
 import { FunctionComponent, useState } from "react";
 
 import Panel from "@/atoms/panel";
-import OrderBuilder, { OrderBuilderOrder } from "@/components/marketplace/order-builder";
+import OrderBuilder, { OrderBuilderInput } from "@/components/marketplace/order-builder";
 import StockFinder from "@/components/marketplace/stock-finder";
 import PageHeader from "@/components/page-header";
 import { useActiveMembership } from "@/providers/active-membership";
@@ -43,13 +43,17 @@ const MyPortfolio: FunctionComponent = () => {
 
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
 
-  const onSubmitOrder = async (order: OrderBuilderOrder) => {
+  const onSubmitOrder = async (order: OrderBuilderInput) => {
     await client.mutate<PlaceOrderResult, PlaceOrderInput>({
       mutation: PLACE_ORDER,
       variables: {
         data: {
-          ...order,
-          leagueId: activeMembership!.leagueId
+          leagueId: activeMembership!.leagueId,
+          stockCount: order.count,
+          stockSymbol: order.symbol,
+          stockPriceCents: order.price,
+          expirationDate: order.expirationDate,
+          type: order.type
         }
       },
       context: { session }
@@ -60,9 +64,9 @@ const MyPortfolio: FunctionComponent = () => {
     <div className="flex flex-col flex-grow">
       <PageHeader
         title="Osta/myy osakkeita"
-        leagueName={activeMembership?.leagueName ?? ""}
+        subtitle={activeMembership?.leagueName ?? ""}
         illustration={
-          <Image src="/images/page-header-marketplace.svg" alt="illustration" width="250px" height="250px" />
+          <Image src="/images/page-header-marketplace.svg" alt="illustration" width="275px" height="275px" />
         }
       />
       <div className="px-10 pb-8">

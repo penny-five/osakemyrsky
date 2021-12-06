@@ -5,6 +5,7 @@ import Head from "next/head";
 import { FunctionComponent } from "react";
 
 import "@/styles/globals.css";
+
 import { client } from "@/apollo/client";
 import DefaultLayout from "@/layouts/default";
 import LeagueSelectionRedirect from "@/layouts/league-redirect";

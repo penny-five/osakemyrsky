@@ -1,25 +1,25 @@
 import debounce from "lodash.debounce";
-import React, { FunctionComponent, useMemo } from "react";
+import React, { FormEvent, useMemo } from "react";
 
-import TextInput from "@/atoms/text-input";
+import TextInput from "@/components/forms/text-input";
 
-export interface SearchFieldProps {
-  maxLength?: number;
-  placeholder?: string;
+export interface SearchFieldProps extends React.HTMLProps<HTMLInputElement> {
   onSearch: (searchphrase: string) => void;
 }
 
-const SearchField: FunctionComponent<SearchFieldProps> = ({ maxLength, placeholder, onSearch }) => {
+const SearchField = React.forwardRef<HTMLInputElement, SearchFieldProps>(({ onSearch, ...props }, ref) => {
   const onChange = useMemo(
     () =>
-      debounce((value: string) => {
-        onSearch(value);
+      debounce((event: FormEvent<HTMLInputElement>) => {
+        onSearch((event.target as HTMLInputElement).value);
       }, 500),
     [onSearch]
   );
 
-  return <TextInput maxLength={maxLength} placeholder={placeholder} onChange={onChange} />;
-};
+  return <TextInput {...props} ref={ref} onChange={onChange} type="text" />;
+});
+
+SearchField.displayName = "SearchField";
 
 SearchField.defaultProps = {
   onSearch: () => {

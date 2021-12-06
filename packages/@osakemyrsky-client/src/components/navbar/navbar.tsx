@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { FunctionComponent } from "react";
 
-import Button, { ButtonPriority } from "../../atoms/button";
+import Button, { ButtonPriority, ButtonVariant } from "../../atoms/button";
 import Heading from "../../atoms/heading";
 
 import NavbarLeagueDropdown from "./navbar-league-dropdown";
@@ -69,7 +69,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ onSignOut }) => {
           </Link>
         </div>
         <span className="flex-grow"></span>
-        {user && activeMembership && (
+        {user && activeMembership ? (
           <NavbarLeagueDropdown activeMembership={activeMembership}>
             {user.memberships.map(membership => (
               <NavbarLeagueDropdownItem
@@ -79,6 +79,14 @@ const Navbar: FunctionComponent<NavbarProps> = ({ onSignOut }) => {
               />
             ))}
           </NavbarLeagueDropdown>
+        ) : (
+          <Link href="/leagues" passHref>
+            <a>
+              <Button variant={ButtonVariant.TEXT} priority={ButtonPriority.PRIMARY}>
+                Selaa liigoja
+              </Button>
+            </a>
+          </Link>
         )}
         {user ? (
           <div>
@@ -92,7 +100,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ onSignOut }) => {
           </Button>
         ) : null}
       </div>
-      {activeLeague && (
+      {user && activeMembership && (
         <ul className="flex flex-row flex-grow items-center px-8 w-full max-w-screen-desktop">
           <NavbarTab target={`/leagues/${activeLeague}`}>Liigapörssi</NavbarTab>
           <NavbarTab target="/my-portfolio">Oma salkku</NavbarTab>

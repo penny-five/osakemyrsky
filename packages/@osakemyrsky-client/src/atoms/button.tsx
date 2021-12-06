@@ -6,29 +6,50 @@ export enum ButtonPriority {
   SECONDARY = "secondary"
 }
 
-export interface ButtonProps {
-  className?: string;
-  priority?: ButtonPriority;
-  type?: "button" | "submit";
-  disabled?: boolean;
-  onClick?: () => void;
-  icon?: JSX.Element;
+export enum ButtonVariant {
+  DEFAULT = "default",
+  TEXT = "text"
 }
 
-const Button: FunctionComponent<ButtonProps> = ({ children, className, priority, type, disabled, icon, onClick }) => {
+export interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
+  priority?: ButtonPriority;
+  variant?: ButtonVariant;
+  type?: "button" | "submit";
+  icon?: JSX.Element;
+  form?: string;
+}
+
+const Button: FunctionComponent<ButtonProps> = ({
+  children,
+  className,
+  priority,
+  variant,
+  disabled,
+  icon,
+  ...props
+}) => {
   return (
     <button
-      type={type}
-      disabled={disabled}
-      onClick={onClick}
+      {...props}
       className={classNames(className, {
-        "flex items-center py-4 px-6 border-1 rounded-lg border-transparent font-extrabold shadow-lg": true,
-        "transition-colors focus:ring-2 focus:ring-blue-200": true,
+        "flex items-center py-4 px-6  font-bold whitespace-nowrap": true,
+        "border-1 rounded-lg border-transparent transition-colors focus:ring-2 focus:ring-blue-200": true,
         "pl-4": icon != null,
-        "bg-blue-200 text-white hover:bg-blue-300": priority === ButtonPriority.PRIMARY && !disabled,
-        "bg-white border-black-200": priority === ButtonPriority.SECONDARY && !disabled,
-        "text-gray-200 bg-gray-100 cursor-not-allowed": priority === ButtonPriority.PRIMARY && disabled,
-        "text-gray-200 border-gray-200 cursor-not-allowed": priority === ButtonPriority.SECONDARY && disabled
+        "cursor-not-allowed": disabled,
+        "shadow-lg": variant === ButtonVariant.DEFAULT,
+        "bg-blue-200 text-white hover:bg-blue-300":
+          variant === ButtonVariant.DEFAULT && priority === ButtonPriority.PRIMARY && !disabled,
+        "bg-white border-black-200":
+          variant === ButtonVariant.DEFAULT && priority === ButtonPriority.SECONDARY && !disabled,
+        "text-gray-200 bg-gray-100":
+          variant === ButtonVariant.DEFAULT && priority === ButtonPriority.PRIMARY && disabled,
+        "text-gray-200 border-gray-200":
+          variant === ButtonVariant.DEFAULT && priority === ButtonPriority.SECONDARY && disabled,
+        "text-blue-200 hover:bg-blue-100":
+          variant === ButtonVariant.TEXT && priority === ButtonPriority.PRIMARY && !disabled,
+        "text-black-100 hover:bg-gray-300":
+          variant === ButtonVariant.TEXT && priority === ButtonPriority.SECONDARY && !disabled,
+        "text-gray-500": variant === ButtonVariant.TEXT && disabled
       })}
     >
       {icon != null && (
@@ -43,6 +64,7 @@ const Button: FunctionComponent<ButtonProps> = ({ children, className, priority,
 
 Button.defaultProps = {
   priority: ButtonPriority.PRIMARY,
+  variant: ButtonVariant.DEFAULT,
   disabled: false,
   type: "button",
   onClick: () => {
