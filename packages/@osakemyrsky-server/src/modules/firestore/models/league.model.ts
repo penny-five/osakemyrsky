@@ -1,5 +1,6 @@
 import { DocumentData, FirestoreDataConverter, Timestamp } from "@google-cloud/firestore";
-import { Field, ObjectType } from "@nestjs/graphql";
+import { Field, ObjectType, registerEnumType } from "@nestjs/graphql";
+import { isAfter, isBefore, isSameDay } from "date-fns";
 import { GraphQLDate } from "graphql-scalars";
 
 import { formatISODate } from "../../../utils/dates";
@@ -17,6 +18,24 @@ export class LeagueCreator {
   picture!: string | null;
 }
 
+export enum LeagueStatus {
+  STARTING = "STARTING",
+  ONGOING = "ONGOING",
+  ENDED = "ENDED"
+}
+
+registerEnumType(LeagueStatus, { name: "LeagueStatus" });
+
+const resolveLeagueStatus = (startDate: Date, endDate: Date, now = new Date()) => {
+  if (!isSameDay(now, startDate) && isBefore(now, startDate)) {
+    return LeagueStatus.STARTING;
+  }
+  if (!isSameDay(now, endDate) && isAfter(now, endDate)) {
+    return LeagueStatus.ENDED;
+  }
+  return LeagueStatus.ONGOING;
+};
+
 @ObjectType()
 export class League extends BaseModel {
   @Field({ nullable: false })
@@ -30,20 +49,26 @@ export class League extends BaseModel {
 
   @Field(() => LeagueCreator, { nullable: false })
   creator!: LeagueCreator;
+
+  @Field(() => LeagueStatus)
+  status!: LeagueStatus;
 }
 
 export const leagueConverter: FirestoreDataConverter<League> = {
   fromFirestore(snapshot) {
     const data = snapshot.data();
+    const startDate = (data.startDate as Timestamp).toDate();
+    const endDate = (data.endDate as Timestamp).toDate();
 
     const league = new League();
 
     league.id = snapshot.id;
     league.createdAt = snapshot.createTime.toDate().toISOString();
     league.updatedAt = snapshot.updateTime.toDate().toISOString();
-    league.startDate = formatISODate((data.startDate as Timestamp).toDate());
-    league.endDate = formatISODate((data.endDate as Timestamp).toDate());
+    league.startDate = formatISODate(startDate);
+    league.endDate = formatISODate(endDate);
     league.name = data.name as string;
+    league.status = resolveLeagueStatus(startDate, endDate);
 
     league.creator = new LeagueCreator();
     league.creator.userId = (data.creator as DocumentData).userId as string;
