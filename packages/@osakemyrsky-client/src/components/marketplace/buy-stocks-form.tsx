@@ -1,5 +1,4 @@
 import { DownloadIcon } from "@heroicons/react/solid";
-import { FunctionComponent } from "react";
 import { useForm } from "react-hook-form";
 
 import Button from "@/atoms/button";
@@ -20,7 +19,7 @@ export interface BuyStocksFormProps {
   onSubmit: (order: SubmitBuyOrderInput) => void;
 }
 
-const BuyStocksForm: FunctionComponent<BuyStocksFormProps> = ({ stock, onSubmit }) => {
+const BuyStocksForm = ({ stock, onSubmit }: BuyStocksFormProps) => {
   const {
     register,
     handleSubmit,

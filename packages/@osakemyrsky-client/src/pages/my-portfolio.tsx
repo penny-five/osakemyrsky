@@ -1,11 +1,10 @@
 import Image from "next/image";
-import { FunctionComponent } from "react";
 
 import Panel from "@/atoms/panel";
 import PageHeader from "@/components/page-header";
 import { useActiveMembership } from "@/providers/active-membership";
 
-const MyPortfolio: FunctionComponent = () => {
+const MyPortfolio = () => {
   const { activeMembership } = useActiveMembership();
 
   return (

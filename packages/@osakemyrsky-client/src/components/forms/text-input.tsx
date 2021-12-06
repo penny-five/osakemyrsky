@@ -2,11 +2,10 @@ import classNames from "classnames";
 import React from "react";
 
 export interface TextInputProps extends React.HTMLProps<HTMLInputElement> {
-  maxLength?: number;
   type?: "text" | "number";
 }
 
-const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(({ type, ...props }, ref) => (
+const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(({ type = "text", ...props }, ref) => (
   <input
     {...props}
     ref={ref}
@@ -19,12 +18,5 @@ const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(({ type, ..
 ));
 
 TextInput.displayName = "TextInput";
-
-TextInput.defaultProps = {
-  type: "text",
-  onChange: () => {
-    // noop
-  }
-};
 
 export default TextInput;

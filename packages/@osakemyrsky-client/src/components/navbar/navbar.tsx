@@ -2,9 +2,8 @@ import { ArchiveIcon } from "@heroicons/react/solid";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { FunctionComponent } from "react";
 
-import Button, { ButtonPriority, ButtonVariant } from "../../atoms/button";
+import Button from "../../atoms/button";
 import Heading from "../../atoms/heading";
 
 import NavbarLeagueDropdown from "./navbar-league-dropdown";
@@ -22,7 +21,7 @@ export interface NavbarProps {
   onSignOut: () => void;
 }
 
-const Navbar: FunctionComponent<NavbarProps> = ({ onSignOut }) => {
+const Navbar = ({ onSignOut }: NavbarProps) => {
   const router = useRouter();
 
   const { user, status } = useUser();
@@ -67,7 +66,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ onSignOut }) => {
         ) : (
           <Link href="/leagues" passHref>
             <a>
-              <Button variant={ButtonVariant.TEXT} priority={ButtonPriority.PRIMARY}>
+              <Button variant="text" priority="primary">
                 Selaa liigoja
               </Button>
             </a>
@@ -80,7 +79,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ onSignOut }) => {
             </NavbarUserDropdown>
           </div>
         ) : status === "unauthenticated" ? (
-          <Button priority={ButtonPriority.PRIMARY} icon={<ArchiveIcon />} onClick={() => signIn("google")}>
+          <Button priority="primary" icon={<ArchiveIcon />} onClick={() => signIn("google")}>
             Kirjaudu sisään
           </Button>
         ) : null}

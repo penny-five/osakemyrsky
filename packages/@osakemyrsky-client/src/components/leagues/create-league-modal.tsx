@@ -1,9 +1,8 @@
-import { FunctionComponent } from "react";
 import { useForm } from "react-hook-form";
 
 import Modal from "../modals/modal";
 
-import Button, { ButtonPriority } from "@/atoms/button";
+import Button from "@/atoms/button";
 import DateInput from "@/components/forms/date-input";
 import FormInput from "@/components/forms/form-input";
 import TextInput from "@/components/forms/text-input";
@@ -20,7 +19,7 @@ export interface SubmitCreateLeagueModalInputs {
   endDate: string;
 }
 
-const CreateLeagueModal: FunctionComponent<CreateLeagueModalProps> = ({ onClose, onSubmit }) => {
+const CreateLeagueModal = ({ onClose, onSubmit }: CreateLeagueModalProps) => {
   const {
     register,
     handleSubmit,
@@ -33,7 +32,7 @@ const CreateLeagueModal: FunctionComponent<CreateLeagueModalProps> = ({ onClose,
       closeOnClickOutside={false}
       onClose={onClose}
       buttons={
-        <Button priority={ButtonPriority.PRIMARY} type="submit" form="createLeague">
+        <Button priority="primary" type="submit" form="createLeague">
           Perusta liiga
         </Button>
       }

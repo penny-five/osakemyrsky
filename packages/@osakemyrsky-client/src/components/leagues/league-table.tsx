@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { FunctionComponent } from "react";
 
 import LeagueStatusBadge from "../league-status-badge";
 
@@ -11,7 +10,7 @@ export interface LeagueTableProps {
   leagues: League[];
 }
 
-const LeagueTable: FunctionComponent<LeagueTableProps> = ({ leagues }) => {
+const LeagueTable = ({ leagues }: LeagueTableProps) => {
   return (
     <table className="flex flex-col w-full">
       <thead className="">

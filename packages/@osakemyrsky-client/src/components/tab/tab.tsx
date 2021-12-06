@@ -1,10 +1,11 @@
-import React, { FunctionComponent } from "react";
+import React from "react";
 
 export interface TabProps {
+  children?: React.ReactNode;
   title: string;
 }
 
-const Tab: FunctionComponent<TabProps> = ({ children }) => {
+const Tab = ({ children }: TabProps) => {
   return (
     <li role="presentation" className="list-none">
       {children}

@@ -1,11 +1,11 @@
 import classNames from "classnames";
-import { FunctionComponent } from "react";
 
 export interface NavbarUserDropdownItemProps {
+  children?: React.ReactNode;
   onClick?: () => void;
 }
 
-const NavbarUserDropdownItem: FunctionComponent<NavbarUserDropdownItemProps> = ({ children, onClick }) => {
+const NavbarUserDropdownItem = ({ children, onClick }: NavbarUserDropdownItemProps) => {
   return (
     <li
       className={classNames({
@@ -16,12 +16,6 @@ const NavbarUserDropdownItem: FunctionComponent<NavbarUserDropdownItemProps> = (
       {children}
     </li>
   );
-};
-
-NavbarUserDropdownItem.defaultProps = {
-  onClick: () => {
-    // noop
-  }
 };
 
 export default NavbarUserDropdownItem;

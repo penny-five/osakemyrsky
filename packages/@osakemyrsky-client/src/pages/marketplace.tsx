@@ -1,7 +1,7 @@
 import { gql, useApolloClient } from "@apollo/client";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { FunctionComponent, useState } from "react";
+import { useState } from "react";
 
 import Panel from "@/atoms/panel";
 import OrderBuilder, { OrderBuilderInput } from "@/components/marketplace/order-builder";
@@ -34,7 +34,7 @@ const PLACE_ORDER = gql`
   }
 `;
 
-const MyPortfolio: FunctionComponent = () => {
+const MyPortfolio = () => {
   const client = useApolloClient();
 
   const { activeMembership } = useActiveMembership();

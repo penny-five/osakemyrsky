@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React, { FunctionComponent } from "react";
+import React from "react";
 
 export type AvatarSize = "sm" | "md" | "lg";
 
@@ -8,7 +8,7 @@ export interface AvatarProps {
   size?: AvatarSize;
 }
 
-const Avatar: FunctionComponent<AvatarProps> = ({ url, size }) => {
+const Avatar = ({ url, size = "md" }: AvatarProps) => {
   return (
     <div
       className={classNames({
@@ -20,10 +20,6 @@ const Avatar: FunctionComponent<AvatarProps> = ({ url, size }) => {
       style={{ backgroundImage: url != null ? `url(${url})` : "" }}
     ></div>
   );
-};
-
-Avatar.defaultProps = {
-  size: "md"
 };
 
 export default Avatar;

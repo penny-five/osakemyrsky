@@ -1,5 +1,4 @@
 import classNames from "classnames";
-import { FunctionComponent } from "react";
 
 import Avatar from "@/atoms/avatar";
 
@@ -7,7 +6,7 @@ export interface AvatarStackProps {
   pictures: string[];
 }
 
-const AvatarStack: FunctionComponent<AvatarStackProps> = ({ pictures }) => {
+const AvatarStack = ({ pictures }: AvatarStackProps) => {
   return (
     <div className="flex items-center">
       {pictures.slice(0, 4).map(picture => (

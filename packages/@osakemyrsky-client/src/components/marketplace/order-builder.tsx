@@ -1,5 +1,3 @@
-import { FunctionComponent } from "react";
-
 import BuyStocksForm, { SubmitBuyOrderInput } from "./buy-stocks-form";
 import SellStocksForm, { SubmitSellOrderInput } from "./sell-stocks-form";
 
@@ -24,7 +22,7 @@ export interface OrderBuilderProps {
   onSubmit: (order: OrderBuilderInput) => void;
 }
 
-const OrderBuilder: FunctionComponent<OrderBuilderProps> = ({ stock, onSubmit }) => {
+const OrderBuilder = ({ stock, onSubmit }: OrderBuilderProps) => {
   const onSubmitBuyOrder = (order: SubmitBuyOrderInput) => {
     onSubmit({
       ...order,

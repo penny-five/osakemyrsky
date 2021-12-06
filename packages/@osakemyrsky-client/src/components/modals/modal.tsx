@@ -1,19 +1,20 @@
 import classNames from "classnames";
-import React, { FunctionComponent, useRef } from "react";
+import React, { useRef } from "react";
 import { createPortal } from "react-dom";
 
-import Button, { ButtonPriority, ButtonVariant } from "@/atoms/button";
+import Button from "@/atoms/button";
 import Heading from "@/atoms/heading";
 import { useOnClickOutside } from "@/hooks/use-on-click-outside";
 
 export interface ModalProps {
+  children?: React.ReactNode;
   title?: string;
   buttons: React.ReactNode;
   closeOnClickOutside?: boolean;
   onClose: () => void;
 }
 
-const Modal: FunctionComponent<ModalProps> = ({ children, title, buttons, closeOnClickOutside, onClose }) => {
+const Modal = ({ children, title, buttons, closeOnClickOutside = true, onClose }: ModalProps) => {
   const modalRef = useRef(null);
 
   useOnClickOutside(modalRef, () => {
@@ -34,7 +35,7 @@ const Modal: FunctionComponent<ModalProps> = ({ children, title, buttons, closeO
         <div className="my-8">{children}</div>
         <div className="flex justify-end gap-4">
           {" "}
-          <Button variant={ButtonVariant.TEXT} priority={ButtonPriority.SECONDARY} onClick={onClose}>
+          <Button variant="text" priority="secondary" onClick={onClose}>
             Peruuta
           </Button>
           {buttons}

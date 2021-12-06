@@ -1,14 +1,15 @@
 import classNames from "classnames";
-import React, { FunctionComponent } from "react";
+import React from "react";
 
 export type HeadingLevel = 1 | 2 | 3;
 
 export interface HeadingProps {
+  children?: React.ReactNode;
   className?: string;
   level?: HeadingLevel;
 }
 
-const Heading: FunctionComponent<HeadingProps> = ({ children, className, level }) => {
+const Heading = ({ children, className, level = 1 }: HeadingProps) => {
   const Tag = `h${level}` as keyof JSX.IntrinsicElements;
 
   return (
@@ -22,10 +23,6 @@ const Heading: FunctionComponent<HeadingProps> = ({ children, className, level }
       {children}
     </Tag>
   );
-};
-
-Heading.defaultProps = {
-  level: 1
 };
 
 export default Heading;

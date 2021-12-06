@@ -7,24 +7,28 @@ export interface SearchFieldProps extends React.HTMLProps<HTMLInputElement> {
   onSearch: (searchphrase: string) => void;
 }
 
-const SearchField = React.forwardRef<HTMLInputElement, SearchFieldProps>(({ onSearch, ...props }, ref) => {
-  const onChange = useMemo(
-    () =>
-      debounce((event: FormEvent<HTMLInputElement>) => {
-        onSearch((event.target as HTMLInputElement).value);
-      }, 500),
-    [onSearch]
-  );
+const SearchField = React.forwardRef<HTMLInputElement, SearchFieldProps>(
+  (
+    {
+      onSearch = () => {
+        /* noop */
+      },
+      ...props
+    },
+    ref
+  ) => {
+    const onChange = useMemo(
+      () =>
+        debounce((event: FormEvent<HTMLInputElement>) => {
+          onSearch((event.target as HTMLInputElement).value);
+        }, 500),
+      [onSearch]
+    );
 
-  return <TextInput {...props} ref={ref} onChange={onChange} type="text" />;
-});
+    return <TextInput {...props} ref={ref} onChange={onChange} type="text" />;
+  }
+);
 
 SearchField.displayName = "SearchField";
-
-SearchField.defaultProps = {
-  onSearch: () => {
-    // noop
-  }
-};
 
 export default SearchField;

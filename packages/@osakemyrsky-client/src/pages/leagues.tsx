@@ -2,7 +2,7 @@ import { gql, useApolloClient, useQuery } from "@apollo/client";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { FunctionComponent, useState } from "react";
+import { useState } from "react";
 
 import Button from "@/atoms/button";
 import Panel from "@/atoms/panel";
@@ -53,7 +53,7 @@ interface CreateLeagueResult {
   createLeague: League;
 }
 
-const LeagueList: FunctionComponent = () => {
+const LeagueList = () => {
   const router = useRouter();
   const client = useApolloClient();
   const { user } = useUser();

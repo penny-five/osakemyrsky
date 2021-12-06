@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { FunctionComponent } from "react";
+import React from "react";
 
 export type CountryFlagSize = "sm" | "md";
 
@@ -8,29 +8,25 @@ export interface CountryFlagProps {
   size?: CountryFlagSize;
 }
 
-const CountryFlag: FunctionComponent<CountryFlagProps> = ({ countryCode, size }) => {
-  let width;
-
+const getWidth = (size: CountryFlagSize) => {
   switch (size) {
     case "sm":
-      width = 20;
-      break;
+      return 20;
     case "md":
-      width = 26;
-      break;
+      return 26;
     default:
       throw new Error();
   }
+};
+
+const CountryFlag = ({ countryCode, size = "sm" }: CountryFlagProps) => {
+  const width = getWidth(size);
 
   return (
     <div className="inline-flex flex-shrink-0 border-gray-300 border-1">
       <Image alt={countryCode} src={`/flags/${countryCode.toUpperCase()}.svg`} width={width} height={width * 0.75} />
     </div>
   );
-};
-
-CountryFlag.defaultProps = {
-  size: "sm"
 };
 
 export default CountryFlag;

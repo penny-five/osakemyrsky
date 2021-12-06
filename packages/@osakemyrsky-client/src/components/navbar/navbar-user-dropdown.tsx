@@ -1,15 +1,14 @@
-import { FunctionComponent } from "react";
-
 import NavbarDropdown from "./navbar-dropdown";
 
 import Avatar from "src/atoms/avatar";
 import { User } from "src/types/user";
 
 export interface NavbarUserDropdownProps {
+  children?: React.ReactNode;
   user: User;
 }
 
-const NavbarUserDropdown: FunctionComponent<NavbarUserDropdownProps> = ({ user, children }) => {
+const NavbarUserDropdown = ({ user, children }: NavbarUserDropdownProps) => {
   return (
     <NavbarDropdown
       content={

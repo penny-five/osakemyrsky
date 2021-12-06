@@ -1,19 +1,19 @@
 import classNames from "classnames";
-import React, { FunctionComponent, ReactElement, useState } from "react";
+import React, { ReactElement, useState } from "react";
 
 import { TabProps } from "./tab";
 
 export interface TabContainerProps {
-  disabled?: boolean;
+  children: ReactElement<TabProps>[];
 }
 
-const TabContainer: FunctionComponent<TabContainerProps> = ({ children }) => {
+const TabContainer = ({ children }: TabContainerProps) => {
   const [activeTab, setActiveTab] = useState(0);
 
   return (
     <div>
       <ul className="flex" role="tablist">
-        {(children as ReactElement<TabProps>[]).map((child, index) => (
+        {children.map((child, index) => (
           <li
             key={index}
             className={classNames({
@@ -28,13 +28,9 @@ const TabContainer: FunctionComponent<TabContainerProps> = ({ children }) => {
           </li>
         ))}
       </ul>
-      <div>{(children as ReactElement<TabProps>[]).map((child, index) => (index === activeTab ? child : null))}</div>
+      <div>{children.map((child, index) => (index === activeTab ? child : null))}</div>
     </div>
   );
-};
-
-TabContainer.defaultProps = {
-  disabled: false
 };
 
 export default TabContainer;

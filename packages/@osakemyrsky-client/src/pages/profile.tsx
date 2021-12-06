@@ -1,6 +1,5 @@
 import { gql, useQuery } from "@apollo/client";
 import { useSession } from "next-auth/react";
-import { FunctionComponent } from "react";
 
 import { User } from "src/types/user";
 
@@ -15,7 +14,7 @@ const GET_ME = gql`
   }
 `;
 
-const Profile: FunctionComponent = () => {
+const Profile = () => {
   const { data: session, status } = useSession();
 
   const { data, loading } = useQuery<{ me: User }>(GET_ME, {

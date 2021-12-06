@@ -98,10 +98,4 @@ const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
 
 DateInput.displayName = "DateInput";
 
-DateInput.defaultProps = {
-  onChange: () => {
-    // noop
-  }
-};
-
 export default DateInput;

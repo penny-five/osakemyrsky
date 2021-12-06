@@ -1,9 +1,9 @@
 import { signOut } from "next-auth/react";
-import React, { FunctionComponent } from "react";
+import React from "react";
 
 import Navbar from "@/components/navbar/navbar";
 
-const DefaultLayout: FunctionComponent = ({ children }) => {
+const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex flex-col items-center min-h-[100vh]">
       <Navbar onSignOut={signOut} />

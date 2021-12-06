@@ -1,16 +1,16 @@
-import { FunctionComponent, ReactNode } from "react";
+import React from "react";
 
 import Heading from "src/atoms/heading";
 
 export interface PageHeaderProps {
   title: string;
   subtitle?: string;
-  illustration: ReactNode;
-  info?: ReactNode;
-  actions?: ReactNode;
+  illustration: React.ReactNode;
+  info?: React.ReactNode;
+  actions?: React.ReactNode;
 }
 
-const PageHeader: FunctionComponent<PageHeaderProps> = ({ title, subtitle, illustration, info, actions }) => {
+const PageHeader = ({ title, subtitle, illustration, info, actions }: PageHeaderProps) => {
   return (
     <div className="flex items-center py-2 pl-4 pr-10">
       <div className="flex items-center justify-center w-[275px] h-[275px]">{illustration}</div>

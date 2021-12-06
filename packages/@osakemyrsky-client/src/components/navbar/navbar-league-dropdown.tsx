@@ -1,17 +1,17 @@
 import { ViewGridIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
 import Link from "next/link";
-import { FunctionComponent } from "react";
 
 import NavbarDropdown from "./navbar-dropdown";
 
 import { Membership } from "@/types/membership";
 
 export interface NavbarLeagueDropdownProps {
+  children?: React.ReactNode;
   activeMembership: Membership;
 }
 
-const NavbarLeagueDropdown: FunctionComponent<NavbarLeagueDropdownProps> = ({ children, activeMembership }) => {
+const NavbarLeagueDropdown = ({ children, activeMembership }: NavbarLeagueDropdownProps) => {
   return (
     <NavbarDropdown
       content={<span className="flex-grow mx-3 truncate font-semibold select-none">{activeMembership.leagueName}</span>}

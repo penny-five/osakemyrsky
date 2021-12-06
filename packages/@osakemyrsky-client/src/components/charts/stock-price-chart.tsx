@@ -1,7 +1,7 @@
 import { ApexOptions } from "apexcharts";
 import * as dateFns from "date-fns";
 import dynamic from "next/dynamic";
-import { FunctionComponent, useRef } from "react";
+import { useRef } from "react";
 
 import { useSize } from "@/hooks/use-size";
 import { randomBetween } from "@/utils/numbers";
@@ -12,7 +12,7 @@ export interface StockPriceChartProps {
   values?: { date: string; value: number }[];
 }
 
-const StockPriceChart: FunctionComponent<StockPriceChartProps> = ({ values }) => {
+const StockPriceChart = ({ values }: StockPriceChartProps) => {
   const target = useRef(null);
 
   const size = useSize(target);

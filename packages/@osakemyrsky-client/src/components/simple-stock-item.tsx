@@ -1,5 +1,4 @@
 import classNames from "classnames";
-import { FunctionComponent } from "react";
 
 import CountryFlag from "@/atoms/country-flag";
 import { Stock } from "@/types/stock";
@@ -9,7 +8,7 @@ export interface SimpleStockItemProps {
   onClick?: () => void;
 }
 
-const SimpleStockItem: FunctionComponent<SimpleStockItemProps> = ({ stock, onClick }) => {
+const SimpleStockItem = ({ stock, onClick }: SimpleStockItemProps) => {
   return (
     <li
       className="flex items-center py-4 px-4 bg-gray-200 rounded-xl cursor-pointer hover:bg-gray-300"
@@ -36,12 +35,6 @@ const SimpleStockItem: FunctionComponent<SimpleStockItemProps> = ({ stock, onCli
       </div>
     </li>
   );
-};
-
-SimpleStockItem.defaultProps = {
-  onClick: () => {
-    // noop
-  }
 };
 
 export default SimpleStockItem;

@@ -2,7 +2,6 @@ import { ApolloProvider } from "@apollo/client";
 import { SessionProvider } from "next-auth/react";
 import { AppProps } from "next/app";
 import Head from "next/head";
-import { FunctionComponent } from "react";
 
 import "@/styles/globals.css";
 
@@ -13,7 +12,7 @@ import { ActiveLeagueProvider } from "@/providers/active-league";
 import { ActiveMembershipProvider } from "@/providers/active-membership";
 import { UserProvider } from "@/providers/user";
 
-const OsakemyrskyApp: FunctionComponent<AppProps> = ({ Component, pageProps: { session, ...pageProps } }) => {
+const OsakemyrskyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
   return (
     <ApolloProvider client={client}>
       <Head>

@@ -1,6 +1,6 @@
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import classNames from "classnames";
-import { FunctionComponent, ReactNode, useState } from "react";
+import { ReactNode, useState } from "react";
 
 export interface NavbarDropdownProps {
   isOpen?: boolean;
@@ -8,7 +8,7 @@ export interface NavbarDropdownProps {
   dropdownContent: ReactNode;
 }
 
-const NavbarDropdown: FunctionComponent<NavbarDropdownProps> = ({ content, dropdownContent }) => {
+const NavbarDropdown = ({ content, dropdownContent }: NavbarDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (

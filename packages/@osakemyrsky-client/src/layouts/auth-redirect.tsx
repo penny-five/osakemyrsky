@@ -1,10 +1,9 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { FunctionComponent } from "react";
 
 import { useActiveLeague } from "src/providers/active-league";
 
-const AuthRedirect: FunctionComponent = ({ children }) => {
+const AuthRedirect = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
 
   const { status: sessionStatus } = useSession();

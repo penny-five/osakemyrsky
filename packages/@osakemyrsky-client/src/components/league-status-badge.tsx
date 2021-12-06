@@ -1,5 +1,3 @@
-import { FunctionComponent } from "react";
-
 import Badge, { BadgeColor } from "@/atoms/badge";
 import { LeagueStatus } from "@/types/league";
 
@@ -27,7 +25,7 @@ const getLabel = (status: LeagueStatus) => {
       return "Päättynyt";
   }
 };
-const LeagueStatusBadge: FunctionComponent<LeagueStatusBadgeProps> = ({ status }) => {
+const LeagueStatusBadge = ({ status }: LeagueStatusBadgeProps) => {
   return (
     <Badge color={getColor(status)} size="sm">
       {getLabel(status)}

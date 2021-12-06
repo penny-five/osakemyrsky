@@ -2,7 +2,6 @@ import { gql, useQuery, useApolloClient } from "@apollo/client";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/dist/client/router";
 import Image from "next/image";
-import { FunctionComponent } from "react";
 
 import Button from "@/atoms/button";
 import Panel from "@/atoms/panel";
@@ -36,7 +35,7 @@ const JOIN_LEAGUE = gql`
   }
 `;
 
-const LeaguePage: FunctionComponent = () => {
+const LeaguePage = () => {
   const client = useApolloClient();
 
   const router = useRouter();

@@ -1,13 +1,13 @@
 import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { FunctionComponent } from "react";
 
 export interface NavbarTabProps {
+  children?: React.ReactNode;
   target: string;
 }
 
-const NavbarTab: FunctionComponent<NavbarTabProps> = ({ children, target }) => {
+const NavbarTab = ({ children, target }: NavbarTabProps) => {
   const router = useRouter();
 
   const isActive = router.asPath === target;

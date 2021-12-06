@@ -1,15 +1,17 @@
 import classNames from "classnames";
-import React, { FunctionComponent } from "react";
+import React from "react";
 
 export type BadgeColor = "gray" | "blue";
+
 export type BadgeSize = "sm" | "md";
 
 export interface BadgeProps {
+  children?: React.ReactNode;
   color?: BadgeColor;
   size?: BadgeSize;
 }
 
-const Badge: FunctionComponent<BadgeProps> = ({ children, color, size }) => {
+const Badge = ({ children, color = "blue", size = "md" }: BadgeProps) => {
   return (
     <span
       className={classNames({
@@ -23,11 +25,6 @@ const Badge: FunctionComponent<BadgeProps> = ({ children, color, size }) => {
       {children}
     </span>
   );
-};
-
-Badge.defaultProps = {
-  color: "blue",
-  size: "md"
 };
 
 export default Badge;
