@@ -3,6 +3,7 @@ import Link from "next/link";
 import LeagueStatusBadge from "../league-status-badge";
 
 import AvatarStack from "@/components/avatar-stack";
+import { useUser } from "@/providers/user";
 import { League } from "@/types/league";
 import { formatDayRange } from "@/utils/dates/display";
 
@@ -11,6 +12,8 @@ export interface LeagueTableProps {
 }
 
 const LeagueTable = ({ leagues }: LeagueTableProps) => {
+  const { user } = useUser();
+
   return (
     <table className="flex flex-col w-full">
       <thead className="">
@@ -36,7 +39,12 @@ const LeagueTable = ({ leagues }: LeagueTableProps) => {
               </Link>
             </td>
             <td className="p-4 w-[15%]">
-              <AvatarStack pictures={league.members.map(member => member.picture)} />
+              <AvatarStack
+                pictures={league.members.map(member => ({
+                  url: member.picture,
+                  isUser: member.userId === user?.id
+                }))}
+              />
             </td>
             <td className="p-4 w-[20%] font-semibold text-base">{formatDayRange(league.startDate, league.endDate)}</td>
             <td className="p-4 w-[15%]">

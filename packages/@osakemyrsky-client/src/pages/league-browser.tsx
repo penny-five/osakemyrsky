@@ -25,6 +25,8 @@ const GET_LEAGUES = gql`
       status
 
       members {
+        id
+        userId
         name
         picture
       }
