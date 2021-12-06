@@ -15,8 +15,8 @@ import NavbarUserDropdownItem from "./navbar-user-dropdown-item";
 
 import Logo from "@/atoms/logo";
 import { useActiveLeague } from "@/providers/active-league";
+import { useActiveMembership } from "@/providers/active-membership";
 import { useUser } from "@/providers/user";
-import { Membership } from "@/types/membership";
 
 export interface NavbarProps {
   onSignOut: () => void;
@@ -29,22 +29,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ onSignOut }) => {
 
   const { activeLeague, setActiveLeague } = useActiveLeague();
 
-  let activeMembership: Membership | null = null;
-
-  if (user != null) {
-    if (activeLeague == null && user.memberships.length > 0) {
-      setActiveLeague(user.memberships[0].leagueId);
-    }
-
-    if (activeLeague != null) {
-      activeMembership = user.memberships.find(membership => membership.leagueId === activeLeague) ?? null;
-
-      if (activeMembership == null && user.memberships.length > 0) {
-        activeMembership = user.memberships[0];
-        setActiveLeague(activeMembership.leagueId);
-      }
-    }
-  }
+  const { activeMembership } = useActiveMembership();
 
   const onSelectActiveLeague = (leagueId: string) => {
     router.push({

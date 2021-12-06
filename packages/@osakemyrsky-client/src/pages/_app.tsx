@@ -7,8 +7,8 @@ import { FunctionComponent } from "react";
 import "@/styles/globals.css";
 
 import { client } from "@/apollo/client";
+import AuthRedirect from "@/layouts/auth-redirect";
 import DefaultLayout from "@/layouts/default";
-import LeagueSelectionRedirect from "@/layouts/league-redirect";
 import { ActiveLeagueProvider } from "@/providers/active-league";
 import { ActiveMembershipProvider } from "@/providers/active-membership";
 import { UserProvider } from "@/providers/user";
@@ -24,13 +24,13 @@ const OsakemyrskyApp: FunctionComponent<AppProps> = ({ Component, pageProps: { s
       <SessionProvider session={session}>
         <UserProvider>
           <ActiveLeagueProvider>
-            <LeagueSelectionRedirect>
+            <AuthRedirect>
               <ActiveMembershipProvider>
                 <DefaultLayout>
                   <Component {...pageProps} />
                 </DefaultLayout>
               </ActiveMembershipProvider>
-            </LeagueSelectionRedirect>
+            </AuthRedirect>
           </ActiveLeagueProvider>
         </UserProvider>
       </SessionProvider>

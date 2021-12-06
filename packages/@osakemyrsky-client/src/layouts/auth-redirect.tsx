@@ -4,12 +4,18 @@ import { FunctionComponent } from "react";
 
 import { useActiveLeague } from "src/providers/active-league";
 
-const LeagueSelectionRedirect: FunctionComponent = ({ children }) => {
+const AuthRedirect: FunctionComponent = ({ children }) => {
   const router = useRouter();
 
-  const { activeLeague } = useActiveLeague();
-
   const { status: sessionStatus } = useSession();
+
+  if (sessionStatus === "unauthenticated") {
+    if (!["/leagues", "/leagues/[id]", "/create-league"].includes(router.pathname)) {
+      router.push("/leagues");
+    }
+  }
+
+  const { activeLeague } = useActiveLeague();
 
   if (sessionStatus === "authenticated" && activeLeague == null) {
     if (!["/leagues", "/leagues/[id]", "/create-league"].includes(router.pathname)) {
@@ -20,4 +26,4 @@ const LeagueSelectionRedirect: FunctionComponent = ({ children }) => {
   return <>{children}</>;
 };
 
-export default LeagueSelectionRedirect;
+export default AuthRedirect;

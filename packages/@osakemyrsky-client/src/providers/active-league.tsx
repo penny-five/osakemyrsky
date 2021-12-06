@@ -1,35 +1,31 @@
-import { useState, createContext, useContext, PropsWithChildren } from "react";
+import { createContext, useContext, PropsWithChildren } from "react";
 
-import { isBrowser } from "src/utils/nextjs";
+import { useUser } from "./user";
 
-const LOCAL_STORAGE_KEY = "activeLeagueId";
+import { useLocalStorage } from "@/hooks/use-local-storage";
 
 const ActiveLeagueContext = createContext<{
-  activeLeague: string | null;
-  setActiveLeague: (id: string) => void;
+  activeLeague: string | null | undefined;
+  setActiveLeague: (id: string | null) => void;
 }>({
   activeLeague: null,
-  setActiveLeague: (_id: string) => {
+  setActiveLeague: (_id: string | null) => {
     /* noop */
   }
 });
 
 export const ActiveLeagueProvider = ({ children }: PropsWithChildren<unknown>) => {
-  const [value, setValue] = useState<string | null | undefined>(undefined);
+  const { user } = useUser();
+  const [value, setValue] = useLocalStorage("active-league-id");
 
-  if (value === undefined && isBrowser()) {
-    setValue(localStorage.getItem(LOCAL_STORAGE_KEY));
+  if (user != null) {
+    if (value == null && user.memberships.length > 0) {
+      setValue(user.memberships[0].leagueId);
+    }
   }
 
-  const setActiveLeague = (id: string) => {
-    if (isBrowser()) {
-      localStorage.setItem(LOCAL_STORAGE_KEY, id);
-    }
-    setValue(id);
-  };
-
   return (
-    <ActiveLeagueContext.Provider value={{ activeLeague: value!, setActiveLeague }}>
+    <ActiveLeagueContext.Provider value={{ activeLeague: value, setActiveLeague: setValue }}>
       {children}
     </ActiveLeagueContext.Provider>
   );
