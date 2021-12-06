@@ -5,6 +5,8 @@ import Image from "next/image";
 
 import Button from "@/atoms/button";
 import Panel from "@/atoms/panel";
+import PanelColumn from "@/atoms/panel-column";
+import MemberList from "@/components/league/member-list";
 import PageHeader from "@/components/page-header";
 import { useUser } from "@/providers/user";
 import { League } from "@/types/league";
@@ -16,6 +18,14 @@ const GET_LEAGUE = gql`
       name
       createdAt
       updatedAt
+
+      members {
+        id
+        userId
+        name
+        companyName
+        picture
+      }
     }
   }
 `;
@@ -77,7 +87,13 @@ const LeaguePage = () => {
       />
       {!isLeagueMember && <Button onClick={onRegisterMember}>Liity liigaan</Button>}
       <div className="flex flex-col gap-10 px-10 pb-8">
-        <Panel title="Tilanne"></Panel>
+        <Panel title="Tilanne" />
+        <Panel>
+          <PanelColumn title="Jäsenet">
+            <MemberList members={data.league.members} />
+          </PanelColumn>
+          <PanelColumn title="Suosituimmat osakkeet"></PanelColumn>
+        </Panel>
         <Panel title="Jäsenet"></Panel>
         <Panel title="Viimeksi toteutuneet kaupat"></Panel>
       </div>

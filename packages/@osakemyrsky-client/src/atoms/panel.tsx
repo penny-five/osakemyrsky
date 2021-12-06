@@ -15,7 +15,7 @@ const Panel = ({ children, title }: PanelProps) => {
           <Heading level={3}>{title}</Heading>
         </div>
       )}
-      {children}
+      <div className="flex gap-16">{children}</div>
     </div>
   );
 };
