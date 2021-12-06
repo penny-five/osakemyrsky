@@ -14,5 +14,5 @@ export interface League {
   startDate: string;
   endDate: string;
   status: LeagueStatus;
-  members?: Member[];
+  members: Member[];
 }

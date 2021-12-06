@@ -12,86 +12,91 @@ import { capitalize } from "@/utils/strings";
 export interface DateInputProps extends React.HTMLProps<HTMLInputElement> {
   value?: string;
   defaultValue?: string;
-  min?: string;
+  minDate?: string;
 }
 
-const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(({ value, defaultValue, min, ...props }, ref) => {
-  const { x, y, strategy, reference, floating } = useFloating({
-    middleware: [offset({ mainAxis: 4 }), flip({ padding: 5 }), shift({ padding: 5 })],
-    placement: "bottom-start",
-    strategy: "absolute"
-  });
+const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
+  ({ value, defaultValue, minDate, ...props }, ref) => {
+    const { x, y, strategy, reference, floating } = useFloating({
+      middleware: [offset({ mainAxis: 4 }), flip({ padding: 5 }), shift({ padding: 5 })],
+      placement: "bottom-start",
+      strategy: "absolute"
+    });
 
-  const [internalValue, setInternalValue] = useState(value || defaultValue);
+    const [internalValue, setInternalValue] = useState(value || defaultValue);
 
-  const wrapperRef = useRef(null);
+    const wrapperRef = useRef(null);
 
-  useOnClickOutside(wrapperRef, () => {
-    setPickerOpen(false);
-  });
-
-  const [isPickerOpen, setPickerOpen] = useState(false);
-
-  const onSelect: SelectSingleEventHandler = (day, _selected, modifiers) => {
-    if (day != null && !modifiers.disabled) {
-      setInternalValue(formatISODay(day));
+    useOnClickOutside(wrapperRef, () => {
       setPickerOpen(false);
-    }
-  };
+    });
 
-  const onFocus: FocusEventHandler<HTMLInputElement> = () => {
-    setPickerOpen(true);
-  };
+    const [isPickerOpen, setPickerOpen] = useState(false);
 
-  return (
-    <div className="flex" ref={wrapperRef} onFocus={onFocus}>
-      <div className="flex-grow" ref={reference}>
-        <input
-          {...props}
-          ref={ref}
-          className={classNames({
-            "w-full py-3 px-4 font-normal text-base placeholder-gray-500 border-gray-400 bg-gray-100 rounded-lg": true,
-            "focus:ring-1 focus:ring-blue-200 transition-colors": true
-          })}
-          type="text"
-          autoComplete="off"
-          value={internalValue || value}
-          onKeyDown={event => event.preventDefault()}
-        />
-      </div>
-      {isPickerOpen && (
-        <div
-          className="bg-white border-1 border-gray-300 rounded-xl shadow-lg z-50"
-          ref={floating}
-          style={{
-            position: strategy,
-            top: y || "",
-            left: x || ""
-          }}
-        >
-          <DayPicker
-            mode="single"
-            locale={fi}
-            fromDate={min != null ? parseDate(min) : undefined}
-            styles={{
-              caption: {
-                fontSize: "0.8rem"
-              },
-              head_cell: {
-                color: "#A9A9A9"
-              }
-            }}
-            formatters={{
-              formatCaption: date => capitalize(format(date, "LLLL", { locale: fi }))
-            }}
-            selected={internalValue != null ? parseDate(internalValue) : undefined}
-            onSelect={onSelect}
+    const onSelect: SelectSingleEventHandler = (day, _selected, modifiers) => {
+      if (day != null && !modifiers.disabled) {
+        setInternalValue(formatISODay(day));
+        setPickerOpen(false);
+      }
+    };
+
+    const onFocus: FocusEventHandler<HTMLInputElement> = () => {
+      setPickerOpen(true);
+    };
+
+    return (
+      <div className="flex" ref={wrapperRef} onFocus={onFocus}>
+        <div className="flex-grow" ref={reference}>
+          <input
+            {...props}
+            ref={ref}
+            className={classNames({
+              "w-full py-3 px-4 font-normal text-base placeholder-gray-500 border-gray-400 bg-gray-100 rounded-lg":
+                true,
+              "focus:ring-1 focus:ring-blue-200 transition-colors": true
+            })}
+            type="text"
+            autoComplete="off"
+            value={internalValue || value}
+            onKeyDown={event => event.preventDefault()}
           />
         </div>
-      )}
-    </div>
-  );
-});
+        {isPickerOpen && (
+          <div
+            className="bg-white border-1 border-gray-300 rounded-xl shadow-lg z-50"
+            ref={floating}
+            style={{
+              position: strategy,
+              top: y || "",
+              left: x || ""
+            }}
+          >
+            <DayPicker
+              mode="single"
+              locale={fi}
+              fromDate={minDate != null ? parseDate(minDate) : undefined}
+              styles={{
+                caption: {
+                  fontSize: "0.8rem"
+                },
+                head_cell: {
+                  color: "#A9A9A9"
+                }
+              }}
+              formatters={{
+                formatCaption: date => capitalize(format(date, "LLLL", { locale: fi }))
+              }}
+              selected={internalValue != null ? parseDate(internalValue) : undefined}
+              onSelect={onSelect}
+            />
+          </div>
+        )}
+      </div>
+    );
+  }
+);
+
+DateInput.displayName = "DateInput";
 
 DateInput.defaultProps = {
   onChange: () => {
