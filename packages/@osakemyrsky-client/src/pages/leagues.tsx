@@ -7,7 +7,7 @@ import { FunctionComponent, useState } from "react";
 import Button from "@/atoms/button";
 import Panel from "@/atoms/panel";
 import CreateLeagueModal, { SubmitCreateLeagueModalInputs } from "@/components/leagues/create-league-modal";
-import LeagueListItem from "@/components/leagues/league-list-item";
+import LeagueTable from "@/components/leagues/league-table";
 import PageHeader from "@/components/page-header";
 import { useActiveLeague } from "@/providers/active-league";
 import { useUser } from "@/providers/user";
@@ -22,6 +22,7 @@ const GET_LEAGUES = gql`
       updatedAt
       startDate
       endDate
+      status
 
       members {
         name
@@ -112,11 +113,7 @@ const LeagueList: FunctionComponent = () => {
       {!loading && (
         <div className="px-10 pb-8">
           <Panel>
-            <ul>
-              {data?.leagues.map(league => (
-                <LeagueListItem key={league.id} league={league} />
-              ))}
-            </ul>
+            <LeagueTable leagues={data.leagues} />
           </Panel>
         </div>
       )}
