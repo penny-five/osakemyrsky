@@ -60,7 +60,7 @@ export class LeagueService {
       .collection("leagues")
       .doc(leagueId)
       .collection("members")
-      .withConverter(membershipConverter)
+      .withConverter(memberConverter)
       .get();
 
     return res.docs.map(doc => doc.data());
