@@ -6,8 +6,8 @@ import { useState } from "react";
 
 import Button from "@/atoms/button";
 import Panel from "@/atoms/panel";
-import CreateLeagueModal, { SubmitCreateLeagueModalInputs } from "@/components/leagues/create-league-modal";
-import LeagueTable from "@/components/leagues/league-table";
+import CreateLeagueModal, { SubmitCreateLeagueModalInputs } from "@/components/league-browser/create-league-modal";
+import LeagueTable from "@/components/league-browser/league-table";
 import PageHeader from "@/components/page-header";
 import { useActiveLeague } from "@/providers/active-league";
 import { useUser } from "@/providers/user";
@@ -53,7 +53,7 @@ interface CreateLeagueResult {
   createLeague: League;
 }
 
-const LeagueList = () => {
+const LeagueBrowser = () => {
   const router = useRouter();
   const client = useApolloClient();
   const { user } = useUser();
@@ -124,4 +124,4 @@ const LeagueList = () => {
   );
 };
 
-export default LeagueList;
+export default LeagueBrowser;

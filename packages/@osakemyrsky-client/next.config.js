@@ -5,7 +5,13 @@
  */
 const config = {
   reactStrictMode: true,
-  swcMinify: true
+  swcMinify: true,
+  rewrites: async () => [
+    {
+      source: "/leagues",
+      destination: "/league-browser"
+    }
+  ]
 };
 
 module.exports = config;
