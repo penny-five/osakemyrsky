@@ -25,10 +25,10 @@ const Modal = ({ children, title, buttons, closeOnClickOutside = true, onClose }
 
   return createPortal(
     <div
-      className={classNames({
-        "flex items-center justify-center absolute top-0 left-0 w-screen h-screen": true,
-        "bg-black-100 bg-opacity-60 z-50": true
-      })}
+      className={classNames(
+        "flex items-center justify-center absolute top-0 left-0 w-screen h-screen",
+        "bg-black-100 bg-opacity-60 z-50"
+      )}
     >
       <div ref={modalRef} className="min-w-[400px] p-6 bg-white rounded-xl shadow-lg">
         {title != null && <Heading level={3}>{title}</Heading>}

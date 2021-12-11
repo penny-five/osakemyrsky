@@ -3,8 +3,8 @@ import jwtDecode from "jwt-decode";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
-import { client } from "src/apollo/client";
-import { ServerJwtToken } from "src/types/auth";
+import { client } from "@/apollo/client";
+import { ServerJwtToken } from "@/types/auth";
 
 interface SignInInput {
   data: {

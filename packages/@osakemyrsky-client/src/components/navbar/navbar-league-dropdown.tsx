@@ -20,10 +20,10 @@ const NavbarLeagueDropdown = ({ children, activeMembership }: NavbarLeagueDropdo
           {children}
           <Link href="/leagues" passHref>
             <a
-              className={classNames({
-                "flex items-center py-3 px-4 truncate select-none cursor-pointer border-t-1 border-gray-300": true,
-                "hover:bg-gray-300 rounded-b-3xl": true
-              })}
+              className={classNames(
+                "flex items-center py-3 px-4 truncate select-none cursor-pointer border-t-1 border-gray-300",
+                "hover:bg-gray-300 rounded-b-3xl"
+              )}
             >
               <ViewGridIcon className="h-5 mr-3 text-black-100" />
               <span>Selaa liigoja</span>

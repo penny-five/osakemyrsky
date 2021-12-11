@@ -23,8 +23,7 @@ const SimpleStockItem = ({ stock, onClick }: SimpleStockItemProps) => {
       </div>
       <div className="flex flex-col items-end shrink-0">
         <span
-          className={classNames({
-            "font-semibold text-base": true,
+          className={classNames("font-semibold text-base", {
             "text-green-200": stock.priceDiff == null || stock.priceDiff >= 0,
             "text-red-200": stock.priceDiff != null && stock.priceDiff < 0
           })}

@@ -1,6 +1,6 @@
 import React from "react";
 
-import Heading from "src/atoms/heading";
+import Heading from "@/atoms/heading";
 
 export interface PageHeaderProps {
   title: string;

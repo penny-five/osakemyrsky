@@ -1,7 +1,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
-import { useActiveLeague } from "src/providers/active-league";
+import { useActiveLeague } from "@/providers/active-league";
 
 const AuthRedirect = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();

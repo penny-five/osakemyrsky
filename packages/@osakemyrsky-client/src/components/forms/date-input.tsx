@@ -50,11 +50,10 @@ const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
           <input
             {...props}
             ref={ref}
-            className={classNames({
-              "w-full py-3 px-4 font-normal text-base placeholder-gray-500 border-gray-400 bg-gray-100 rounded-lg":
-                true,
-              "focus:ring-1 focus:ring-blue-200 transition-colors": true
-            })}
+            className={classNames([
+              "w-full py-3 px-4 font-normal text-base placeholder-gray-500 border-gray-400 bg-gray-100 rounded-lg",
+              "focus:ring-1 focus:ring-blue-200 transition-colors"
+            ])}
             type="text"
             autoComplete="off"
             value={internalValue || value}

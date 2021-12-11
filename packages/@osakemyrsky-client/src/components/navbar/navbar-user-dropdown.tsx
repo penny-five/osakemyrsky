@@ -1,7 +1,7 @@
 import NavbarDropdown from "./navbar-dropdown";
 
-import Avatar from "src/atoms/avatar";
-import { User } from "src/types/user";
+import Avatar from "@/atoms/avatar";
+import { User } from "@/types/user";
 
 export interface NavbarUserDropdownProps {
   children?: React.ReactNode;

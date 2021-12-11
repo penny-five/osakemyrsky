@@ -18,10 +18,10 @@ const AvatarStack = ({ pictures }: AvatarStackProps) => {
       ))}
       {pictures.length > 4 && (
         <div
-          className={classNames({
-            "flex shrink-0 justify-center items-center w-[36px] h-[36px] bg-white rounded-full": true,
-            "font-bold text-sm text-gray-500": true
-          })}
+          className={classNames(
+            "flex shrink-0 justify-center items-center w-[36px] h-[36px] bg-white rounded-full",
+            "font-bold text-sm text-gray-500"
+          )}
         >
           +{pictures.length - 4}
         </div>
