@@ -74,7 +74,7 @@ const LeagueBrowser = () => {
   }
 
   const numLeagues = data.leagues.length;
-  const numMembers = data.leagues.flatMap(league => league.members!).length;
+  const numMembers = data.leagues.flatMap(league => league.members).length;
 
   const onCreateLeague = async (data: SubmitCreateLeagueModalInputs) => {
     const result = await client.mutate<CreateLeagueResult, CreateLeagueInput>({
@@ -85,7 +85,7 @@ const LeagueBrowser = () => {
 
     setActiveLeague(result.data!.createLeague.id);
 
-    router.push({
+    void router.push({
       pathname: "/leagues/[id]",
       query: {
         id: result.data!.createLeague.id

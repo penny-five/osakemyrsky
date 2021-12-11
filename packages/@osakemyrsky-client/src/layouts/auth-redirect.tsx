@@ -10,7 +10,7 @@ const AuthRedirect = ({ children }: { children: React.ReactNode }) => {
 
   if (sessionStatus === "unauthenticated") {
     if (!["/league-browser", "/leagues/[id]", "/create-league"].includes(router.pathname)) {
-      router.push("/leagues");
+      void router.push("/leagues");
     }
   }
 
@@ -18,7 +18,7 @@ const AuthRedirect = ({ children }: { children: React.ReactNode }) => {
 
   if (sessionStatus === "authenticated" && activeLeague == null) {
     if (!["/league-browser", "/leagues/[id]", "/create-league"].includes(router.pathname)) {
-      router.push("/leagues");
+      void router.push("/leagues");
     }
   }
 

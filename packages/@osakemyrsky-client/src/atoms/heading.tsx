@@ -10,6 +10,7 @@ export interface HeadingProps extends React.HTMLProps<HTMLHeadingElement> {
 }
 
 const Heading = ({ children, className, level = 1, ...props }: HeadingProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
   const Tag = `h${level}` as keyof Pick<JSX.IntrinsicElements, "h1" | "h2" | "h3">;
 
   return (

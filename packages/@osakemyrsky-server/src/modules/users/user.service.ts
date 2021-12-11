@@ -30,12 +30,12 @@ export class UserService {
 
   async findUserByEmail(email: string) {
     const res = await this.firestore.collection("users").withConverter(userConverter).where("email", "==", email).get();
-    return res.empty ? undefined : res.docs[0];
+    return res.empty ? undefined : res.docs[0].data();
   }
 
   async findBySub(sub: string) {
     const res = await this.firestore.collection("users").withConverter(userConverter).where("sub", "==", sub).get();
-    return res.empty ? undefined : res.docs[0];
+    return res.empty ? undefined : res.docs[0].data();
   }
 
   async findUserMemberships(userId: string) {

@@ -1,4 +1,5 @@
 import { ApolloProvider } from "@apollo/client";
+import { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { AppProps } from "next/app";
 import Head from "next/head";
@@ -20,7 +21,7 @@ const OsakemyrskyApp = ({ Component, pageProps: { session, ...pageProps } }: App
         <meta name="description" content="osakemyrsky" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <SessionProvider session={session}>
+      <SessionProvider session={session as Session}>
         <UserProvider>
           <ActiveLeagueProvider>
             <AuthRedirect>

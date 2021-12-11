@@ -69,7 +69,7 @@
     "audit-ci": "audit-ci --high --report-type=full",
     "prettier:write": "prettier --write .",
     "prettier:check": "prettier --check .",
-    "lint": "eslint **/*.ts",
+    "lint": "eslint \"src/**\"",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "rimraf ./dist && tsc --project tsconfig.json",
     "start": "node ./src/index.js"

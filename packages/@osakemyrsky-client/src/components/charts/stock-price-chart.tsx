@@ -37,7 +37,7 @@ const StockPriceChart = ({ values }: StockPriceChartProps) => {
         enabled: false
       },
       events: {
-        mounted: chart => {
+        mounted: (chart: { windowResizeHandler: () => void }) => {
           chart.windowResizeHandler();
         }
       }

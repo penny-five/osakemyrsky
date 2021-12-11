@@ -26,12 +26,12 @@ const Navbar = ({ onSignOut }: NavbarProps) => {
 
   const { user, status } = useUser();
 
-  const { activeLeague, setActiveLeague } = useActiveLeague();
+  const { setActiveLeague } = useActiveLeague();
 
   const { activeMembership } = useActiveMembership();
 
   const onSelectActiveLeague = (leagueId: string) => {
-    router.push({
+    void router.push({
       pathname: "/leagues/[id]",
       query: {
         id: leagueId
@@ -86,7 +86,7 @@ const Navbar = ({ onSignOut }: NavbarProps) => {
       </div>
       {user && activeMembership && (
         <ul className="flex flex-row grow items-center px-8 w-full max-w-screen-desktop">
-          <NavbarTab target={`/leagues/${activeLeague}`}>Liigapörssi</NavbarTab>
+          <NavbarTab target={`/leagues/${activeMembership.leagueId}`}>Liigapörssi</NavbarTab>
           <NavbarTab target="/my-portfolio">Oma salkku</NavbarTab>
           <NavbarTab target="/marketplace">Osta/myy osakkeita</NavbarTab>
         </ul>
