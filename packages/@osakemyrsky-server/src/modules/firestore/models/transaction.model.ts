@@ -13,11 +13,14 @@ registerEnumType(TransactionType, { name: "TransactionType" });
 
 @ObjectType()
 export class Transaction extends BaseModel {
-  @Field(() => TransactionType)
+  @Field(() => TransactionType, { nullable: false })
   type!: TransactionType;
 
-  @Field(() => String)
-  symbol!: string;
+  @Field(() => String, { nullable: false })
+  stockSymbol!: string;
+
+  @Field(() => () => GraphQLPositiveInt, { nullable: false })
+  count!: number;
 
   @Field(() => GraphQLPositiveInt, { nullable: false })
   priceCents!: number;
@@ -33,7 +36,7 @@ export const transactionConverter: FirestoreDataConverter<Transaction> = {
     transaction.createdAt = snapshot.createTime.toDate().toISOString();
     transaction.updatedAt = snapshot.updateTime.toDate().toISOString();
     transaction.type = data.type as TransactionType;
-    transaction.symbol = data.symbol as string;
+    transaction.stockSymbol = data.symbol as string;
     transaction.priceCents = data.priceCents as number;
 
     return transaction;
@@ -42,7 +45,7 @@ export const transactionConverter: FirestoreDataConverter<Transaction> = {
   toFirestore: function (transaction: Transaction): DocumentData {
     return {
       type: transaction.type,
-      symbol: transaction.symbol,
+      stockSymbol: transaction.stockSymbol,
       priceCents: transaction.priceCents
     };
   }

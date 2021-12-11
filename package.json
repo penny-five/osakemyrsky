@@ -17,7 +17,7 @@
     "prepare": "husky install || true",
     "bootstrap": "lerna bootstrap",
     "dev": "yarn dev:start",
-    "dev:start": "docker compose -p osakemyrsky up -d --build",
+    "dev:start": "docker compose -p osakemyrsky up -d --build --remove-orphans",
     "dev:stop": "docker compose -p osakemyrsky stop",
     "dev:destroy": "docker compose -p osakemyrsky down -v"
   }

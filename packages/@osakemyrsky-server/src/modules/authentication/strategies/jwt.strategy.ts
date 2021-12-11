@@ -7,11 +7,11 @@ import { JwtConfig } from "../../config/jwt";
 import { AuthenticatedUser, AuthenticationToken } from "../authentication.types";
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, "jwt") {
+export class UserJwtStrategy extends PassportStrategy(Strategy, "user-jwt") {
   constructor(configService: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ignoreExpiration: true,
+      ignoreExpiration: false,
       secretOrKey: configService.get<JwtConfig>("jwt")!.key.public.pem
     } as StrategyOptions);
   }

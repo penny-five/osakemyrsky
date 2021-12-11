@@ -1,20 +1,16 @@
 import { Module, RequestMethod } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
 import { Request } from "express";
 import { LoggerModule } from "nestjs-pino";
 
 import { AuthModule } from "./modules/authentication/authentication.module";
-import { firestoreConfig } from "./modules/config/firestore";
-import { gameConfig } from "./modules/config/game";
-import { jwtConfig } from "./modules/config/jwt";
-import { DepositModule } from "./modules/deposits/deposit.module";
+import { ConfigModule } from "./modules/config/config.module";
 import { DiagnosticsModule } from "./modules/diagnostics/diagnostics.module";
-import { FirestoreModule } from "./modules/firestore/firestore.module";
 import { LeagueModule } from "./modules/leagues/league.module";
-import { NordnetModule } from "./modules/nordnet/nordnet.module";
 import { OrderModule } from "./modules/orders/order.module";
 import { StockModule } from "./modules/stocks/stock.module";
+import { TaskModule } from "./modules/tasks/task.module";
+import { TransactionModule } from "./modules/transactions/transaction.module";
 import { UserModule } from "./modules/users/user.module";
 
 @Module({
@@ -42,19 +38,15 @@ import { UserModule } from "./modules/users/user.module";
       autoSchemaFile: "schema.gql",
       context: (ctx: { req: Request }) => ({ headers: ctx.req.headers })
     }),
-    ConfigModule.forRoot({
-      ignoreEnvFile: true,
-      load: [gameConfig, firestoreConfig, jwtConfig]
-    }),
+    ConfigModule,
     DiagnosticsModule,
-    FirestoreModule,
     AuthModule,
-    DepositModule,
     LeagueModule,
-    NordnetModule,
     OrderModule,
+    TransactionModule,
     StockModule,
-    UserModule
+    UserModule,
+    TaskModule
   ]
 })
 export class AppModule {}

@@ -1,4 +1,4 @@
-import { forwardRef, Module } from "@nestjs/common";
+import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 
@@ -7,12 +7,13 @@ import { UserModule } from "../users/user.module";
 
 import { AuthResolver } from "./authentication.resolver";
 import { AuthenticationService } from "./authentication.service";
-import { JwtStrategy } from "./strategies/jwt.strategy";
+import { GoogleServiceAccountStrategy } from "./strategies/google-service-account.strategy";
+import { UserJwtStrategy } from "./strategies/jwt.strategy";
 
 @Module({
   imports: [
     ConfigModule,
-    forwardRef(() => UserModule),
+    UserModule,
     JwtModule.registerAsync({
       useFactory(configService: ConfigService) {
         const config = configService.get<JwtConfig>("jwt")!;
@@ -30,6 +31,6 @@ import { JwtStrategy } from "./strategies/jwt.strategy";
       imports: [ConfigModule]
     })
   ],
-  providers: [AuthenticationService, AuthResolver, JwtStrategy]
+  providers: [AuthenticationService, AuthResolver, UserJwtStrategy, GoogleServiceAccountStrategy]
 })
 export class AuthModule {}

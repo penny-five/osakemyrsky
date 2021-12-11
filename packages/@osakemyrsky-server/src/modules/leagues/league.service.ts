@@ -169,6 +169,17 @@ export class LeagueService {
     return res.data();
   }
 
+  /**
+   * Returns the member current cash amoun in cents.
+   */
+  async getMemberCurrentCashAmount(leagueId: string, memberId: string) {
+    const deposits = await this.depositService.getMemberDeposits(leagueId, memberId);
+
+    return deposits.reduce((sum, deposit) => {
+      return sum + deposit.valueCents;
+    }, 0);
+  }
+
   async isLeagueOngoing(leagueId: string) {
     const league = await this.findLeagueById(leagueId);
     const now = new Date();

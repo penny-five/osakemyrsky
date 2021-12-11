@@ -51,7 +51,7 @@ const MyPortfolio = () => {
           leagueId: activeMembership!.leagueId,
           stockCount: order.count,
           stockSymbol: order.symbol,
-          stockPriceCents: order.price,
+          stockPriceCents: order.price * 100,
           expirationDate: order.expirationDate,
           type: order.type
         }

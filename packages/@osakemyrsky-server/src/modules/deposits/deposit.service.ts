@@ -25,4 +25,17 @@ export class DepositService {
     const res = await depositRef.get();
     return res.data()!;
   }
+
+  async getMemberDeposits(leagueId: string, memberId: string) {
+    const res = await this.firestore
+      .collection("leagues")
+      .doc(leagueId)
+      .collection("members")
+      .doc(memberId)
+      .collection("deposits")
+      .withConverter(depositConverter)
+      .get();
+
+    return res.docs.map(doc => doc.data());
+  }
 }
