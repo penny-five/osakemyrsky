@@ -61,7 +61,7 @@ const MyPortfolio = () => {
   };
 
   return (
-    <div className="flex flex-col flex-grow">
+    <div className="flex flex-col grow">
       <PageHeader
         title="Osta/myy osakkeita"
         subtitle={activeMembership?.leagueName ?? ""}

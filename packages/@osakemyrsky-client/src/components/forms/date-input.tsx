@@ -46,7 +46,7 @@ const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
 
     return (
       <div className="flex" ref={wrapperRef} onFocus={onFocus}>
-        <div className="flex-grow" ref={reference}>
+        <div className="grow" ref={reference}>
           <input
             {...props}
             ref={ref}

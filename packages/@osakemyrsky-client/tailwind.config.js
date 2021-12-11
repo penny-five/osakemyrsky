@@ -2,14 +2,12 @@
  * @type {import("@types/tailwindcss/tailwind-config").TailwindConfig }
  */
 module.exports = {
-  mode: "jit",
-  purge: [
+  content: [
     "./src/atoms/**/*.{ts,tsx}",
     "./src/components/**/*.{ts,tsx}",
     "./src/layouts/**/*.{ts,tsx}",
     "./src/pages/**/*.{ts,tsx}"
   ],
-  darkMode: false,
   theme: {
     fontFamily: {
       sans: "Inter"

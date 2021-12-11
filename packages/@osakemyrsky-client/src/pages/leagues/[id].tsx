@@ -79,7 +79,7 @@ const LeaguePage = () => {
   }
 
   return (
-    <div className="flex-grow">
+    <div className="grow">
       <PageHeader
         title="Liigapörssi"
         subtitle={data.league.name}

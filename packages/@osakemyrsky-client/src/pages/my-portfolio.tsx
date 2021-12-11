@@ -8,7 +8,7 @@ const MyPortfolio = () => {
   const { activeMembership } = useActiveMembership();
 
   return (
-    <div className="flex-grow">
+    <div className="grow">
       <PageHeader
         title="Oma salkku"
         subtitle={activeMembership?.leagueName ?? ""}

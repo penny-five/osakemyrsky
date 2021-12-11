@@ -20,8 +20,8 @@ const NavbarDropdown = ({ content, dropdownContent }: NavbarDropdownProps) => {
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
     >
-      <div className="flex-grow truncate">{content}</div>
-      <ChevronDownIcon className="w-5 flex-shrink-0 text-gray-400 transition-transform group-hover:rotate-180" />
+      <div className="grow truncate">{content}</div>
+      <ChevronDownIcon className="w-5 shrink-0 text-gray-400 transition-transform group-hover:rotate-180" />
       <div
         className={classNames({
           "absolute top-full mt-[-1px] left-[-1px] right-[-1px] bg-white shadow-lg": true,

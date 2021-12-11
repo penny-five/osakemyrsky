@@ -43,7 +43,7 @@ const OrderBuilder = ({ stock, onSubmit }: OrderBuilderProps) => {
     <div className="flex flex-col">
       <div className="flex items-center gap-2">
         <CountryFlag countryCode={stock.exchangeCountry} />
-        <Heading level={3} className="flex-grow truncate">
+        <Heading level={3} className="grow truncate">
           {stock.name}
         </Heading>
         <span className="text-xl font-bold whitespace-nowrap">{stock.price} €</span>

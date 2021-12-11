@@ -25,14 +25,16 @@ const Button = ({
   return (
     <button
       {...{ type, ...props }}
-      className={classNames({
+      className={classNames(props.className, {
         "flex items-center py-4 px-6  font-bold whitespace-nowrap": true,
         "border-1 rounded-lg border-transparent transition-colors focus:ring-2 focus:ring-blue-200": true,
         "pl-4": icon != null,
         "cursor-not-allowed": disabled,
         "shadow-lg": variant === "default",
-        "bg-blue-200 text-white hover:bg-blue-300": variant === "default" && priority === "primary" && !disabled,
-        "bg-white border-black-200": variant === "default" && priority === "secondary" && !disabled,
+        "bg-blue-200 text-white shadow-black-100/10 hover:bg-blue-300":
+          variant === "default" && priority === "primary" && !disabled,
+        "bg-white border-gray-400 shadow-black-100/5 hover:bg-gray-300 hover:border-gray-500":
+          variant === "default" && priority === "secondary" && !disabled,
         "text-gray-200 bg-gray-100": variant === "default" && priority === "primary" && disabled,
         "text-gray-200 border-gray-200": variant === "default" && priority === "secondary" && disabled,
         "text-blue-200 hover:bg-blue-100": variant === "text" && priority === "primary" && !disabled,

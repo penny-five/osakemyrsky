@@ -17,7 +17,7 @@ const TabContainer = ({ children }: TabContainerProps) => {
           <li
             key={index}
             className={classNames({
-              "flex-grow py-4 px-4 font-bold text-center truncate cursor-pointer transition-colors": true,
+              "grow py-4 px-4 font-bold text-center truncate cursor-pointer transition-colors": true,
               "first:rounded-l-md last:rounded-r-md": true,
               "text-white bg-black-100": index === activeTab,
               "text-black-200 bg-gray-300": index !== activeTab

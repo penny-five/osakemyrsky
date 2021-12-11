@@ -43,7 +43,7 @@ const Navbar = ({ onSignOut }: NavbarProps) => {
 
   return (
     <nav className="flex flex-col items-center w-full bg-white border-b-1 border-gray-400 shadow-lg z-10">
-      <div className="flex flex-grow items-end gap-4 pt-6 pb-4 px-8 w-full max-w-screen-desktop">
+      <div className="flex grow items-end gap-4 pt-6 pb-4 px-8 w-full max-w-screen-desktop">
         <div className="flex flex-row gap-3">
           <Logo />
           <Link href="/" passHref>
@@ -52,7 +52,7 @@ const Navbar = ({ onSignOut }: NavbarProps) => {
             </a>
           </Link>
         </div>
-        <span className="flex-grow"></span>
+        <span className="grow"></span>
         {user && activeMembership ? (
           <NavbarLeagueDropdown activeMembership={activeMembership}>
             {user.memberships.map(membership => (
@@ -85,7 +85,7 @@ const Navbar = ({ onSignOut }: NavbarProps) => {
         ) : null}
       </div>
       {user && activeMembership && (
-        <ul className="flex flex-row flex-grow items-center px-8 w-full max-w-screen-desktop">
+        <ul className="flex flex-row grow items-center px-8 w-full max-w-screen-desktop">
           <NavbarTab target={`/leagues/${activeLeague}`}>Liigapörssi</NavbarTab>
           <NavbarTab target="/my-portfolio">Oma salkku</NavbarTab>
           <NavbarTab target="/marketplace">Osta/myy osakkeita</NavbarTab>

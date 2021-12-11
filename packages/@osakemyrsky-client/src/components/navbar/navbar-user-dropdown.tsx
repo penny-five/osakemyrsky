@@ -14,7 +14,7 @@ const NavbarUserDropdown = ({ user, children }: NavbarUserDropdownProps) => {
       content={
         <div className="flex items-center">
           <Avatar url={user.picture} />
-          <span className="flex-grow truncate mx-3 font-semibold select-none">{user.name}</span>
+          <span className="grow truncate mx-3 font-semibold select-none">{user.name}</span>
         </div>
       }
       dropdownContent={<ul>{children}</ul>}
