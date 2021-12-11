@@ -21,7 +21,8 @@ export class LeagueCreator {
 export enum LeagueStatus {
   STARTING = "STARTING",
   ONGOING = "ONGOING",
-  ENDED = "ENDED"
+  ENDED = "ENDED",
+  UNKNOWN = "UNKNOWN"
 }
 
 registerEnumType(LeagueStatus, { name: "LeagueStatus" });

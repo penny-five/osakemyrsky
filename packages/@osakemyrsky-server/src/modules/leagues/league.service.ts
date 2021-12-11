@@ -1,10 +1,13 @@
 import { Firestore } from "@google-cloud/firestore";
 import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { v4 as uuid } from "uuid";
 
 import { Editor } from "../../common/editor";
 import { isAfter, isSameDay } from "../../utils/dates";
-import { League, leagueConverter } from "../firestore/models/league.model";
+import { GameConfig } from "../config/game";
+import { DepositService } from "../deposits/deposit.service";
+import { League, leagueConverter, LeagueStatus } from "../firestore/models/league.model";
 import { Member, memberConverter } from "../firestore/models/member.model";
 import { membershipConverter } from "../firestore/models/membership.model";
 import { UserService } from "../users/user.service";
@@ -15,7 +18,16 @@ export enum LeaguesOrderBy {
 
 @Injectable()
 export class LeagueService {
-  constructor(private readonly firestore: Firestore, private readonly userService: UserService) {}
+  private readonly gameConfig: GameConfig;
+
+  constructor(
+    configService: ConfigService,
+    private readonly firestore: Firestore,
+    private readonly userService: UserService,
+    private readonly depositService: DepositService
+  ) {
+    this.gameConfig = configService.get<GameConfig>("game")!;
+  }
 
   async findLeagueById(leagueId: string) {
     const res = await this.firestore.collection("leagues").withConverter(leagueConverter).doc(leagueId).get();
@@ -91,6 +103,7 @@ export class LeagueService {
         name: params.name,
         startDate: params.startDate,
         endDate: params.endDate,
+        status: LeagueStatus.UNKNOWN,
         creator: {
           name: user.name,
           picture: user.picture,
@@ -149,6 +162,8 @@ export class LeagueService {
           leagueName: league.name
         });
     });
+
+    await this.depositService.placeDeposit(leagueId, memberId, this.gameConfig.initialDepositEuros * 100);
 
     const res = await membershipRef.get();
     return res.data();

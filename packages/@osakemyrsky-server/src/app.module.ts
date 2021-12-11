@@ -6,7 +6,9 @@ import { LoggerModule } from "nestjs-pino";
 
 import { AuthModule } from "./modules/authentication/authentication.module";
 import { firestoreConfig } from "./modules/config/firestore";
+import { gameConfig } from "./modules/config/game";
 import { jwtConfig } from "./modules/config/jwt";
+import { DepositModule } from "./modules/deposits/deposit.module";
 import { DiagnosticsModule } from "./modules/diagnostics/diagnostics.module";
 import { FirestoreModule } from "./modules/firestore/firestore.module";
 import { LeagueModule } from "./modules/leagues/league.module";
@@ -42,15 +44,16 @@ import { UserModule } from "./modules/users/user.module";
     }),
     ConfigModule.forRoot({
       ignoreEnvFile: true,
-      load: [firestoreConfig, jwtConfig]
+      load: [gameConfig, firestoreConfig, jwtConfig]
     }),
     DiagnosticsModule,
     FirestoreModule,
     AuthModule,
-    NordnetModule,
-    StockModule,
-    OrderModule,
+    DepositModule,
     LeagueModule,
+    NordnetModule,
+    OrderModule,
+    StockModule,
     UserModule
   ]
 })

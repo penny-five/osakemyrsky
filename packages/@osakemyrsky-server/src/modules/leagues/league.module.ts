@@ -1,5 +1,7 @@
 import { forwardRef, Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
 
+import { DepositModule } from "../deposits/deposit.module";
 import { FirestoreModule } from "../firestore/firestore.module";
 import { UserModule } from "../users/user.module";
 
@@ -7,7 +9,7 @@ import { LeagueResolver } from "./league.resolver";
 import { LeagueService } from "./league.service";
 
 @Module({
-  imports: [FirestoreModule, forwardRef(() => UserModule)],
+  imports: [ConfigModule, FirestoreModule, forwardRef(() => UserModule), DepositModule],
   providers: [LeagueService, LeagueResolver],
   exports: [LeagueService]
 })
