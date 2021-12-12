@@ -14,6 +14,7 @@
     "prettier:write": "lerna run --concurrency 1 --stream prettier:write --exclude-dependents",
     "prettier:check": "lerna run --concurrency 1 --stream prettier:check --exclude-dependents",
     "lint": "lerna run --concurrency 1 --stream lint --exclude-dependents",
+    "typecheck": "lerna run --concurrency 1 --stream typecheck --exclude-dependents",
     "prepare": "husky install || true",
     "bootstrap": "lerna bootstrap",
     "dev": "yarn dev:start",

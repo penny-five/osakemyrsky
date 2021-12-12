@@ -28,3 +28,16 @@ jobs:
         run: yarn bootstrap
       - name: Run linters
         run: yarn lint
+  typecheck:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Bootstrap project
+        run: yarn bootstrap
+      - name: Run typechecks
+        run: yarn typecheck
