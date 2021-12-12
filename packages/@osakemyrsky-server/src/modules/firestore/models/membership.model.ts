@@ -1,17 +1,12 @@
 import { DocumentData, FirestoreDataConverter } from "@google-cloud/firestore";
-import { Field, ObjectType } from "@nestjs/graphql";
 
 import { BaseModel } from "./base";
 
-@ObjectType()
 export class Membership extends BaseModel {
-  @Field({ nullable: false })
   leagueId!: string;
 
-  @Field({ nullable: false })
   leagueName!: string;
 
-  @Field({ nullable: false })
   companyName!: string;
 }
 

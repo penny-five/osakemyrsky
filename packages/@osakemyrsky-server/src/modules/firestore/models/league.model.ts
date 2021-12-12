@@ -1,22 +1,9 @@
 import { DocumentData, FirestoreDataConverter, Timestamp } from "@google-cloud/firestore";
-import { Field, ObjectType, registerEnumType } from "@nestjs/graphql";
 import { isAfter, isBefore, isSameDay } from "date-fns";
-import { GraphQLDate } from "graphql-scalars";
 
 import { formatISODate } from "../../../utils/dates";
 
 import { BaseModel } from "./base";
-
-@ObjectType()
-export class LeagueCreator {
-  userId!: string;
-
-  @Field({ nullable: false })
-  name!: string;
-
-  @Field(() => String, { nullable: true })
-  picture!: string | null;
-}
 
 export enum LeagueStatus {
   STARTING = "STARTING",
@@ -24,8 +11,6 @@ export enum LeagueStatus {
   ENDED = "ENDED",
   UNKNOWN = "UNKNOWN"
 }
-
-registerEnumType(LeagueStatus, { name: "LeagueStatus" });
 
 const resolveLeagueStatus = (startDate: Date, endDate: Date, now = new Date()) => {
   if (!isSameDay(now, startDate) && isBefore(now, startDate)) {
@@ -37,21 +22,23 @@ const resolveLeagueStatus = (startDate: Date, endDate: Date, now = new Date()) =
   return LeagueStatus.ONGOING;
 };
 
-@ObjectType()
-export class League extends BaseModel {
-  @Field({ nullable: false })
+export class LeagueCreator {
+  userId!: string;
+
   name!: string;
 
-  @Field(() => GraphQLDate, { nullable: false })
+  picture!: string | null;
+}
+
+export class League extends BaseModel {
+  name!: string;
+
   startDate!: string;
 
-  @Field(() => GraphQLDate, { nullable: false })
   endDate!: string;
 
-  @Field(() => LeagueCreator, { nullable: false })
   creator!: LeagueCreator;
 
-  @Field(() => LeagueStatus)
   status!: LeagueStatus;
 }
 

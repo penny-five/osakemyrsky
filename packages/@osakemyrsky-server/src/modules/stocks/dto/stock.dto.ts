@@ -9,7 +9,7 @@ export enum StockTradingStatus {
 
 registerEnumType(StockTradingStatus, { name: "StockTradingStatus" });
 
-@ObjectType()
+@ObjectType("Stock")
 export class Stock {
   @Field()
   name!: string;

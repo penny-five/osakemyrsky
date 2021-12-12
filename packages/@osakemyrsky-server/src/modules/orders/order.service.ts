@@ -35,7 +35,7 @@ export class OrderService {
       .where("id", "==", orderId)
       .get();
 
-    return res.size > 0 ? res.docs[0] : undefined;
+    return res.size > 0 ? res.docs[0].data() : undefined;
   }
 
   async findMemberOrders(memberId: string) {
@@ -81,7 +81,7 @@ export class OrderService {
       "Order placed"
     );
 
-    return res.data();
+    return res.data()!;
   }
 
   async processOrders() {

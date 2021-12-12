@@ -95,23 +95,22 @@ export class LeagueService {
 
     const id = uuid();
 
-    await this.firestore
-      .collection("leagues")
-      .doc(id)
-      .withConverter(leagueConverter)
-      .create({
-        name: params.name,
-        startDate: params.startDate,
-        endDate: params.endDate,
-        status: LeagueStatus.UNKNOWN,
-        creator: {
-          name: user.name,
-          picture: user.picture,
-          userId: user.id!
-        }
-      });
+    const leagueRef = this.firestore.collection("leagues").doc(id).withConverter(leagueConverter);
 
-    return this.findLeagueById(id);
+    await leagueRef.create({
+      name: params.name,
+      startDate: params.startDate,
+      endDate: params.endDate,
+      status: LeagueStatus.UNKNOWN,
+      creator: {
+        name: user.name,
+        picture: user.picture,
+        userId: user.id!
+      }
+    });
+
+    const res = await leagueRef.get();
+    return res.data()!;
   }
 
   async registerMember(leagueId: string, userId: string, params: Pick<Member, "companyName">) {
@@ -166,7 +165,7 @@ export class LeagueService {
     await this.depositService.placeDeposit(leagueId, memberId, this.gameConfig.initialDepositEuros * 100);
 
     const res = await membershipRef.get();
-    return res.data();
+    return res.data()!;
   }
 
   /**

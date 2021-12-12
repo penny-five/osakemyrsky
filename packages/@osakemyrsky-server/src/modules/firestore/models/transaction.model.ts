@@ -1,6 +1,4 @@
 import { DocumentData, FirestoreDataConverter } from "@google-cloud/firestore";
-import { Field, ObjectType, registerEnumType } from "@nestjs/graphql";
-import { GraphQLPositiveInt } from "graphql-scalars";
 
 import { BaseModel } from "./base";
 
@@ -9,26 +7,17 @@ export enum TransactionType {
   SELL = "SELL"
 }
 
-registerEnumType(TransactionType, { name: "TransactionType" });
-
-@ObjectType()
 export class Transaction extends BaseModel {
-  @Field({ nullable: false })
   leagueId!: string;
 
-  @Field({ nullable: false })
   memberId!: string;
 
-  @Field(() => TransactionType, { nullable: false })
   type!: TransactionType;
 
-  @Field(() => String, { nullable: false })
   stockSymbol!: string;
 
-  @Field(() => GraphQLPositiveInt, { nullable: false })
   count!: number;
 
-  @Field(() => GraphQLPositiveInt, { nullable: false })
   priceCents!: number;
 }
 

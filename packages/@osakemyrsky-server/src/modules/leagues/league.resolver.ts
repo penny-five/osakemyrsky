@@ -1,51 +1,61 @@
 import { UseGuards } from "@nestjs/common";
 import { Query, Resolver, Args, ResolveField, Parent, Mutation } from "@nestjs/graphql";
 
+import { DocumentNotFoundError } from "../../common/errors";
 import { AuthenticationToken } from "../authentication/authentication.types";
 import { Token } from "../authentication/decorators/token.decorator";
 import { GqlJwtAuthGuard } from "../authentication/guards/qgl.jwt.guard";
-import { League } from "../firestore/models/league.model";
-import { Member } from "../firestore/models/member.model";
-import { Membership } from "../firestore/models/membership.model";
-import { Transaction } from "../firestore/models/transaction.model";
+import { TransactionDto } from "../transactions/dto/transaction.dto";
 import { TransactionService } from "../transactions/transaction.service";
 
 import { CreateLeagueInput } from "./dto/create-league.input";
 import { GetLeaguesArgs } from "./dto/get-leagues.args";
 import { JoinLeagueInput } from "./dto/join-league.input";
+import { LeagueDto } from "./dto/league.dto";
+import { MemberDto } from "./dto/member.dto";
+import { MembershipDto } from "./dto/membership.dto";
 import { LeagueService } from "./league.service";
 
-@Resolver(() => League)
+@Resolver(() => LeagueDto)
 export class LeagueResolver {
   constructor(private readonly leagueService: LeagueService, private readonly transactionService: TransactionService) {}
 
-  @Query(() => League)
-  league(@Args("id") id: string) {
-    return this.leagueService.findLeagueById(id);
+  @Query(() => LeagueDto)
+  async league(@Args("id") id: string) {
+    const league = await this.leagueService.findLeagueById(id);
+
+    if (league == null) {
+      throw new DocumentNotFoundError("league", id);
+    }
+
+    return LeagueDto.fromModel(league);
   }
 
-  @Query(() => [League])
-  leagues(@Args() args: GetLeaguesArgs) {
-    return this.leagueService.findAll(args.orderBy);
+  @Query(() => [LeagueDto])
+  async leagues(@Args() args: GetLeaguesArgs) {
+    const leagues = await this.leagueService.findAll(args.orderBy);
+    return leagues.map(league => LeagueDto.fromModel(league));
   }
 
-  @ResolveField(() => [Member])
-  async members(@Parent() league: League) {
-    return this.leagueService.findLeagueMembers(league.id!);
+  @ResolveField(() => [MemberDto])
+  async members(@Parent() league: LeagueDto) {
+    const members = await this.leagueService.findLeagueMembers(league.id);
+    return members.map(member => MemberDto.fromModel(member));
   }
 
-  @ResolveField(() => [Transaction])
-  async transactions(@Parent() league: League) {
-    return this.transactionService.findLeagueTransactions(league.id!);
+  @ResolveField(() => [TransactionDto])
+  async transactions(@Parent() league: LeagueDto) {
+    const transactions = await this.transactionService.findLeagueTransactions(league.id);
+    return transactions.map(transaction => TransactionDto.fromModel(transaction));
   }
 
   @UseGuards(GqlJwtAuthGuard)
-  @Mutation(() => League)
+  @Mutation(() => LeagueDto)
   async createLeague(
     @Token() token: AuthenticationToken,
     @Args("createLeagueInput") createLeagueInput: CreateLeagueInput
   ) {
-    return this.leagueService.createLeague(
+    const league = await this.leagueService.createLeague(
       {
         name: createLeagueInput.name,
         startDate: createLeagueInput.startDate,
@@ -53,13 +63,17 @@ export class LeagueResolver {
       },
       { userId: token.sub }
     );
+
+    return LeagueDto.fromModel(league);
   }
 
   @UseGuards(GqlJwtAuthGuard)
-  @Mutation(() => Membership)
+  @Mutation(() => MembershipDto)
   async joinLeague(@Token() token: AuthenticationToken, @Args("joinLeagueInput") joinLeagueInput: JoinLeagueInput) {
-    return this.leagueService.registerMember(joinLeagueInput.leagueId, token.sub, {
+    const membership = await this.leagueService.registerMember(joinLeagueInput.leagueId, token.sub, {
       companyName: joinLeagueInput.companyName
     });
+
+    return MembershipDto.fromModel(membership);
   }
 }

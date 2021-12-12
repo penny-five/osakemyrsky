@@ -1,5 +1,5 @@
 import { DocumentData, FirestoreDataConverter } from "@google-cloud/firestore";
-import { Field, ObjectType } from "@nestjs/graphql";
+import { ObjectType } from "@nestjs/graphql";
 
 import { BaseModel } from "./base";
 
@@ -7,12 +7,10 @@ import { BaseModel } from "./base";
 export class User extends BaseModel {
   sub!: string;
 
-  @Field({ nullable: false })
   name!: string;
 
   email!: string;
 
-  @Field(() => String, { nullable: true })
   picture!: string | null;
 }
 

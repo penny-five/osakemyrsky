@@ -1,12 +1,8 @@
 import { DocumentData, FirestoreDataConverter } from "@google-cloud/firestore";
-import { Field, ObjectType } from "@nestjs/graphql";
-import { GraphQLPositiveInt } from "graphql-scalars";
 
 import { BaseModel } from "./base";
 
-@ObjectType()
 export class Deposit extends BaseModel {
-  @Field(() => GraphQLPositiveInt, { nullable: false })
   valueCents!: number;
 }
 

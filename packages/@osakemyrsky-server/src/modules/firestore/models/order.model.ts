@@ -1,6 +1,4 @@
 import { DocumentData, FirestoreDataConverter, Timestamp } from "@google-cloud/firestore";
-import { Field, ObjectType, registerEnumType } from "@nestjs/graphql";
-import { GraphQLDate, GraphQLPositiveInt } from "graphql-scalars";
 
 import { BaseModel } from "./base";
 
@@ -9,8 +7,6 @@ export enum OrderType {
   SELL = "SELL"
 }
 
-registerEnumType(OrderType, { name: "OrderType" });
-
 export enum OrderStatus {
   PENDING = "PENDING",
   COMPLETED = "COMPLETED",
@@ -18,37 +14,21 @@ export enum OrderStatus {
   EXPIRED = "EXPIRED"
 }
 
-registerEnumType(OrderStatus, { name: "OrderStatus" });
-
-@ObjectType()
 export class Order extends BaseModel {
-  @Field({ nullable: false })
   leagueId!: string;
 
-  @Field({ nullable: false })
   memberId!: string;
 
-  @Field({ nullable: false })
   stockSymbol!: string;
 
-  @Field(() => GraphQLPositiveInt, { nullable: false })
   stockPriceCents!: number;
 
-  @Field(() => String, { nullable: false })
-  stockPriceString() {
-    return `${(this.stockPriceCents / 100).toFixed(2)} €`;
-  }
-
-  @Field(() => GraphQLPositiveInt, { nullable: false })
   stockCount!: number;
 
-  @Field(() => OrderType)
   type!: OrderType;
 
-  @Field(() => OrderStatus)
   status!: OrderStatus;
 
-  @Field(() => GraphQLDate, { nullable: false })
   expirationDate!: string;
 }
 
