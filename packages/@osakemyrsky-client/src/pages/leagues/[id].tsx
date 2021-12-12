@@ -99,7 +99,7 @@ const LeaguePage = () => {
   }
 
   return (
-    <div className="grow pb-24">
+    <div className="grow">
       <PageHeader
         title="Liigapörssi"
         subtitle={data.league.name}
