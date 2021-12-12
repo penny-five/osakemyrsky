@@ -11,11 +11,17 @@ export class OrderMemberDto {
   @Field(() => GraphQLUUID, { nullable: false })
   id!: string;
 
+  @Field(() => GraphQLUUID, { nullable: false })
+  userId!: string;
+
   @Field({ nullable: false })
   name!: string;
 
   @Field(() => String, { nullable: true })
   picture!: string | null;
+
+  @Field(() => String, { nullable: true })
+  companyName!: string | null;
 }
 
 @ObjectType("OrderStock")
@@ -43,9 +49,6 @@ export class OrderDto {
 
   @Field(() => OrderMemberDto, { nullable: false })
   member!: OrderMemberDto;
-
-  @Field({ nullable: false })
-  memberId!: string;
 
   @Field(() => OrderStockDto, { nullable: false })
   stock!: OrderStockDto;
@@ -76,8 +79,10 @@ export class OrderDto {
     dto.leagueId = model.leagueId;
     dto.member = new OrderMemberDto();
     dto.member.id = model.member.id;
+    dto.member.id = model.member.userId;
     dto.member.name = model.member.name;
     dto.member.picture = model.member.picture;
+    dto.member.companyName = model.member.companyName;
     dto.stock = new OrderStockDto();
     dto.stock.name = model.stock.name;
     dto.stock.symbol = model.stock.symbol;

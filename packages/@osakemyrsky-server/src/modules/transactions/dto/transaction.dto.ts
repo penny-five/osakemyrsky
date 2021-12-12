@@ -11,11 +11,17 @@ export class TransactionMemberDto {
   @Field(() => GraphQLUUID, { nullable: false })
   id!: string;
 
+  @Field(() => GraphQLUUID, { nullable: false })
+  userId!: string;
+
   @Field({ nullable: false })
   name!: string;
 
   @Field(() => String, { nullable: true })
   picture!: string | null;
+
+  @Field(() => String, { nullable: true })
+  companyName!: string | null;
 }
 
 @ObjectType("TransactionStock")
@@ -64,8 +70,10 @@ export class TransactionDto {
     dto.leagueId = model.leagueId;
     dto.member = new TransactionMemberDto();
     dto.member.id = model.member.id;
+    dto.member.userId = model.member.userId;
     dto.member.name = model.member.name;
     dto.member.picture = model.member.picture;
+    dto.member.companyName = model.member.companyName;
     dto.stock = new TransactionStockDto();
     dto.stock.name = model.stock.name;
     dto.stock.symbol = model.stock.symbol;

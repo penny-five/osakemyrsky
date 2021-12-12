@@ -11,7 +11,7 @@ export enum TransactionType {
 
 export interface CommitTransactionParams {
   leagueId: string;
-  member: { id: string; name: string; picture: string | null };
+  member: { id: string; userId: string; name: string; picture: string | null; companyName: string };
   stock: { name: string; symbol: string };
   count: number;
   unitPriceCents: number;

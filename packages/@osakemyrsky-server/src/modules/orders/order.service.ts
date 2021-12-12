@@ -92,8 +92,10 @@ export class OrderService {
       leagueId: params.leagueId,
       member: {
         id: member.id!,
+        userId: member.userId,
         name: member.name,
-        picture: member.picture
+        picture: member.picture,
+        companyName: member.companyName
       },
       stock: {
         name: stock.name,
@@ -214,8 +216,10 @@ export class OrderService {
           leagueId: order.leagueId,
           member: {
             id: order.member.id,
+            userId: order.member.userId,
             name: order.member.name,
-            picture: order.member.picture
+            picture: order.member.picture,
+            companyName: order.member.companyName
           },
           stock: {
             name: order.stock.name,
@@ -260,15 +264,17 @@ export class OrderService {
         leagueId: order.leagueId,
         member: {
           id: order.member.id,
+          userId: order.member.userId,
           name: order.member.name,
-          picture: order.member.picture
+          picture: order.member.picture,
+          companyName: order.member.companyName
         },
         stock: {
           name: order.stock.name,
           symbol: order.stock.symbol
         },
         count: order.stockCount,
-        priceCents: order.stockPriceCents,
+        unitPriceCents: order.stockPriceCents,
         type: TransactionType.SELL
       });
 

@@ -1,4 +1,5 @@
 import { Member } from "./member";
+import { Transaction } from "./transaction";
 
 export enum LeagueStatus {
   STARTING = "STARTING",
@@ -15,4 +16,5 @@ export interface League {
   endDate: string;
   status: LeagueStatus;
   members: Member[];
+  transactions: Transaction[];
 }

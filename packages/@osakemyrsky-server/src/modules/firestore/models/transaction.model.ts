@@ -12,8 +12,10 @@ export class Transaction extends BaseModel {
 
   member!: {
     id: string;
+    userId: string;
     name: string;
     picture: string | null;
+    companyName: string;
   };
 
   stock!: {
@@ -40,8 +42,10 @@ export const transactionConverter: FirestoreDataConverter<Transaction> = {
     transaction.leagueId = data.leagueId as string;
     transaction.member = {
       id: (data.member as DocumentData).id as string,
-      name: (data.member as DocumentData).id as string,
-      picture: (data.member as DocumentData).name as string
+      userId: (data.member as DocumentData).userId as string,
+      name: (data.member as DocumentData).name as string,
+      picture: (data.member as DocumentData).picture as string,
+      companyName: (data.member as DocumentData).companyName as string
     };
     transaction.stock = {
       name: (data.stock as DocumentData).name as string,
@@ -59,8 +63,10 @@ export const transactionConverter: FirestoreDataConverter<Transaction> = {
       leagueId: transaction.leagueId,
       member: {
         id: transaction.member.id,
+        userId: transaction.member.userId,
         name: transaction.member.name,
-        picture: transaction.member.picture
+        picture: transaction.member.picture,
+        companyName: transaction.member.companyName
       },
       stock: {
         name: transaction.stock.name,

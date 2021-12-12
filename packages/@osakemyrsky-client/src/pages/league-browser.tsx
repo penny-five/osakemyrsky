@@ -94,7 +94,7 @@ const LeagueBrowser = () => {
   };
 
   return (
-    <div className="flex flex-col grow">
+    <div className="flex flex-col grow pb-8">
       <PageHeader
         title="Liigat"
         illustration={<Image src="/images/page-header-leagues.svg" alt="illustration" width="275px" height="275px" />}

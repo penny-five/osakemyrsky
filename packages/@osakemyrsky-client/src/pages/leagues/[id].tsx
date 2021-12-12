@@ -7,6 +7,7 @@ import Button from "@/atoms/button";
 import Panel from "@/atoms/panel";
 import PanelColumn from "@/atoms/panel-column";
 import MemberList from "@/components/league/member-list";
+import TransactionList from "@/components/league/transaction.list";
 import PageHeader from "@/components/page-header";
 import { useUser } from "@/providers/user";
 import { League } from "@/types/league";
@@ -30,13 +31,20 @@ const GET_LEAGUE = gql`
       transactions {
         id
         createdAt
-        type
+        member {
+          id
+          userId
+          name
+          picture
+          companyName
+        }
         stock {
           name
           symbol
         }
         count
         unitPriceCents
+        type
       }
     }
   }
@@ -91,7 +99,7 @@ const LeaguePage = () => {
   }
 
   return (
-    <div className="grow">
+    <div className="grow pb-24">
       <PageHeader
         title="Liigapörssi"
         subtitle={data.league.name}
@@ -106,8 +114,9 @@ const LeaguePage = () => {
           </PanelColumn>
           <PanelColumn title="Suosituimmat osakkeet"></PanelColumn>
         </Panel>
-        <Panel title="Jäsenet"></Panel>
-        <Panel title="Viimeksi toteutuneet kaupat"></Panel>
+        <Panel title="Viimeksi toteutuneet kaupat">
+          <TransactionList transactions={data.league.transactions} />
+        </Panel>
       </div>
     </div>
   );
