@@ -25,7 +25,7 @@ export class Transaction extends BaseModel {
 
   count!: number;
 
-  priceCents!: number;
+  unitPriceCents!: number;
 }
 
 export const transactionConverter: FirestoreDataConverter<Transaction> = {
@@ -43,13 +43,13 @@ export const transactionConverter: FirestoreDataConverter<Transaction> = {
       name: (data.member as DocumentData).id as string,
       picture: (data.member as DocumentData).name as string
     };
-    transaction.type = data.type as TransactionType;
     transaction.stock = {
       name: (data.stock as DocumentData).name as string,
       symbol: (data.stock as DocumentData).symbol as string
     };
+    transaction.type = data.type as TransactionType;
     transaction.count = data.count as number;
-    transaction.priceCents = data.priceCents as number;
+    transaction.unitPriceCents = data.unitPriceCents as number;
 
     return transaction;
   },
@@ -62,13 +62,13 @@ export const transactionConverter: FirestoreDataConverter<Transaction> = {
         name: transaction.member.name,
         picture: transaction.member.picture
       },
-      type: transaction.type,
       stock: {
         name: transaction.stock.name,
         symbol: transaction.stock.symbol
       },
+      type: transaction.type,
       count: transaction.count,
-      priceCents: transaction.priceCents
+      unitPriceCents: transaction.unitPriceCents
     };
   }
 };

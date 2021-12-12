@@ -10,5 +10,5 @@ export interface Transaction {
   type: TransactionType;
   stockSymbol: string;
   count: number;
-  priceCents: number;
+  unitPriceCents: number;
 }

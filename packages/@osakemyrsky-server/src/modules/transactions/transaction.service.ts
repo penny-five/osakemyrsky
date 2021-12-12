@@ -14,7 +14,7 @@ export interface CommitTransactionParams {
   member: { id: string; name: string; picture: string | null };
   stock: { name: string; symbol: string };
   count: number;
-  priceCents: number;
+  unitPriceCents: number;
   type: TransactionType;
 }
 
@@ -51,7 +51,7 @@ export class TransactionService {
       member: params.member,
       stock: params.stock,
       count: params.count,
-      priceCents: params.priceCents,
+      unitPriceCents: params.unitPriceCents,
       type: params.type
     });
 

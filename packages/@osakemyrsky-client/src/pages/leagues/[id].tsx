@@ -36,7 +36,7 @@ const GET_LEAGUE = gql`
           symbol
         }
         count
-        priceCents
+        unitPriceCents
       }
     }
   }

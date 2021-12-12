@@ -222,7 +222,7 @@ export class OrderService {
             symbol: order.stock.symbol
           },
           count: order.stockCount,
-          priceCents: order.stockPriceCents,
+          unitPriceCents: order.stockPriceCents,
           type: TransactionType.BUY
         });
 

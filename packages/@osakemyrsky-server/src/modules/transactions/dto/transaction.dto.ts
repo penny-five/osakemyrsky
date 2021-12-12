@@ -54,7 +54,7 @@ export class TransactionDto {
   count!: number;
 
   @Field(() => GraphQLPositiveInt, { nullable: false })
-  priceCents!: number;
+  unitPriceCents!: number;
 
   static fromModel(model: Transaction) {
     const dto = new TransactionDto();
@@ -69,8 +69,9 @@ export class TransactionDto {
     dto.stock = new TransactionStockDto();
     dto.stock.name = model.stock.name;
     dto.stock.symbol = model.stock.symbol;
+    dto.type = model.type;
     dto.count = model.count;
-    dto.priceCents = model.priceCents;
+    dto.unitPriceCents = model.unitPriceCents;
     return dto;
   }
 }
