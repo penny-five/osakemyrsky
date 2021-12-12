@@ -35,7 +35,7 @@ export class AuthenticationService {
       throw new Error("Invalid token");
     }
 
-    let user: User | undefined = await this.userService.findBySub(userInfo.sub);
+    let user: User | undefined = await this.userService.findUserBySub(userInfo.sub);
 
     if (user == null) {
       user = await this.userService.createUser({

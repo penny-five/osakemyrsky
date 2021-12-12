@@ -7,6 +7,8 @@ import { GqlJwtAuthGuard } from "../authentication/guards/qgl.jwt.guard";
 import { League } from "../firestore/models/league.model";
 import { Member } from "../firestore/models/member.model";
 import { Membership } from "../firestore/models/membership.model";
+import { Transaction } from "../firestore/models/transaction.model";
+import { TransactionService } from "../transactions/transaction.service";
 
 import { CreateLeagueInput } from "./dto/create-league.input";
 import { GetLeaguesArgs } from "./dto/get-leagues.args";
@@ -15,7 +17,7 @@ import { LeagueService } from "./league.service";
 
 @Resolver(() => League)
 export class LeagueResolver {
-  constructor(private readonly leagueService: LeagueService) {}
+  constructor(private readonly leagueService: LeagueService, private readonly transactionService: TransactionService) {}
 
   @Query(() => League)
   league(@Args("id") id: string) {
@@ -30,6 +32,11 @@ export class LeagueResolver {
   @ResolveField(() => [Member])
   async members(@Parent() league: League) {
     return this.leagueService.findLeagueMembers(league.id!);
+  }
+
+  @ResolveField(() => [Transaction])
+  async transactions(@Parent() league: League) {
+    return this.transactionService.findLeagueTransactions(league.id!);
   }
 
   @UseGuards(GqlJwtAuthGuard)

@@ -5,6 +5,8 @@ export enum OrderType {
 
 export interface Order {
   id: string;
+  createdAt: string;
+  updatedAt: string;
   type: OrderType;
   stockSymbol: string;
   stockPriceCents: number;

@@ -33,7 +33,7 @@ export class UserService {
     return res.empty ? undefined : res.docs[0].data();
   }
 
-  async findBySub(sub: string) {
+  async findUserBySub(sub: string) {
     const res = await this.firestore.collection("users").withConverter(userConverter).where("sub", "==", sub).get();
     return res.empty ? undefined : res.docs[0].data();
   }

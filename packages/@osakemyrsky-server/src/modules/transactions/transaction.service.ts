@@ -22,11 +22,21 @@ export class TransactionService {
 
   constructor(private readonly firestore: Firestore) {}
 
+  async findLeagueTransactions(leagueId: string) {
+    const res = await this.firestore
+      .collectionGroup("transactions")
+      .where("leagueId", "==", leagueId)
+      .withConverter(transactionConverter)
+      .get();
+
+    return res.docs.map(doc => doc.data());
+  }
+
   async commitTransaction(leagueId: string, memberId: string, params: CommitTransactionParams) {
     const id = uuid();
 
     const transactionRef = this.firestore
-      .collection("leagueId")
+      .collection("leagues")
       .doc(leagueId)
       .collection("members")
       .doc(memberId)
@@ -35,6 +45,8 @@ export class TransactionService {
       .doc(id);
 
     await transactionRef.set({
+      leagueId,
+      memberId,
       stockSymbol: params.stockSymbol,
       count: params.count,
       priceCents: params.priceCents,

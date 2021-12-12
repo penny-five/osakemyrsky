@@ -26,6 +26,15 @@ const GET_LEAGUE = gql`
         companyName
         picture
       }
+
+      transactions {
+        id
+        createdAt
+        type
+        stockSymbol
+        count
+        priceCents
+      }
     }
   }
 `;

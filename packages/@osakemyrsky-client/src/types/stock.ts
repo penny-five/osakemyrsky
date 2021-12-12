@@ -5,6 +5,9 @@ export enum StockTradingStatus {
 }
 
 export interface Stock {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
   name: string;
   symbol: string;
   exchangeCountry: string;
