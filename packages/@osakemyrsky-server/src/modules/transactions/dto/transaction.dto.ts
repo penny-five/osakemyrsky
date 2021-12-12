@@ -6,6 +6,27 @@ import { TransactionType } from "../transaction.service";
 
 registerEnumType(TransactionType, { name: "TransactionType" });
 
+@ObjectType("TransactionMember")
+export class TransactionMemberDto {
+  @Field(() => GraphQLUUID, { nullable: false })
+  id!: string;
+
+  @Field({ nullable: false })
+  name!: string;
+
+  @Field(() => String, { nullable: true })
+  picture!: string | null;
+}
+
+@ObjectType("TransactionStock")
+export class TransactionStockDto {
+  @Field({ nullable: false })
+  name!: string;
+
+  @Field(() => String, { nullable: true })
+  symbol!: string;
+}
+
 @ObjectType("Transaction")
 export class TransactionDto {
   @Field(() => GraphQLUUID, { nullable: false })
@@ -21,13 +42,13 @@ export class TransactionDto {
   leagueId!: string;
 
   @Field({ nullable: false })
-  memberId!: string;
+  member!: TransactionMemberDto;
+
+  @Field({ nullable: false })
+  stock!: TransactionStockDto;
 
   @Field(() => TransactionType, { nullable: false })
   type!: TransactionType;
-
-  @Field(() => String, { nullable: false })
-  stockSymbol!: string;
 
   @Field(() => GraphQLPositiveInt, { nullable: false })
   count!: number;
@@ -41,9 +62,13 @@ export class TransactionDto {
     dto.createdAt = model.createdAt!;
     dto.updatedAt = model.updatedAt!;
     dto.leagueId = model.leagueId;
-    dto.memberId = model.memberId;
-    dto.type = model.type;
-    dto.stockSymbol = model.stockSymbol;
+    dto.member = new TransactionMemberDto();
+    dto.member.id = model.member.id;
+    dto.member.name = model.member.name;
+    dto.member.picture = model.member.picture;
+    dto.stock = new TransactionStockDto();
+    dto.stock.name = model.stock.name;
+    dto.stock.symbol = model.stock.symbol;
     dto.count = model.count;
     dto.priceCents = model.priceCents;
     return dto;

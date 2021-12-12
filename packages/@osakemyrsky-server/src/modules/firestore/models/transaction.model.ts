@@ -10,11 +10,18 @@ export enum TransactionType {
 export class Transaction extends BaseModel {
   leagueId!: string;
 
-  memberId!: string;
+  member!: {
+    id: string;
+    name: string;
+    picture: string | null;
+  };
+
+  stock!: {
+    name: string;
+    symbol: string;
+  };
 
   type!: TransactionType;
-
-  stockSymbol!: string;
 
   count!: number;
 
@@ -31,9 +38,16 @@ export const transactionConverter: FirestoreDataConverter<Transaction> = {
     transaction.createdAt = snapshot.createTime.toDate().toISOString();
     transaction.updatedAt = snapshot.updateTime.toDate().toISOString();
     transaction.leagueId = data.leagueId as string;
-    transaction.memberId = data.memberId as string;
+    transaction.member = {
+      id: (data.member as DocumentData).id as string,
+      name: (data.member as DocumentData).id as string,
+      picture: (data.member as DocumentData).name as string
+    };
     transaction.type = data.type as TransactionType;
-    transaction.stockSymbol = data.stockSymbol as string;
+    transaction.stock = {
+      name: (data.stock as DocumentData).name as string,
+      symbol: (data.stock as DocumentData).symbol as string
+    };
     transaction.count = data.count as number;
     transaction.priceCents = data.priceCents as number;
 
@@ -43,9 +57,16 @@ export const transactionConverter: FirestoreDataConverter<Transaction> = {
   toFirestore: function (transaction: Transaction): DocumentData {
     return {
       leagueId: transaction.leagueId,
-      memberId: transaction.memberId,
+      member: {
+        id: transaction.member.id,
+        name: transaction.member.name,
+        picture: transaction.member.picture
+      },
       type: transaction.type,
-      stockSymbol: transaction.stockSymbol,
+      stock: {
+        name: transaction.stock.name,
+        symbol: transaction.stock.symbol
+      },
       count: transaction.count,
       priceCents: transaction.priceCents
     };

@@ -6,6 +6,27 @@ import { Order, OrderStatus, OrderType } from "../../firestore/models/order.mode
 registerEnumType(OrderType, { name: "OrderType" });
 registerEnumType(OrderStatus, { name: "OrderStatus" });
 
+@ObjectType("OrderMember")
+export class OrderMemberDto {
+  @Field(() => GraphQLUUID, { nullable: false })
+  id!: string;
+
+  @Field({ nullable: false })
+  name!: string;
+
+  @Field(() => String, { nullable: true })
+  picture!: string | null;
+}
+
+@ObjectType("OrderStock")
+export class OrderStockDto {
+  @Field({ nullable: false })
+  name!: string;
+
+  @Field(() => String, { nullable: true })
+  symbol!: string;
+}
+
 @ObjectType("Order")
 export class OrderDto {
   @Field(() => GraphQLUUID, { nullable: false })
@@ -20,11 +41,14 @@ export class OrderDto {
   @Field({ nullable: false })
   leagueId!: string;
 
+  @Field(() => OrderMemberDto, { nullable: false })
+  member!: OrderMemberDto;
+
   @Field({ nullable: false })
   memberId!: string;
 
-  @Field({ nullable: false })
-  stockSymbol!: string;
+  @Field(() => OrderStockDto, { nullable: false })
+  stock!: OrderStockDto;
 
   @Field(() => GraphQLPositiveInt, { nullable: false })
   stockPriceCents!: number;
@@ -50,8 +74,13 @@ export class OrderDto {
     dto.createdAt = model.createdAt!;
     dto.updatedAt = model.updatedAt!;
     dto.leagueId = model.leagueId;
-    dto.memberId = model.memberId;
-    dto.stockSymbol = model.stockSymbol;
+    dto.member = new OrderMemberDto();
+    dto.member.id = model.member.id;
+    dto.member.name = model.member.name;
+    dto.member.picture = model.member.picture;
+    dto.stock = new OrderStockDto();
+    dto.stock.name = model.stock.name;
+    dto.stock.symbol = model.stock.symbol;
     dto.stockPriceCents = model.stockPriceCents;
     dto.stockPriceString = `${(model.stockPriceCents / 100).toFixed(2)} €`;
     dto.stockCount = model.stockCount;

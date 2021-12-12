@@ -31,7 +31,10 @@ const GET_LEAGUE = gql`
         id
         createdAt
         type
-        stockSymbol
+        stock {
+          name
+          symbol
+        }
         count
         priceCents
       }

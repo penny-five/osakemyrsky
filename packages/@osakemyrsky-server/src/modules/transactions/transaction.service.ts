@@ -10,7 +10,9 @@ export enum TransactionType {
 }
 
 export interface CommitTransactionParams {
-  stockSymbol: string;
+  leagueId: string;
+  member: { id: string; name: string; picture: string | null };
+  stock: { name: string; symbol: string };
   count: number;
   priceCents: number;
   type: TransactionType;
@@ -32,22 +34,22 @@ export class TransactionService {
     return res.docs.map(doc => doc.data());
   }
 
-  async commitTransaction(leagueId: string, memberId: string, params: CommitTransactionParams) {
+  async commitTransaction(params: CommitTransactionParams) {
     const id = uuid();
 
     const transactionRef = this.firestore
       .collection("leagues")
-      .doc(leagueId)
+      .doc(params.leagueId)
       .collection("members")
-      .doc(memberId)
+      .doc(params.member.id)
       .collection("transactions")
       .withConverter(transactionConverter)
       .doc(id);
 
     await transactionRef.set({
-      leagueId,
-      memberId,
-      stockSymbol: params.stockSymbol,
+      leagueId: params.leagueId,
+      member: params.member,
+      stock: params.stock,
       count: params.count,
       priceCents: params.priceCents,
       type: params.type
@@ -55,8 +57,6 @@ export class TransactionService {
 
     this.logger.log(
       {
-        leagueId,
-        memberId,
         params
       },
       "Commit transaction"

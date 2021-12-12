@@ -14,6 +14,6 @@ export class StockResolver {
 
   @Query(() => Stock)
   stock(@Args("symbol") symbol: string) {
-    return this.stockService.findBySymbol(symbol);
+    return this.stockService.findStockBySymbol(symbol);
   }
 }

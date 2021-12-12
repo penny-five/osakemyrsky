@@ -43,12 +43,12 @@ export class LeagueService {
       .where("userId", "==", userId)
       .get();
 
-    return res.empty ? undefined : res.docs[0];
+    return res.empty ? undefined : res.docs[0].data();
   }
 
   async findMemberLeague(memberId: string) {
     const res = await this.firestore.collection("members").withConverter(leagueConverter).doc(memberId).parent.get();
-    return res.empty ? undefined : res.docs[0];
+    return res.empty ? undefined : res.docs[0].data();
   }
 
   async findAll(orderBy = LeaguesOrderBy.NAME) {

@@ -9,15 +9,15 @@ import { Stock, StockTradingStatus } from "./dto/stock.dto";
 export class StockService {
   constructor(private readonly nordnetClient: NordnetClient) {}
 
-  async search(search: string): Promise<Stock[]> {
+  async search(search: string) {
     const response = await this.nordnetClient.searchInstruments(search);
 
     return response.results.map(instrument => this.mapNordnetInstrumentToStock(instrument));
   }
 
-  async findBySymbol(symbol: string): Promise<Stock> {
+  async findStockBySymbol(symbol: string) {
     const instrument = await this.nordnetClient.findInstrumentBySymbol(symbol);
-    return this.mapNordnetInstrumentToStock(instrument);
+    return instrument != null ? this.mapNordnetInstrumentToStock(instrument) : undefined;
   }
 
   private mapNordnetInstrumentToStock(instrument: NordnetInstrument) {

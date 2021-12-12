@@ -17,9 +17,16 @@ export enum OrderStatus {
 export class Order extends BaseModel {
   leagueId!: string;
 
-  memberId!: string;
+  member!: {
+    id: string;
+    name: string;
+    picture: string | null;
+  };
 
-  stockSymbol!: string;
+  stock!: {
+    name: string;
+    symbol: string;
+  };
 
   stockPriceCents!: number;
 
@@ -42,8 +49,15 @@ export const orderConverter: FirestoreDataConverter<Order> = {
     order.createdAt = snapshot.createTime.toDate().toISOString();
     order.updatedAt = snapshot.updateTime.toDate().toISOString();
     order.leagueId = data.leagueId as string;
-    order.memberId = data.memberId as string;
-    order.stockSymbol = data.stockSymbol as string;
+    order.member = {
+      id: (data.member as DocumentData).id as string,
+      name: (data.member as DocumentData).id as string,
+      picture: (data.member as DocumentData).name as string
+    };
+    order.stock = {
+      name: (data.stock as DocumentData).name as string,
+      symbol: (data.stock as DocumentData).symbol as string
+    };
     order.stockPriceCents = data.stockPriceCents as number;
     order.stockCount = data.stockCount as number;
     order.type = data.type as OrderType;
@@ -57,8 +71,15 @@ export const orderConverter: FirestoreDataConverter<Order> = {
     return {
       id: order.id,
       leagueId: order.leagueId,
-      memberId: order.memberId,
-      stockSymbol: order.stockSymbol,
+      member: {
+        id: order.member.id,
+        name: order.member.name,
+        picture: order.member.picture
+      },
+      stock: {
+        name: order.stock.name,
+        symbol: order.stock.symbol
+      },
       stockPriceCents: order.stockPriceCents,
       stockCount: order.stockCount,
       type: order.type,

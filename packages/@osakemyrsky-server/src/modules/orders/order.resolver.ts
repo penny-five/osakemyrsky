@@ -35,13 +35,13 @@ export class OrderResolver {
   @Mutation(() => OrderDto)
   async placeOrder(@Token() token: AuthenticationToken, @Args("placeOrderInput") placeOrderInput: PlaceOrderInput) {
     const order = await this.orderService.placeOrder(
-      placeOrderInput.leagueId,
       {
+        leagueId: placeOrderInput.leagueId,
         expirationDate: placeOrderInput.expirationDate,
         stockCount: placeOrderInput.stockCount,
         stockPriceCents: placeOrderInput.stockPriceCents,
         stockSymbol: placeOrderInput.stockSymbol,
-        type: placeOrderInput.type
+        orderType: placeOrderInput.type
       },
       { userId: token.sub }
     );

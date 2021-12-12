@@ -54,7 +54,7 @@ export class NordnetClient {
       limit: 1
     });
 
-    return response.results[0];
+    return response.results.length > 0 ? response.results[0] : undefined;
   }
 
   async findInstrumentBySymbol(symbol: string) {
@@ -63,6 +63,6 @@ export class NordnetClient {
       limit: 1
     });
 
-    return response.results[0];
+    return response.results.length > 0 ? response.results[0] : undefined;
   }
 }
