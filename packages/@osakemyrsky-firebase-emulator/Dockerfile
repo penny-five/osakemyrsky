@@ -4,13 +4,15 @@ ENV FIREBASE_TOOLS_VERSION=9.23.0
 
 WORKDIR /firebase
 
-RUN apk --no-cache add openjdk11 bash && \
+RUN apk --no-cache add openjdk11 openssl bash && \
   npm install -g firebase-tools@${FIREBASE_TOOLS_VERSION} && \
   firebase setup:emulators:firestore
 
 EXPOSE 8080
 
 COPY firebase.json .
-COPY run.sh .
+COPY start.sh .
 
-CMD [ "sh", "run.sh" ]
+RUN mkdir .cache
+
+CMD [ "bash", "start.sh" ]
