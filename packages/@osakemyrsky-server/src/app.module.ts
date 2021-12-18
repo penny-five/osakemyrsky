@@ -19,17 +19,15 @@ import { UserModule } from "./modules/users/user.module";
       useFactory() {
         if (process.env.NODE_ENV === "production") {
           return {
-            pinoHttp: [{ redact: ["req.headers.authorization"] }],
+            pinoHttp: { redact: ["req.headers.authorization"] },
             exclude: [{ method: RequestMethod.ALL, path: "/health" }]
           };
         }
 
         return {
-          pinoHttp: [
-            {
-              transport: { target: "pino-pretty", options: { colorize: true } }
-            }
-          ]
+          pinoHttp: {
+            transport: { target: "pino-pretty", options: { colorize: true } }
+          }
         };
       }
     }),
