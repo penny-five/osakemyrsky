@@ -5,7 +5,7 @@ import { v4 as uuid } from "uuid";
 
 import { Editor } from "../../common/editor";
 import { isAfter, isSameDay } from "../../utils/dates";
-import { GameConfig } from "../config/game";
+import { GameConfig } from "../config/files/game";
 import { DepositService } from "../deposits/deposit.service";
 import { League, leagueConverter, LeagueStatus } from "../firestore/models/league.model";
 import { Member, memberConverter } from "../firestore/models/member.model";
