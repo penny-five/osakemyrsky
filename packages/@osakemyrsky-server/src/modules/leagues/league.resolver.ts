@@ -2,9 +2,9 @@ import { UseGuards } from "@nestjs/common";
 import { Query, Resolver, Args, ResolveField, Parent, Mutation } from "@nestjs/graphql";
 
 import { DocumentNotFoundError } from "../../common/errors";
-import { AuthenticationToken } from "../authentication/authentication.types";
-import { Token } from "../authentication/decorators/token.decorator";
-import { GqlJwtAuthGuard } from "../authentication/guards/qgl.jwt.guard";
+import { Session } from "../authentication/decorators/session.decorator";
+import { GqlUserAuthGuard } from "../authentication/guards/qgl.jwt.guard";
+import { SessionToken } from "../authentication/token.service";
 import { TransactionDto } from "../transactions/dto/transaction.dto";
 import { TransactionService } from "../transactions/transaction.service";
 
@@ -49,10 +49,10 @@ export class LeagueResolver {
     return transactions.map(transaction => TransactionDto.fromModel(transaction));
   }
 
-  @UseGuards(GqlJwtAuthGuard)
+  @UseGuards(GqlUserAuthGuard)
   @Mutation(() => LeagueDto)
   async createLeague(
-    @Token() token: AuthenticationToken,
+    @Session() session: SessionToken,
     @Args("createLeagueInput") createLeagueInput: CreateLeagueInput
   ) {
     const league = await this.leagueService.createLeague(
@@ -61,16 +61,16 @@ export class LeagueResolver {
         startDate: createLeagueInput.startDate,
         endDate: createLeagueInput.endDate
       },
-      { userId: token.sub }
+      { userId: session.userId }
     );
 
     return LeagueDto.fromModel(league);
   }
 
-  @UseGuards(GqlJwtAuthGuard)
+  @UseGuards(GqlUserAuthGuard)
   @Mutation(() => MembershipDto)
-  async joinLeague(@Token() token: AuthenticationToken, @Args("joinLeagueInput") joinLeagueInput: JoinLeagueInput) {
-    const membership = await this.leagueService.registerMember(joinLeagueInput.leagueId, token.sub, {
+  async joinLeague(@Session() session: SessionToken, @Args("joinLeagueInput") joinLeagueInput: JoinLeagueInput) {
+    const membership = await this.leagueService.registerMember(joinLeagueInput.leagueId, session.userId, {
       companyName: joinLeagueInput.companyName
     });
 

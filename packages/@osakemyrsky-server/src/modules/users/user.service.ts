@@ -16,16 +16,18 @@ export class UserService {
   async createUser(params: Pick<User, "sub" | "name" | "email" | "picture">) {
     const id = uuid();
     await this.firestore.collection("users").withConverter(userConverter).doc(id).create(params);
-    return (await this.findUserById(id))!;
+
+    const user = await this.findUserById(id);
+    return user!;
+  }
+
+  async updateUser(id: string, user: Partial<Pick<User, "sub" | "name" | "email" | "picture">>) {
+    await this.firestore.collection("users").withConverter(userConverter).doc(id).update(user);
   }
 
   async findUserById(id: string) {
     const res = await this.firestore.collection("users").withConverter(userConverter).doc(id).get();
     return res.data();
-  }
-
-  async updateUser(id: string, user: Partial<Pick<User, "sub" | "name" | "email" | "picture">>) {
-    await this.firestore.collection("users").withConverter(userConverter).doc(id).update(user);
   }
 
   async findUserByEmail(email: string) {

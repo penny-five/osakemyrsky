@@ -2,9 +2,9 @@ import { UseGuards } from "@nestjs/common";
 import { Query, Resolver, Args, Mutation } from "@nestjs/graphql";
 
 import { DocumentNotFoundError } from "../../common/errors";
-import { AuthenticationToken } from "../authentication/authentication.types";
-import { Token } from "../authentication/decorators/token.decorator";
-import { GqlJwtAuthGuard } from "../authentication/guards/qgl.jwt.guard";
+import { Session } from "../authentication/decorators/session.decorator";
+import { GqlUserAuthGuard } from "../authentication/guards/qgl.jwt.guard";
+import { SessionToken } from "../authentication/token.service";
 
 import { OrderDto } from "./dto/order.dto";
 import { PlaceOrderInput } from "./dto/place-order.input";
@@ -31,9 +31,9 @@ export class OrderResolver {
     return OrderDto.fromModel(order);
   }
 
-  @UseGuards(GqlJwtAuthGuard)
+  @UseGuards(GqlUserAuthGuard)
   @Mutation(() => OrderDto)
-  async placeOrder(@Token() token: AuthenticationToken, @Args("placeOrderInput") placeOrderInput: PlaceOrderInput) {
+  async placeOrder(@Session() session: SessionToken, @Args("placeOrderInput") placeOrderInput: PlaceOrderInput) {
     const order = await this.orderService.placeOrder(
       {
         leagueId: placeOrderInput.leagueId,
@@ -43,7 +43,7 @@ export class OrderResolver {
         stockSymbol: placeOrderInput.stockSymbol,
         orderType: placeOrderInput.type
       },
-      { userId: token.sub }
+      { userId: session.userId }
     );
 
     return OrderDto.fromModel(order);

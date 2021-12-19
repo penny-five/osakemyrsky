@@ -73,13 +73,7 @@ This stops and destroys all containers and volumes.
 
 ## Production environment
 
-### Generating JWT signing keys
-
-Both client and server require private JWK's for signing JWT's. The keys can be easily generated with:
-
-```sh
-npm install -g node-jose-tools && jose newkey --size 256 --ec -a ES256
-```
+TODO
 
 ## License
 

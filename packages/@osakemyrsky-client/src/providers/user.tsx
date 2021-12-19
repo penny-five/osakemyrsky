@@ -1,8 +1,9 @@
 import { useQuery, gql } from "@apollo/client";
-import { useSession } from "next-auth/react";
 import { createContext, useContext, PropsWithChildren } from "react";
 
-import { User } from "src/types/user";
+import { useSession } from "./session";
+
+import { User } from "@/types/user";
 
 const GET_ME = gql`
   query GetMe {
@@ -25,18 +26,30 @@ const GET_ME = gql`
   }
 `;
 
-const UserContext = createContext<{ user: User | null; status: "loading" | "unauthenticated" | "authenticated" }>({
+export type UserStatus = "loading" | "unauthenticated" | "authenticated";
+
+const UserContext = createContext<{ user: User | null; status: UserStatus }>({
   user: null,
   status: "loading"
 });
 
 export const UserProvider = ({ children }: PropsWithChildren<unknown>) => {
-  const { data: session, status } = useSession();
+  const session = useSession();
 
-  const { data } = useQuery<{ me: User }>(GET_ME, {
+  const { data, loading } = useQuery<{ me: User }>(GET_ME, {
     context: { session },
-    skip: status !== "authenticated"
+    skip: session == null
   });
+
+  let status: UserStatus;
+
+  if (session == null) {
+    status = "unauthenticated";
+  } else if (loading) {
+    status = "loading";
+  } else {
+    status = "authenticated";
+  }
 
   return <UserContext.Provider value={{ user: data?.me ?? null, status }}>{children}</UserContext.Provider>;
 };

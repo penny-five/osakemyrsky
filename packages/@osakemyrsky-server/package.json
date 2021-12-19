@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@google-cloud/firestore": "5.0.1",
+    "@hapi/iron": "6.0.0",
     "@nestjs/common": "8.2.4",
     "@nestjs/config": "1.1.5",
     "@nestjs/core": "8.2.4",
@@ -28,10 +29,11 @@
     "graphql": "15.6.1",
     "graphql-scalars": "1.14.1",
     "jsonwebtoken": "8.5.1",
-    "jwk-to-pem": "2.0.5",
     "jwks-rsa": "2.0.5",
     "nestjs-pino": "2.4.0",
+    "openid-client": "5.1.0",
     "passport": "0.4.1",
+    "passport-custom": "1.1.1",
     "passport-jwt": "4.0.0",
     "pino-http": "6.4.0",
     "pino-pretty": "7.3.0",
@@ -45,7 +47,6 @@
   "devDependencies": {
     "@tsconfig/node16": "1.0.2",
     "@types/jsonwebtoken": "8.5.6",
-    "@types/jwk-to-pem": "2.0.1",
     "@types/node": "16.11.11",
     "@types/passport-jwt": "3.0.6",
     "@types/pg": "8.6.2",

@@ -1,5 +1,4 @@
 import { ArchiveIcon } from "@heroicons/react/solid";
-import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -18,10 +17,11 @@ import { useActiveMembership } from "@/providers/active-membership";
 import { useUser } from "@/providers/user";
 
 export interface NavbarProps {
+  onSignIn: () => void;
   onSignOut: () => void;
 }
 
-const Navbar = ({ onSignOut }: NavbarProps) => {
+const Navbar = ({ onSignIn, onSignOut }: NavbarProps) => {
   const router = useRouter();
 
   const { user, status } = useUser();
@@ -79,7 +79,7 @@ const Navbar = ({ onSignOut }: NavbarProps) => {
             </NavbarUserDropdown>
           </div>
         ) : status === "unauthenticated" ? (
-          <Button priority="primary" icon={<ArchiveIcon />} onClick={() => signIn("google")}>
+          <Button priority="primary" icon={<ArchiveIcon />} onClick={onSignIn}>
             Kirjaudu sisään
           </Button>
         ) : null}

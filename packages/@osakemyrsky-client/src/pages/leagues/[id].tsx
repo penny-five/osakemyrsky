@@ -1,5 +1,4 @@
 import { gql, useQuery, useApolloClient } from "@apollo/client";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/dist/client/router";
 import Image from "next/image";
 
@@ -9,6 +8,7 @@ import PanelColumn from "@/atoms/panel-column";
 import MemberList from "@/components/league/member-list";
 import TransactionList from "@/components/league/transaction.list";
 import PageHeader from "@/components/page-header";
+import { useSession } from "@/providers/session";
 import { useUser } from "@/providers/user";
 import { League } from "@/types/league";
 
@@ -74,14 +74,14 @@ const LeaguePage = () => {
 
   const leagueId = router.query.id as string;
 
-  const { data: session, status } = useSession();
+  const session = useSession();
 
   const { data, loading } = useQuery<{ league: League }>(GET_LEAGUE, {
     variables: {
       id: router.query.id
     },
     context: { session },
-    skip: status !== "authenticated"
+    skip: session == null
   });
 
   const isLeagueMember = user?.memberships.some(membership => membership.leagueId === leagueId);

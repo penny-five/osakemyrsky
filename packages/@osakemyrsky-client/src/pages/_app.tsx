@@ -1,6 +1,4 @@
 import { ApolloProvider } from "@apollo/client";
-import { Session } from "next-auth";
-import { SessionProvider } from "next-auth/react";
 import { AppProps } from "next/app";
 import Head from "next/head";
 
@@ -11,9 +9,10 @@ import AuthRedirect from "@/layouts/auth-redirect";
 import DefaultLayout from "@/layouts/default";
 import { ActiveLeagueProvider } from "@/providers/active-league";
 import { ActiveMembershipProvider } from "@/providers/active-membership";
+import { SessionProvider } from "@/providers/session";
 import { UserProvider } from "@/providers/user";
 
-const OsakemyrskyApp = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
+const OsakemyrskyApp = ({ Component, pageProps: { ...pageProps } }: AppProps) => {
   return (
     <ApolloProvider client={client}>
       <Head>
@@ -21,7 +20,7 @@ const OsakemyrskyApp = ({ Component, pageProps: { session, ...pageProps } }: App
         <meta name="description" content="osakemyrsky" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <SessionProvider session={session as Session}>
+      <SessionProvider>
         <UserProvider>
           <ActiveLeagueProvider>
             <AuthRedirect>

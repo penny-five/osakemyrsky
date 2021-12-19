@@ -3,12 +3,12 @@ import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
 import { JwtPayload } from "jsonwebtoken";
 import { passportJwtSecret } from "jwks-rsa";
-import { ExtractJwt, Strategy, StrategyOptions } from "passport-jwt";
+import { ExtractJwt, Strategy as JwtStrategy, StrategyOptions as JwtStrategyOptions } from "passport-jwt";
 
-import { ServiceAccountAuthConfig } from "../../config/service-account-auth";
+import { ServiceAccountAuthConfig } from "../../config/files/service-account-auth";
 
 @Injectable()
-export class GoogleServiceAccountStrategy extends PassportStrategy(Strategy, "google-service-account-jwt") {
+export class GoogleServiceAccountStrategy extends PassportStrategy(JwtStrategy, "google-service-account-jwt") {
   private readonly serviceAccountAuthConfig: ServiceAccountAuthConfig;
 
   constructor(configService: ConfigService) {
@@ -22,7 +22,7 @@ export class GoogleServiceAccountStrategy extends PassportStrategy(Strategy, "go
         jwksUri: "https://www.googleapis.com/oauth2/v3/certs"
       }),
       algorithms: ["RS256"]
-    } as StrategyOptions);
+    } as JwtStrategyOptions);
 
     this.serviceAccountAuthConfig = configService.get<ServiceAccountAuthConfig>("serviceAccountAuth")!;
   }

@@ -2,7 +2,7 @@ import { Firestore } from "@google-cloud/firestore";
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 
-import { FirestoreConfig } from "../config/firestore";
+import { FirestoreConfig } from "../config/files/firestore";
 
 @Module({
   imports: [ConfigModule],

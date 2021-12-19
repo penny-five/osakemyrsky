@@ -12,15 +12,7 @@ services:
     environment:
       PORT: 8080
       NODE_ENV: development
-      NEXTAUTH_URL: http://localhost:8000
-      NEXTAUTH_URL_INTERNAL: http://localhost:8080
-      NEXT_PUBLIC_APOLLO_URL: http://localhost:8020/graphql
-      NEXT_PUBLIC_APOLLO_URL_INTERNAL: http://server:8080/graphql
-      NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_REDIRECT_URI: http://localhost:8000/auth/callback/google
-      # Private JWK for signing tokens in local environment. DON'T USE IN PRODUCTION.
-      JWT_SIGNING_KEY: '{"kty":"oct","kid":"mx0g5KXY7T7ioj8AQGnhC_KWy71bYxTO1UWYAHbjyVw","alg":"HS256","k":"kPXm0uBUCH7-5NgXJ_YSkEqjgZJ87LfRSdHg4AS4Q3U"}'
-    env_file:
-      - "./packages/@osakemyrsky-client/.env"
+      API_URL: http://server:8080
     ports:
       - 127.0.0.1:8000:8080
     volumes:
@@ -40,11 +32,12 @@ services:
     environment:
       PORT: 8080
       NODE_ENV: development
+      # Used for encrypting session cookies in local environment. DON'T USE IN PRODUCTION.
+      IRON_SECRET: d33c95209c4f54cc970f187d614a5bb2d1420a7aad4ffd0946350a91a5078568
       FIRESTORE_HOST_URL: firebase-emulator
       FIRESTORE_HOST_PORT: 4040
+      AUTH_GOOGLE_CLIENT_REDIRECT_URL: http://localhost:8000/auth/redirect/google
       GOOGLE_APPLICATION_CREDENTIALS: /tmp/keys/google-credentials.json
-      # Private JWK for signing tokens in local environment. DON'T USE IN PRODUCTION.
-      JWT_SIGNING_KEY: '{"kty":"EC","kid":"wYV089pb2dk6TpKG-LXZamIklfOQQGPIKO0BYT-Ck3s","alg":"ES256","crv":"P-256","x":"7z-tXKboXsZ1tjL-BoxgPHXaOrEgS2zzwtBMQyPUi0s","y":"z6XYL3vtbNbD9skucrPeWqpxBDX1sqslRqaQrwpPs6Y","d":"R902EY9oQk1HMr2fZmfGrSAaKuBEp_xXn4zhmTIzJ2o"}'
     env_file:
       - "./packages/@osakemyrsky-server/.env"
     ports:

@@ -9,7 +9,7 @@ export class User extends BaseModel {
 
   name!: string;
 
-  email!: string;
+  email!: string | null;
 
   picture!: string | null;
 }

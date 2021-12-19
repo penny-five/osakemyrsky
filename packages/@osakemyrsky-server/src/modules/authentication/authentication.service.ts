@@ -1,40 +1,49 @@
-import { Injectable } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
+import { Inject, Injectable } from "@nestjs/common";
+import { Request } from "express";
 
 import { User } from "../firestore/models/user.model";
 import { UserService } from "../users/user.service";
 
-import { Issuer, IssuerID } from "./issuers";
-import { GoogleIssuer } from "./issuers/google";
+import { IdentityProvider, UserInfo } from "./idp";
+import { TokenService } from "./token.service";
 
 @Injectable()
 export class AuthenticationService {
-  private readonly issuers: Map<IssuerID, Issuer> = new Map();
+  private readonly identityProviders: Map<string, IdentityProvider> = new Map();
 
-  constructor(private readonly jwtService: JwtService, private readonly userService: UserService) {
-    this.issuers.set(IssuerID.GOOGLE, new GoogleIssuer());
+  constructor(
+    private readonly userService: UserService,
+    private readonly tokenService: TokenService,
+    @Inject("google-idp") googleIdentityProvider: IdentityProvider
+  ) {
+    this.identityProviders.set(googleIdentityProvider.id, googleIdentityProvider);
+  }
+
+  isSupportedIdentityProvider(idp: string) {
+    return this.identityProviders.get(idp) != null;
+  }
+
+  createAuthorizationUrl(idp: string) {
+    const identityProvider = this.identityProviders.get(idp)!;
+
+    return identityProvider.createAuthorizationUrl();
+  }
+
+  async handleRedirect(idp: string, req: Request) {
+    const identityProvider = this.identityProviders.get(idp)!;
+
+    const userInfo = await identityProvider.handleRedirect(req);
+
+    return this.signIn(userInfo);
   }
 
   /**
    * Signs in a user.
    *
-   * @param issuerId The issuer ID.
-   * @param token ID token from the sign in provider.
+   * @param userInfo User info returned from IDP
    * @returns Signed JWT token.
    */
-  async signIn(issuerID: IssuerID, issuerToken: string): Promise<string> {
-    const issuer = this.issuers.get(issuerID);
-
-    if (issuer == null) {
-      throw new Error(`Unsupported sign-in token issuer: "${issuerID}"`);
-    }
-
-    const userInfo = await issuer.validateToken(issuerToken);
-
-    if (!userInfo) {
-      throw new Error("Invalid token");
-    }
-
+  async signIn(userInfo: UserInfo): Promise<string> {
     let user: User | undefined = await this.userService.findUserBySub(userInfo.sub);
 
     if (user == null) {
@@ -45,17 +54,17 @@ export class AuthenticationService {
         picture: userInfo.picture
       });
     } else {
-      await this.userService.updateUser(user.id!, { name: userInfo.name, picture: userInfo.picture });
+      await this.userService.updateUser(user.id!, {
+        name: userInfo.name,
+        picture: userInfo.picture,
+        email: userInfo.email
+      });
     }
 
-    const token = this.jwtService.sign(
-      {},
-      {
-        expiresIn: "1h",
-        subject: user.id
-      }
-    );
+    const seal = await this.tokenService.seal({
+      userId: user.id!
+    });
 
-    return token;
+    return seal;
   }
 }

@@ -1,5 +1,4 @@
 import { gql, useApolloClient } from "@apollo/client";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -8,6 +7,7 @@ import OrderBuilder, { OrderBuilderInput } from "@/components/marketplace/order-
 import StockFinder from "@/components/marketplace/stock-finder";
 import PageHeader from "@/components/page-header";
 import { useActiveMembership } from "@/providers/active-membership";
+import { useSession } from "@/providers/session";
 import { Order, OrderType } from "@/types/order";
 import { Stock } from "@/types/stock";
 
@@ -39,7 +39,7 @@ const MyPortfolio = () => {
 
   const { activeMembership } = useActiveMembership();
 
-  const { data: session } = useSession();
+  const session = useSession();
 
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
 

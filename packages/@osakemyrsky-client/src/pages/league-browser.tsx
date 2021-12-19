@@ -1,5 +1,4 @@
 import { gql, useApolloClient, useQuery } from "@apollo/client";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -10,6 +9,7 @@ import CreateLeagueModal, { SubmitCreateLeagueModalInputs } from "@/components/l
 import LeagueTable from "@/components/league-browser/league-table";
 import PageHeader from "@/components/page-header";
 import { useActiveLeague } from "@/providers/active-league";
+import { useSession } from "@/providers/session";
 import { useUser } from "@/providers/user";
 import { League } from "@/types/league";
 
@@ -59,7 +59,7 @@ const LeagueBrowser = () => {
   const router = useRouter();
   const client = useApolloClient();
   const { user } = useUser();
-  const { data: session } = useSession();
+  const session = useSession();
 
   const { setActiveLeague } = useActiveLeague();
 

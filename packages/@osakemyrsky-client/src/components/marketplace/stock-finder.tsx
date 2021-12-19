@@ -1,10 +1,10 @@
 import { gql, useQuery } from "@apollo/client";
-import { useSession } from "next-auth/react";
 import { useState } from "react";
 
 import SearchField from "../search-field";
 import SimpleStockItem from "../simple-stock-item";
 
+import { useSession } from "@/providers/session";
 import { Stock } from "@/types/stock";
 
 const SEARCH_STOCKS = gql`
@@ -28,7 +28,7 @@ export interface StockFinderProps {
 const StockFinder = ({ onSelect }: StockFinderProps) => {
   const [searchphrase, setSearchphrase] = useState("");
 
-  const { data: session } = useSession();
+  const session = useSession();
 
   const { data, loading } = useQuery<{ stocks: Stock[] }>(SEARCH_STOCKS, {
     variables: {
