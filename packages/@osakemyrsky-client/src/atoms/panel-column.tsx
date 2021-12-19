@@ -11,11 +11,11 @@ export interface PanelProps {
 const PanelColumn = ({ children, title }: PanelProps) => {
   return (
     <div
-      className={classNames({
-        "relative flex-1": true,
-        "before:absolute before:top-0 before:-left-8 before:bottom-0 before:border-l-1 before:border-gray-400": true,
-        "first-of-type:before:border-l-0": true
-      })}
+      className={classNames(
+        "relative flex-1",
+        "before:absolute before:top-0 before:-left-8 before:bottom-0 before:border-l-1 before:border-gray-400",
+        "first-of-type:before:border-l-0"
+      )}
     >
       {title != null && (
         <div className="flex mb-4">

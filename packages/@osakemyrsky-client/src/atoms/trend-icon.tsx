@@ -11,8 +11,7 @@ export interface TrendIconProps {
 const TrendIcon = ({ trend }: TrendIconProps) => {
   return (
     <span
-      className={classNames({
-        "flex items-center justify-center p-[7px] rounded-xl border-1 border-gray-500  bg-white": true,
+      className={classNames("flex items-center justify-center p-[7px] rounded-xl border-1 border-gray-500  bg-white", {
         "text-green-200": trend === "up",
         "text-red-200": trend === "down"
       })}

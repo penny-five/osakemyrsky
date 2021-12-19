@@ -12,8 +12,7 @@ export interface AvatarProps {
 const Avatar = ({ url, size = "md", hightlight = false }: AvatarProps) => {
   return (
     <div
-      className={classNames({
-        "rounded-full bg-gray-200 bg-cover": true,
+      className={classNames("rounded-full bg-gray-200 bg-cover", {
         "w-[2rem] min-w-[2rem] min-h-[2rem]": size === "sm",
         "w-[2.3rem] min-w-[2.3rem] min-h-[2.3rem]": size === "md",
         "w-[4rem] min-w-[4rem] min-h-[4rem]": size === "lg",
