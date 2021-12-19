@@ -1,6 +1,6 @@
 import { Firestore } from "@google-cloud/firestore";
 import { Module } from "@nestjs/common";
-import { ConfigModule, ConfigService } from "@nestjs/config";
+import { ConfigModule, ConfigService, ConfigType } from "@nestjs/config";
 
 import { FirestoreConfig } from "../config/files/firestore";
 
@@ -11,10 +11,12 @@ import { FirestoreConfig } from "../config/files/firestore";
       provide: Firestore,
       inject: [ConfigService],
       useFactory(configService: ConfigService) {
+        const config = configService.get<ConfigType<typeof FirestoreConfig>>("firestore")!;
+
         return new Firestore({
-          ssl: configService.get<FirestoreConfig>("firestore")?.ssl,
-          host: configService.get<FirestoreConfig>("firestore")?.hostUrl,
-          port: configService.get<FirestoreConfig>("firestore")?.hostPort
+          ssl: config.ssl,
+          host: config.hostUrl,
+          port: config.hostPort
         });
       }
     }

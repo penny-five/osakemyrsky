@@ -1,5 +1,5 @@
-import { Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
+import { Inject, Injectable } from "@nestjs/common";
+import { ConfigType } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
 import { JwtPayload } from "jsonwebtoken";
 import { passportJwtSecret } from "jwks-rsa";
@@ -9,9 +9,10 @@ import { ServiceAccountAuthConfig } from "../../config/files/service-account-aut
 
 @Injectable()
 export class GoogleServiceAccountStrategy extends PassportStrategy(JwtStrategy, "google-service-account-jwt") {
-  private readonly serviceAccountAuthConfig: ServiceAccountAuthConfig;
-
-  constructor(configService: ConfigService) {
+  constructor(
+    @Inject(ServiceAccountAuthConfig.KEY)
+    private readonly config: ConfigType<typeof ServiceAccountAuthConfig>
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -23,12 +24,10 @@ export class GoogleServiceAccountStrategy extends PassportStrategy(JwtStrategy, 
       }),
       algorithms: ["RS256"]
     } as JwtStrategyOptions);
-
-    this.serviceAccountAuthConfig = configService.get<ServiceAccountAuthConfig>("serviceAccountAuth")!;
   }
 
   validate(payload: JwtPayload): JwtPayload {
-    if (payload.sub != null && this.serviceAccountAuthConfig.authorizedServiceAccounts.includes(payload.sub)) {
+    if (payload.sub != null && this.config.authorizedServiceAccounts.includes(payload.sub)) {
       return payload;
     }
 

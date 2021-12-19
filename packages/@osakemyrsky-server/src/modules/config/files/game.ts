@@ -1,9 +1,5 @@
 import { registerAs } from "@nestjs/config";
 
-export interface GameConfig {
-  initialDepositEuros: number;
-}
-
-export const gameConfig = registerAs<GameConfig>("game", () => ({
+export const GameConfig = registerAs("game", () => ({
   initialDepositEuros: 1_000_000
 }));

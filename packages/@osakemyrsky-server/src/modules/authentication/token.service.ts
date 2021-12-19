@@ -1,23 +1,16 @@
 import * as Iron from "@hapi/iron";
 import { Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-
-import { IronConfig } from "../config/files/iron";
 
 export interface SessionToken {
   userId: string;
 }
 
 /**
- * Service that seals/unseals tokens using @hapi/iron.
+ * Service that seals/unseals session tokens using @hapi/iron.
  */
 @Injectable()
 export class TokenService {
-  private readonly secret: string;
-
-  constructor(configService: ConfigService) {
-    this.secret = configService.get<IronConfig>("iron")!.secret;
-  }
+  constructor(private readonly secret: string) {}
 
   async seal(token: SessionToken) {
     return Iron.seal(token, this.secret, Iron.defaults);

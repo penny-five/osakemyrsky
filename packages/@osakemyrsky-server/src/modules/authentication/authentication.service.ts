@@ -40,8 +40,13 @@ export class AuthenticationService {
   /**
    * Signs in a user.
    *
+   * a) If the user is signing in the first time, a new user is created.
+   *
+   * b) If the user is a returning user, the user is updated with fresh data from UserInfo.
+   *
+   *
    * @param userInfo User info returned from IDP
-   * @returns Signed JWT token.
+   * @returns Sealed session token
    */
   async signIn(userInfo: UserInfo): Promise<string> {
     let user: User | undefined = await this.userService.findUserBySub(userInfo.sub);
@@ -61,10 +66,10 @@ export class AuthenticationService {
       });
     }
 
-    const seal = await this.tokenService.seal({
+    const token = await this.tokenService.seal({
       userId: user.id!
     });
 
-    return seal;
+    return token;
   }
 }

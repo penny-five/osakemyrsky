@@ -1,9 +1,5 @@
 import { registerAs } from "@nestjs/config";
 
-export interface IronConfig {
-  secret: string;
-}
-
-export const ironConfig = registerAs<IronConfig>("iron", () => ({
+export const IronConfig = registerAs("iron", () => ({
   secret: process.env.IRON_SECRET
 }));

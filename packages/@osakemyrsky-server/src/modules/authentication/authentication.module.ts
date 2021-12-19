@@ -1,7 +1,8 @@
 import { Module } from "@nestjs/common";
-import { ConfigModule, ConfigService } from "@nestjs/config";
+import { ConfigModule, ConfigService, ConfigType } from "@nestjs/config";
 
 import { GoogleIdentityProviderConfig } from "../config/files/google-idp";
+import { IronConfig } from "../config/files/iron";
 import { UserModule } from "../users/user.module";
 
 import { AuthenticationController } from "./authentication.controller";
@@ -20,9 +21,18 @@ import { TokenService } from "./token.service";
     SessionStrategy,
     GoogleServiceAccountStrategy,
     {
+      provide: TokenService,
+      useFactory(configService: ConfigService) {
+        const config = configService.get<ConfigType<typeof IronConfig>>("iron")!;
+        const service = new TokenService(config.secret);
+        return service;
+      },
+      inject: [ConfigService]
+    },
+    {
       provide: "google-idp",
       useFactory(configService: ConfigService) {
-        const config = configService.get<GoogleIdentityProviderConfig>("google-idp")!;
+        const config = configService.get<ConfigType<typeof GoogleIdentityProviderConfig>>("google-idp")!;
 
         return IdentityProvider.create({
           id: "google",

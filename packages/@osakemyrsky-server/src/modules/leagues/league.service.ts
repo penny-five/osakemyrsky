@@ -1,6 +1,6 @@
 import { Firestore } from "@google-cloud/firestore";
-import { Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
+import { Inject, Injectable } from "@nestjs/common";
+import { ConfigType } from "@nestjs/config";
 import { v4 as uuid } from "uuid";
 
 import { Editor } from "../../common/editor";
@@ -18,16 +18,12 @@ export enum LeaguesOrderBy {
 
 @Injectable()
 export class LeagueService {
-  private readonly gameConfig: GameConfig;
-
   constructor(
-    configService: ConfigService,
+    @Inject(GameConfig.KEY) private readonly gameConfig: ConfigType<typeof GameConfig>,
     private readonly firestore: Firestore,
     private readonly userService: UserService,
     private readonly depositService: DepositService
-  ) {
-    this.gameConfig = configService.get<GameConfig>("game")!;
-  }
+  ) {}
 
   async findLeagueById(leagueId: string) {
     const res = await this.firestore.collection("leagues").withConverter(leagueConverter).doc(leagueId).get();
