@@ -37,7 +37,7 @@ services:
       FIRESTORE_HOST_URL: firebase-emulator
       FIRESTORE_HOST_PORT: 4040
       AUTH_GOOGLE_CLIENT_REDIRECT_URL: http://localhost:8000/auth/redirect/google
-      GOOGLE_APPLICATION_CREDENTIALS: /tmp/keys/google-credentials.json
+      GOOGLE_APPLICATION_CREDENTIALS: /tmp/keys/google-application-credentials.json
     env_file:
       - "./packages/@osakemyrsky-server/.env"
     ports:
@@ -45,8 +45,8 @@ services:
     volumes:
       - "./packages/@osakemyrsky-server/src:/app/src"
       - "./packages/@osakemyrsky-server/typings:/app/typings"
-      - "./packages/@osakemyrsky-server/google-credentials.json:/tmp/keys/googl\
-        e-credentials.json"
+      - "./packages/@osakemyrsky-server/google-application-credentials.json:/tmp/keys/googl\
+        e-application-credentials.json"
     depends_on:
       - firebase-emulator
 
