@@ -26,19 +26,19 @@ Very, very much **work in progress**.
 
 ### Getting started
 
-Install necessary dependencies with:
+To get started, run:
 
 ```sh
-yarn install
+sh bootstrap.sh
 ```
 
-Then bootstrap the development environment with:
+This will perform the following things:
 
-```sh
-yarn bootstrap
-```
+- Install dependencies
+- Bootstrap the Lerna project
+- Create `.env` file under each package
 
-Finally, in each package under `./packages` directory, copy `.env.template` as `.env` and fill in all the missing values.
+Once this is done, fill in the missing values to each `.env` file.
 
 ### Local port mappings
 
