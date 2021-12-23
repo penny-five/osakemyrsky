@@ -20,8 +20,7 @@ services:
       - "./packages/@osakemyrsky-client/styles:/app/styles"
       - "./packages/@osakemyrsky-client/src:/app/src"
       - "./packages/@osakemyrsky-client/typings:/app/typings"
-      - "./packages/@osakemyrsky-client/tailwind.config.js:/app/tailwind.config\
-        .js"
+      - "./packages/@osakemyrsky-client/tailwind.config.js:/app/tailwind.config.js"
 
   server:
     container_name: osakemyrsky-server
@@ -45,8 +44,7 @@ services:
     volumes:
       - "./packages/@osakemyrsky-server/src:/app/src"
       - "./packages/@osakemyrsky-server/typings:/app/typings"
-      - "./packages/@osakemyrsky-server/google-application-credentials.json:/tmp/keys/googl\
-        e-application-credentials.json"
+      - "./packages/@osakemyrsky-server/google-application-credentials.json:/tmp/keys/google-application-credentials.json"
     depends_on:
       - firebase-emulator
 
