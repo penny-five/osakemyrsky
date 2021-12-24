@@ -41,6 +41,17 @@ export class IdentityProvider {
     return this.config.id;
   }
 
+  static async create(config: IdentityProviderConfig) {
+    const issuer = await Issuer.discover(config.discoveryUrl);
+    const client = new issuer.Client({
+      client_id: config.clientId,
+      client_secret: config.clientSecret,
+      redirect_uris: [config.redirectUrl]
+    });
+
+    return new IdentityProvider(config, client);
+  }
+
   /**
    * Creates authorization url that can be used to initiate authorization code flow
    * with the identity provider.
@@ -75,16 +86,5 @@ export class IdentityProvider {
       email: userInfo.email ?? null,
       picture: userInfo.picture ?? null
     };
-  }
-
-  static async create(config: IdentityProviderConfig) {
-    const issuer = await Issuer.discover(config.discoveryUrl);
-    const client = new issuer.Client({
-      client_id: config.clientId,
-      client_secret: config.clientSecret,
-      redirect_uris: [config.redirectUrl]
-    });
-
-    return new IdentityProvider(config, client);
   }
 }

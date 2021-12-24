@@ -1,9 +1,9 @@
 import { Firestore } from "@google-cloud/firestore";
-import { Injectable, Logger, UnauthorizedException } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { v4 as uuid } from "uuid";
 
 import { Editor } from "../../common/editor";
-import { DocumentNotFoundError } from "../../common/errors";
+import { AuthorizationError, LeagueInactiveError, UnsupportedStockError } from "../../common/errors";
 import { isBefore, isSameDay } from "../../utils/dates";
 import { Order, orderConverter, OrderStatus, OrderType } from "../firestore/models/order.model";
 import { TransactionType } from "../firestore/models/transaction.model";
@@ -60,20 +60,22 @@ export class OrderService {
   }
 
   async placeOrder(params: PlaceOrderParams, editor: Editor) {
+    const isLeagueOngoing = await this.leagueService.isLeagueOngoing(params.leagueId);
+
+    if (!isLeagueOngoing) {
+      throw new LeagueInactiveError();
+    }
+
     const member = await this.leagueService.findMemberByUserId(params.leagueId, editor.userId);
 
     if (member == null) {
-      throw new DocumentNotFoundError("member");
-    }
-
-    if (editor != null && editor.userId != member.userId) {
-      throw new UnauthorizedException();
+      throw new AuthorizationError("User not league member");
     }
 
     const stock = await this.stockService.findStockBySymbol(params.stockSymbol);
 
     if (stock == null) {
-      throw new Error("Unsupported stock");
+      throw new UnsupportedStockError(params.stockSymbol);
     }
 
     const id = uuid();

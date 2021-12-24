@@ -18,6 +18,11 @@ export class NordnetSessionCache {
     });
   }
 
+  async getSessionId() {
+    const sessionCookie = await this.fetchSessionCookie();
+    return sessionCookie.value;
+  }
+
   private isExpired() {
     return this.sessionCookie != null && new Date() > this.sessionCookie.expires;
   }
@@ -44,10 +49,5 @@ export class NordnetSessionCache {
     }
 
     return this.getSessionCookieTask;
-  }
-
-  async getSessionId(): Promise<string> {
-    const sessionCookie = await this.fetchSessionCookie();
-    return sessionCookie.value;
   }
 }

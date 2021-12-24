@@ -7,13 +7,13 @@ registerEnumType(LeagueStatus, { name: "LeagueStatus" });
 
 @ObjectType("LeagueCreator")
 export class LeagueCreatorDto {
-  userId!: string;
-
   @Field({ nullable: false })
   name!: string;
 
   @Field(() => String, { nullable: true })
   picture!: string | null;
+
+  userId!: string;
 }
 
 @ObjectType("League")

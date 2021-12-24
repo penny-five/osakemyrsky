@@ -26,21 +26,6 @@ export class NordnetClient {
     });
   }
 
-  private async get<T>(url: string, searchParams?: Record<string, string | number | boolean>): Promise<T> {
-    const sessionId = await this.sessionCache.getSessionId();
-
-    const response = await this.httpClient
-      .get(url, {
-        searchParams,
-        headers: {
-          cookie: `NEXT=${sessionId};`
-        }
-      })
-      .json<T>();
-
-    return response;
-  }
-
   async searchInstruments(search: string, params?: SearchInstrumentsParams) {
     return this.get<NordnetPaginatedResponse<NordnetInstrument>>("instrument_search/query/stocklist", {
       free_text_search: search,
@@ -64,5 +49,20 @@ export class NordnetClient {
     });
 
     return response.results.length > 0 ? response.results[0] : undefined;
+  }
+
+  private async get<T>(url: string, searchParams?: Record<string, string | number | boolean>): Promise<T> {
+    const sessionId = await this.sessionCache.getSessionId();
+
+    const response = await this.httpClient
+      .get(url, {
+        searchParams,
+        headers: {
+          cookie: `NEXT=${sessionId};`
+        }
+      })
+      .json<T>();
+
+    return response;
   }
 }

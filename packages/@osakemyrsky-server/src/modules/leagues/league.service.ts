@@ -4,6 +4,7 @@ import { ConfigType } from "@nestjs/config";
 import { v4 as uuid } from "uuid";
 
 import { Editor } from "../../common/editor";
+import { DocumentNotFoundError, LeagueInactiveError } from "../../common/errors";
 import { isAfter, isSameDay } from "../../utils/dates";
 import { GameConfig } from "../config/files/game";
 import { DepositService } from "../deposits/deposit.service";
@@ -39,11 +40,6 @@ export class LeagueService {
       .where("userId", "==", userId)
       .get();
 
-    return res.empty ? undefined : res.docs[0].data();
-  }
-
-  async findMemberLeague(memberId: string) {
-    const res = await this.firestore.collection("members").withConverter(leagueConverter).doc(memberId).parent.get();
     return res.empty ? undefined : res.docs[0].data();
   }
 
@@ -86,7 +82,7 @@ export class LeagueService {
     const user = await this.userService.findUserById(editor.userId);
 
     if (user == null) {
-      throw new Error("User not found");
+      throw new DocumentNotFoundError("user", editor.userId);
     }
 
     const id = uuid();
@@ -113,17 +109,17 @@ export class LeagueService {
     const league = await this.findLeagueById(leagueId);
 
     if (league == null) {
-      throw new Error("League not found");
+      throw new DocumentNotFoundError("league", leagueId);
     }
 
     if (this.hasLeagueEndedOn(league, new Date())) {
-      throw new Error("League has already ended");
+      throw new LeagueInactiveError();
     }
 
     const user = await this.userService.findUserById(userId);
 
     if (user == null) {
-      throw new Error("User not found");
+      throw new DocumentNotFoundError("user", userId);
     }
 
     const memberId = uuid();
@@ -177,9 +173,14 @@ export class LeagueService {
 
   async isLeagueOngoing(leagueId: string) {
     const league = await this.findLeagueById(leagueId);
+
+    if (league == null) {
+      return false;
+    }
+
     const now = new Date();
 
-    return league != null && this.hasLeagueStartedOn(league, now) && !this.hasLeagueEndedOn(league, now);
+    return this.hasLeagueStartedOn(league, now) && !this.hasLeagueEndedOn(league, now);
   }
 
   private hasLeagueEndedOn(league: League, date: Date | string) {
