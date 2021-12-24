@@ -1,6 +1,9 @@
+import { URL } from "url";
+
 import { Injectable } from "@nestjs/common";
 import { gotScraping } from "got-scraping";
 
+import { NordnetRequestCache } from "./response-cache";
 import { NordnetSessionCache } from "./session-cache";
 import { NordnetInstrument, NordnetPaginatedResponse } from "./types";
 
@@ -14,7 +17,9 @@ export interface SearchInstrumentsParams {
 export class NordnetClient {
   private httpClient: typeof gotScraping;
 
-  private sessionCache: NordnetSessionCache = new NordnetSessionCache();
+  private requestCache = new NordnetRequestCache();
+
+  private sessionCache = new NordnetSessionCache();
 
   constructor() {
     this.httpClient = gotScraping.extend({
@@ -22,21 +27,42 @@ export class NordnetClient {
       headers: {
         "client-id": "NEXT",
         referer: "https://www.nordnet.fi/"
+      },
+      hooks: {
+        beforeRequest: [
+          options => {
+            if (options.context.ignoreCache) {
+              return;
+            }
+
+            return this.requestCache.get((options.url as URL).href);
+          }
+        ],
+        afterResponse: [
+          response => {
+            this.requestCache.set(response.requestUrl.toString(), response);
+            return response;
+          }
+        ]
       }
     });
   }
 
   async searchInstruments(search: string, params?: SearchInstrumentsParams) {
     return this.get<NordnetPaginatedResponse<NordnetInstrument>>("instrument_search/query/stocklist", {
-      free_text_search: search,
-      limit: params?.limit ?? 10
+      searchParams: {
+        free_text_search: search,
+        limit: params?.limit ?? 10
+      }
     });
   }
 
   async findInstrumentByInstrumentId(instrumentId: string) {
     const response = await this.get<NordnetPaginatedResponse<NordnetInstrument>>("instrument_search/query/stocklist", {
-      apply_filters: `instrument_id=${instrumentId}`,
-      limit: 1
+      searchParams: {
+        apply_filters: `instrument_id=${instrumentId}`,
+        limit: 1
+      }
     });
 
     return response.results.length > 0 ? response.results[0] : undefined;
@@ -44,14 +70,25 @@ export class NordnetClient {
 
   async findInstrumentBySymbol(symbol: string) {
     const response = await this.get<NordnetPaginatedResponse<NordnetInstrument>>("instrument_search/query/stocklist", {
-      apply_filters: `symbol=${symbol}`,
-      limit: 1
+      searchParams: {
+        apply_filters: `symbol=${symbol}`,
+        limit: 1
+      }
     });
 
     return response.results.length > 0 ? response.results[0] : undefined;
   }
 
-  private async get<T>(url: string, searchParams?: Record<string, string | number | boolean>): Promise<T> {
+  private async get<T>(
+    url: string,
+    {
+      searchParams = {},
+      ignoreCache = false
+    }: { searchParams?: Record<string, string | number | boolean>; ignoreCache?: boolean } = {
+      searchParams: {},
+      ignoreCache: false
+    }
+  ): Promise<T> {
     const sessionId = await this.sessionCache.getSessionId();
 
     const response = await this.httpClient
@@ -59,6 +96,9 @@ export class NordnetClient {
         searchParams,
         headers: {
           cookie: `NEXT=${sessionId};`
+        },
+        context: {
+          ignoreCache
         }
       })
       .json<T>();
