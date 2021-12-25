@@ -48,7 +48,7 @@ const TransactionItem = ({ transaction, isUser }: TransactionItemProps) => {
             <span className="text-xs my-[6px]">
               <span className="font-semibold">{transaction.count}</span>
               <span className="text-gray-500"> × </span>
-              <span className="font-semibold">${formatCurrency(transaction.unitPriceCents / 100)}</span>
+              <span className="font-semibold">{formatCurrency(transaction.unitPriceCents / 100)}</span>
             </span>
           </div>
         </div>

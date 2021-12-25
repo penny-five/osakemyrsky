@@ -96,10 +96,12 @@ const BuyStocksForm = ({ stock, onSubmit }: BuyStocksFormProps) => {
             {...register("price", { required: true, valueAsNumber: true, min: 0.01 })}
           />
         </FormInput>
-        <span className="mt-4 mb-2 text-gray-500 text-lg text-right">
-          {getValues().count} × {formatCurrency(getValues().price)}
-          {" = "}
-          <span className="font-bold text-black-200">{formatCurrency(getValues().count * getValues().price)}</span>
+        <span className="mt-4 mb-2 text-lg text-right text-gray-500">
+          <span className="font-bold">{getValues().count}</span>
+          <span> × </span>
+          <span className="font-bold">{formatCurrency(getValues().price)}</span>
+          <span> = </span>
+          <span className="font-bold text-black-100">{formatCurrency(getValues().count * getValues().price)}</span>
         </span>
         <Button type="submit" icon={<DownloadIcon />} className="mt-4 self-end">
           Lähetä ostotoimeksianto
