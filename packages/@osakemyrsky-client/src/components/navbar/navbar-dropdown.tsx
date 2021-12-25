@@ -24,7 +24,7 @@ const NavbarDropdown = ({ content, dropdownContent }: NavbarDropdownProps) => {
       <ChevronDownIcon className="w-5 shrink-0 text-gray-400 transition-transform group-hover:rotate-180" />
       <div
         className={classNames(
-          "absolute top-full mt-[-1px] left-[-1px] right-[-1px] bg-white shadow-lg",
+          "absolute top-full mt-[-1px] left-[-1px] right-[-1px] bg-white shadow-lg z-40",
           "border-gray-400 rounded-b-3xl border-t-transparent border-1",
           {
             invisible: !isOpen,
