@@ -97,7 +97,7 @@ const SellStocksForm = ({ stock, onSubmit }: SellStocksFormProps) => {
           />
         </FormInput>
         <span className="mt-4 mb-2 text-gray-500 text-lg text-right">
-          {getValues().count} x {getValues().price} € ={" "}
+          {getValues().count} × {getValues().price} € ={" "}
           <span className="font-bold text-black-200">{(getValues().count * getValues().price).toFixed(2)} €</span>
         </span>
         <Button type="submit" icon={<UploadIcon />} className="mt-4 self-end">

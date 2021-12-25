@@ -9,6 +9,7 @@ import DateInput from "@/components/forms/date-input";
 import FormInput from "@/components/forms/form-input";
 import TextInput from "@/components/forms/text-input";
 import { Stock } from "@/types/stock";
+import { formatCurrency } from "@/utils/currency";
 import { currentISODay } from "@/utils/dates";
 
 export interface SubmitBuyOrderInput {
@@ -96,8 +97,9 @@ const BuyStocksForm = ({ stock, onSubmit }: BuyStocksFormProps) => {
           />
         </FormInput>
         <span className="mt-4 mb-2 text-gray-500 text-lg text-right">
-          {getValues().count} x {getValues().price} € ={" "}
-          <span className="font-bold text-black-200">{(getValues().count * getValues().price).toFixed(2)} €</span>
+          {getValues().count} × {formatCurrency(getValues().price)}
+          {" = "}
+          <span className="font-bold text-black-200">{formatCurrency(getValues().count * getValues().price)}</span>
         </span>
         <Button type="submit" icon={<DownloadIcon />} className="mt-4 self-end">
           Lähetä ostotoimeksianto

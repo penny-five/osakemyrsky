@@ -26,7 +26,7 @@ const OrderSubmittedMessage = (props: OrderSubmittedMessageProps) => {
             <span className="font-bold text-lg">{props.message}</span>
           </p>
           <span className="font-bold text-2xl">
-            {props.count} x {formatCents(props.priceCents)}
+            {props.count} × {formatCents(props.priceCents)}
           </span>
           <span className="text-sm text-gray-600">
             Voimassa <strong>{formatDay(props.expirationDate)}</strong> asti.
