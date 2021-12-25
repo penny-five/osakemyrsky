@@ -2,6 +2,7 @@ import { Firestore } from "@google-cloud/firestore";
 import { Injectable, Logger } from "@nestjs/common";
 import { v4 as uuid } from "uuid";
 
+import { compareDesc } from "../../utils/dates";
 import { transactionConverter, TransactionType } from "../firestore/models/transaction.model";
 
 export interface CommitTransactionParams {
@@ -39,7 +40,7 @@ export class TransactionService {
       .withConverter(transactionConverter)
       .get();
 
-    return res.docs.map(doc => doc.data());
+    return res.docs.map(doc => doc.data()).sort((first, second) => compareDesc(first.createdAt!, second.createdAt!));
   }
 
   async commitTransaction(params: CommitTransactionParams) {

@@ -18,3 +18,11 @@ export const isAfter = (date: string | Date, compareTo: string | Date) => {
 export const isSameDay = (first: string | Date, second: string | Date) => {
   return dateFns.isSameDay(parse(first), parse(second));
 };
+
+export const compareAsc = (first: string | Date, second: string | Date) => {
+  return dateFns.compareAsc(parse(first), parse(second));
+};
+
+export const compareDesc = (first: string | Date, second: string | Date) => {
+  return dateFns.compareDesc(parse(first), parse(second));
+};
