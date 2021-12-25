@@ -17,12 +17,13 @@ Browser based game where players compete in the stock market. Uses actual stock 
 
 Very, very much **work in progress**.
 
-## Development environment
+## Local development environment
 
 ### Prerequisites
 
 - Docker
 - Node.js 16
+- Google Cloud Platform project
 
 ### Getting started
 
@@ -32,11 +33,11 @@ To get started, run:
 sh bootstrap.sh
 ```
 
-This will perform the following things:
+This performs the following things:
 
-- Install dependencies
-- Bootstrap the Lerna project
-- Create `.env` file under each package
+- Installs dependencies
+- Bootstraps the Lerna project
+- Creates a `.env` file under each package
 
 Once this is done, fill in the missing values to each `.env` file.
 
@@ -71,6 +72,18 @@ yarn dev:destroy
 
 This stops and destroys all containers and volumes.
 
+### Executing tasks
+
+To execute tasks locally, an authorized service account is required.
+
+1. Create a new service account
+
+2. Add service account ID to `AUTHORIZED_SERVICE_ACCOUNTS` environment variable on `@osakemyrsky-server`
+
+3. Generate ID token for the service account (see `https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateIdToken`)
+
+4. Invoke a task endpoint (e.g. `GET http://localhost:8000/api/tasks/process-orders`) with the ID token set as bearer token
+
 ## Production environment
 
 TODO
@@ -79,10 +92,10 @@ TODO
 
 Here I list various improvement ideas.
 
-## Technical
+### Technical
 
-- Replace `class-validator` with `zod` (https://github.com/colinhacks/zod) on server
-- Use ESM on server (see https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c)
+- Replace `class-validator` with `zod` (https://github.com/colinhacks/zod) on `@osakemyrsky-server`
+- Use ESM on `@osakemyrsky-server` (see https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c)
 
 ## License
 
