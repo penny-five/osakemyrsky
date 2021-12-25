@@ -9,6 +9,7 @@ import { UserModule } from "../users/user.module";
 
 import { LeagueResolver } from "./league.resolver";
 import { LeagueService } from "./league.service";
+import { MemberResolver } from "./member.resolver";
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { LeagueService } from "./league.service";
     DepositModule,
     TransactionModule
   ],
-  providers: [LeagueService, LeagueResolver],
+  providers: [LeagueService, LeagueResolver, MemberResolver],
   exports: [LeagueService]
 })
 export class LeagueModule {}

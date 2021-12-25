@@ -15,17 +15,34 @@ const GET_MEMBER = gql`
       id
       createdAt
       updatedAt
+
       league {
         id
         name
       }
+
       user {
         id
         name
         picture
       }
+
       balanceUpdatedAt
       balanceCents
+
+      stocks {
+        symbol
+        name
+        count
+      }
+
+      orders {
+        stock {
+          symbol
+          name
+        }
+        type
+      }
     }
   }
 `;

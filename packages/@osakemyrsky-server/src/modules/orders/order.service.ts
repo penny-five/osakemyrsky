@@ -56,7 +56,7 @@ export class OrderService {
     const res = await this.firestore
       .collectionGroup("orders")
       .withConverter(orderConverter)
-      .where("memberId", "==", memberId)
+      .where("member.id", "==", memberId)
       .get();
 
     return res.docs.map(doc => doc.data());

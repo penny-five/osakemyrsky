@@ -4,12 +4,21 @@ import { v4 as uuid } from "uuid";
 
 import { compareDesc } from "../../utils/dates";
 import { Order } from "../firestore/models/order.model";
-import { transactionConverter, TransactionType } from "../firestore/models/transaction.model";
+import { Transaction, transactionConverter, TransactionType } from "../firestore/models/transaction.model";
 
 export interface CommitTransactionParams {
   order: Order;
   unitPriceCents: number;
   type: TransactionType;
+}
+
+export interface MemberStockSnapshot {
+  stock: {
+    symbol: string;
+    name: string;
+    exchangeCountry: string;
+  };
+  count: number;
 }
 
 @Injectable()
@@ -71,5 +80,34 @@ export class TransactionService {
 
     const res = await transactionRef.get();
     return res.data();
+  }
+
+  async getMemberStocks(leagueId: string, memberId: string): Promise<MemberStockSnapshot[]> {
+    const transactions = await this.getMemberTransactions(leagueId, memberId);
+
+    const transactionsBySymbol = transactions.reduce((acc, transaction) => {
+      if (acc[transaction.stock.symbol] == null) {
+        acc[transaction.stock.symbol] = [];
+      }
+
+      acc[transaction.stock.symbol].push(transaction);
+
+      return acc;
+    }, {} as Record<string, Transaction[]>);
+
+    return Object.entries(transactionsBySymbol)
+      .map(([symbol, transactions]) => {
+        return {
+          stock: {
+            symbol,
+            name: transactions[0].stock.name,
+            exchangeCountry: transactions[0].stock.exchangeCountry
+          },
+          count: transactions.reduce((total, transaction) => {
+            return total + (transaction.type === TransactionType.BUY ? transaction.count : -transaction.count);
+          }, 0)
+        };
+      })
+      .filter(snapshot => snapshot.count <= 0);
   }
 }
