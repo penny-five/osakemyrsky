@@ -9,7 +9,7 @@ declare namespace NodeJS {
     AUTH_GOOGLE_CLIENT_SECRET: string;
     AUTH_GOOGLE_CLIENT_REDIRECT_URL: string;
     /**
-     * Comma separeted list of service accounts that should be granted access to routes
+     * Comma separated list of service accounts that should be granted access to routes
      * guarded by `GoogleServiceAccountAuthGuard`.
      */
     AUTHORIZED_GOOGLE_SERVICE_ACCOUNTS: string;
