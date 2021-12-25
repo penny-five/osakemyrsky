@@ -13,7 +13,7 @@ const ActiveMembershipContext = createContext<{
 
 export const ActiveMembershipProvider = ({ children }: PropsWithChildren<unknown>) => {
   const { user } = useUser();
-  const { activeLeague } = useActiveLeague();
+  const { activeLeague, setActiveLeague } = useActiveLeague();
 
   let activeMembership: Membership | null = null;
 
@@ -22,6 +22,10 @@ export const ActiveMembershipProvider = ({ children }: PropsWithChildren<unknown
 
     if (activeMembership == null) {
       activeMembership = user.memberships.at(0) ?? null;
+
+      if (activeMembership != null) {
+        setActiveLeague(activeMembership.leagueId);
+      }
     }
   }
 

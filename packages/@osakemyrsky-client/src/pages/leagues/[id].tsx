@@ -5,12 +5,14 @@ import Image from "next/image";
 import Button from "@/atoms/button";
 import Panel from "@/atoms/panel";
 import PanelColumn from "@/atoms/panel-column";
+import LeagueStatusBadge from "@/components/league-status-badge";
 import MemberList from "@/components/league/member-list";
 import TransactionList from "@/components/league/transaction.list";
 import PageHeader from "@/components/page-header";
 import { useSession } from "@/providers/session";
 import { useUser } from "@/providers/user";
 import { League } from "@/types/league";
+import { formatDayRange } from "@/utils/dates/display";
 
 const GET_LEAGUE = gql`
   query GetLeague($id: String!) {
@@ -19,6 +21,9 @@ const GET_LEAGUE = gql`
       name
       createdAt
       updatedAt
+      startDate
+      endDate
+      status
 
       members {
         id
@@ -107,8 +112,17 @@ const LeaguePage = () => {
         title="Liigapörssi"
         subtitle={data.league.name}
         illustration={<Image src="/images/page-header-league.svg" alt="illustration" width="250px" height="250px" />}
+        actions={!isLeagueMember && <Button onClick={onRegisterMember}>Liity liigaan</Button>}
+        info={
+          <div className="flex gap-4 items-center">
+            <span className=" font-semibold text-base">
+              {formatDayRange(data.league.startDate, data.league.endDate)}
+            </span>
+
+            <LeagueStatusBadge status={data.league.status} />
+          </div>
+        }
       />
-      {!isLeagueMember && <Button onClick={onRegisterMember}>Liity liigaan</Button>}
       <div className="flex flex-col gap-10 px-10 pb-8">
         <Panel title="Tilanne" />
         <Panel>
