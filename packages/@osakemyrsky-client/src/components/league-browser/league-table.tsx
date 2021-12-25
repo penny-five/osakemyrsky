@@ -39,12 +39,16 @@ const LeagueTable = ({ leagues }: LeagueTableProps) => {
               </Link>
             </td>
             <td className="w-[15%] p-4 ">
-              <AvatarStack
-                pictures={league.members.map(member => ({
-                  url: member.picture,
-                  isUser: member.userId === user?.id
-                }))}
-              />
+              {league.members.length > 0 ? (
+                <AvatarStack
+                  pictures={league.members.map(member => ({
+                    url: member.picture,
+                    isUser: member.userId === user?.id
+                  }))}
+                />
+              ) : (
+                <span className="text-gray-600">-</span>
+              )}
             </td>
             <td className="w-[20%] p-4 font-semibold text-base">{formatDayRange(league.startDate, league.endDate)}</td>
             <td className="w-[15%] p-4">
