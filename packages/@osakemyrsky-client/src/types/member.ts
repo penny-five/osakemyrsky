@@ -2,11 +2,16 @@ export interface Member {
   id: string;
   createdAt: string;
   updatedAt: string;
-  userId: string;
-  name: string;
+  league: {
+    id: string;
+    name: string;
+  };
+  user: {
+    id: string;
+    name: string;
+    picture: string | null;
+  };
   companyName: string;
-  leagueName: string;
-  picture: string;
   balanceCents: number;
   balanceUpdatedAt: string;
 }

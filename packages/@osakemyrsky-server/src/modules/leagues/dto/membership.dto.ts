@@ -3,6 +3,24 @@ import { GraphQLDateTime, GraphQLUUID } from "graphql-scalars";
 
 import { Membership } from "../../firestore/models/membership.model";
 
+@ObjectType("MembershipMember")
+export class MembershipMemberDto {
+  @Field(() => GraphQLUUID, { nullable: false })
+  id!: string;
+
+  @Field({ nullable: false })
+  companyName!: string;
+}
+
+@ObjectType("MembershipLeague")
+export class MembershipLeagueDto {
+  @Field(() => GraphQLUUID, { nullable: false })
+  id!: string;
+
+  @Field({ nullable: false })
+  name!: string;
+}
+
 @ObjectType("Membership")
 export class MembershipDto {
   @Field(() => GraphQLUUID, { nullable: false })
@@ -15,22 +33,22 @@ export class MembershipDto {
   updatedAt!: string;
 
   @Field({ nullable: false })
-  leagueId!: string;
+  member!: MembershipMemberDto;
 
   @Field({ nullable: false })
-  leagueName!: string;
-
-  @Field({ nullable: false })
-  companyName!: string;
+  league!: MembershipLeagueDto;
 
   static fromModel(model: Membership) {
     const dto = new MembershipDto();
     dto.id = model.id!;
     dto.createdAt = model.createdAt!;
     dto.updatedAt = model.updatedAt!;
-    dto.leagueId = model.leagueId;
-    dto.leagueName = model.leagueName;
-    dto.companyName = model.companyName;
+    dto.league = new MembershipLeagueDto();
+    dto.league.id = model.league.id;
+    dto.league.name = model.league.name;
+    dto.member = new MembershipMemberDto();
+    dto.member.id = model.member.id;
+    dto.member.companyName = model.member.companyName;
     return dto;
   }
 }

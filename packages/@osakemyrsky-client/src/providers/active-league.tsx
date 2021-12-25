@@ -1,7 +1,5 @@
 import { createContext, useContext, PropsWithChildren } from "react";
 
-import { useUser } from "./user";
-
 import { useLocalStorage } from "@/hooks/use-local-storage";
 
 const ActiveLeagueContext = createContext<{
@@ -15,14 +13,7 @@ const ActiveLeagueContext = createContext<{
 });
 
 export const ActiveLeagueProvider = ({ children }: PropsWithChildren<unknown>) => {
-  const { user } = useUser();
   const [value, setValue] = useLocalStorage("active-league-id");
-
-  if (user != null) {
-    if (value == null && user.memberships.length > 0) {
-      setValue(user.memberships[0].leagueId);
-    }
-  }
 
   return (
     <ActiveLeagueContext.Provider value={{ activeLeague: value, setActiveLeague: setValue }}>

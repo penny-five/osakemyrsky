@@ -14,7 +14,7 @@ export interface NavbarLeagueDropdownProps {
 const NavbarLeagueDropdown = ({ children, activeMembership }: NavbarLeagueDropdownProps) => {
   return (
     <NavbarDropdown
-      content={<span className="grow mx-3 truncate font-semibold select-none">{activeMembership.leagueName}</span>}
+      content={<span className="grow mx-3 truncate font-semibold select-none">{activeMembership.league.name}</span>}
       dropdownContent={
         <ul>
           {children}

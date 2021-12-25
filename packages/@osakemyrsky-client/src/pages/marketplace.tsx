@@ -48,7 +48,7 @@ const MyPortfolio = () => {
       mutation: PLACE_ORDER,
       variables: {
         data: {
-          leagueId: activeMembership!.leagueId,
+          leagueId: activeMembership!.league.id,
           stockCount: order.count,
           stockSymbol: order.symbol,
           stockPriceCents: order.priceCents,
@@ -64,7 +64,7 @@ const MyPortfolio = () => {
     <div className="flex flex-col grow">
       <PageHeader
         title="Osta/myy osakkeita"
-        subtitle={activeMembership?.leagueName ?? ""}
+        subtitle={activeMembership?.league.name ?? ""}
         illustration={
           <Image src="/images/page-header-marketplace.svg" alt="illustration" width="275px" height="275px" />
         }

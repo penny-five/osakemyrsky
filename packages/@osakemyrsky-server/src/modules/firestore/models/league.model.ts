@@ -22,14 +22,6 @@ const resolveLeagueStatus = (startDate: Date, endDate: Date, now = new Date()) =
   return LeagueStatus.ONGOING;
 };
 
-export class LeagueCreator {
-  userId!: string;
-
-  name!: string;
-
-  picture!: string | null;
-}
-
 export class League extends BaseModel {
   name!: string;
 
@@ -37,7 +29,11 @@ export class League extends BaseModel {
 
   endDate!: string;
 
-  creator!: LeagueCreator;
+  creator!: {
+    id: string;
+    name: string;
+    picture: string | null;
+  };
 
   status!: LeagueStatus;
 }
@@ -58,10 +54,11 @@ export const leagueConverter: FirestoreDataConverter<League> = {
     league.name = data.name as string;
     league.status = resolveLeagueStatus(startDate, endDate);
 
-    league.creator = new LeagueCreator();
-    league.creator.userId = (data.creator as DocumentData).userId as string;
-    league.creator.name = (data.creator as DocumentData).name as string;
-    league.creator.picture = (data.creator as DocumentData).picture as string;
+    league.creator = {
+      id: (data.creator as DocumentData).id as string,
+      name: (data.creator as DocumentData).name as string,
+      picture: (data.creator as DocumentData).picture as string
+    };
 
     return league;
   },
@@ -72,7 +69,7 @@ export const leagueConverter: FirestoreDataConverter<League> = {
       endDate: league.endDate,
       name: league.name,
       creator: {
-        userId: league.creator.userId,
+        id: league.creator.id,
         name: league.creator.name,
         picture: league.creator.picture
       }

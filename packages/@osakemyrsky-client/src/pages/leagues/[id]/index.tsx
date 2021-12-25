@@ -27,10 +27,11 @@ const GET_LEAGUE = gql`
 
       members {
         id
-        userId
-        name
+        user {
+          name
+          picture
+        }
         companyName
-        picture
         balanceCents
         balanceUpdatedAt
       }
@@ -78,21 +79,21 @@ const LeaguePage = () => {
 
   const router = useRouter();
 
-  const { user } = useUser();
-
   const leagueId = router.query.id as string;
+
+  const { user } = useUser();
 
   const session = useSession();
 
   const { data, loading } = useQuery<{ league: League }>(GET_LEAGUE, {
     variables: {
-      id: router.query.id
+      id: leagueId
     },
     context: { session },
     skip: session == null
   });
 
-  const isLeagueMember = user?.memberships.some(membership => membership.leagueId === leagueId);
+  const isLeagueMember = user?.memberships.some(membership => membership.league.id === leagueId);
 
   const onRegisterMember = async () => {
     await client.mutate<void, JoinLeagueInput>({
@@ -127,7 +128,7 @@ const LeaguePage = () => {
         <Panel title="Tilanne" />
         <Panel>
           <PanelColumn title="Jäsenet">
-            <MemberList members={data.league.members} />
+            <MemberList leagueId={leagueId} members={data.league.members} />
           </PanelColumn>
           <PanelColumn title="Suosituimmat osakkeet"></PanelColumn>
         </Panel>

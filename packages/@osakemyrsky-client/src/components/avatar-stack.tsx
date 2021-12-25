@@ -3,7 +3,7 @@ import classNames from "classnames";
 import Avatar from "@/atoms/avatar";
 
 export interface AvatarStackProps {
-  pictures: { url: string; isUser: boolean }[];
+  pictures: { url: string | null; isUser: boolean }[];
 }
 
 const AvatarStack = ({ pictures }: AvatarStackProps) => {

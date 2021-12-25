@@ -26,9 +26,11 @@ const GET_LEAGUES = gql`
 
       members {
         id
-        userId
-        name
-        picture
+        user {
+          id
+          name
+          picture
+        }
       }
     }
   }

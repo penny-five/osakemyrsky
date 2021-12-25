@@ -97,9 +97,9 @@ export class OrderService {
       leagueId: params.leagueId,
       member: {
         id: member.id!,
-        userId: member.userId,
-        name: member.name,
-        picture: member.picture,
+        userId: member.user.id,
+        name: member.user.name,
+        picture: member.user.picture,
         companyName: member.companyName
       },
       stock: {

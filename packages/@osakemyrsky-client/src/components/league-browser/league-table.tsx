@@ -42,8 +42,8 @@ const LeagueTable = ({ leagues }: LeagueTableProps) => {
               {league.members.length > 0 ? (
                 <AvatarStack
                   pictures={league.members.map(member => ({
-                    url: member.picture,
-                    isUser: member.userId === user?.id
+                    url: member.user.picture,
+                    isUser: member.user.id === user?.id
                   }))}
                 />
               ) : (

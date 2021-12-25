@@ -5,6 +5,8 @@ import { DocumentNotFoundError } from "../../common/errors";
 import { Session } from "../authentication/decorators/session.decorator";
 import { GqlUserAuthGuard } from "../authentication/guards/qgl.jwt.guard";
 import { SessionToken } from "../authentication/token.service";
+import { OrderDto } from "../orders/dto/order.dto";
+import { OrderService } from "../orders/order.service";
 import { TransactionDto } from "../transactions/dto/transaction.dto";
 import { TransactionService } from "../transactions/transaction.service";
 
@@ -18,7 +20,11 @@ import { LeagueService } from "./league.service";
 
 @Resolver(() => LeagueDto)
 export class LeagueResolver {
-  constructor(private readonly leagueService: LeagueService, private readonly transactionService: TransactionService) {}
+  constructor(
+    private readonly leagueService: LeagueService,
+    private readonly orderService: OrderService,
+    private readonly transactionService: TransactionService
+  ) {}
 
   @Query(() => LeagueDto)
   async league(@Args("id") id: string) {
@@ -41,6 +47,23 @@ export class LeagueResolver {
   async members(@Parent() league: LeagueDto) {
     const members = await this.leagueService.findLeagueMembers(league.id);
     return members.map(member => MemberDto.fromModel(member));
+  }
+
+  @Query(() => MemberDto)
+  async member(@Args("leagueId") leagueId: string, @Args("memberId") memberId: string) {
+    const member = await this.leagueService.findMemberById(leagueId, memberId);
+
+    if (member == null) {
+      throw new DocumentNotFoundError("member", memberId);
+    }
+
+    return MemberDto.fromModel(member);
+  }
+
+  @ResolveField(() => [OrderDto])
+  async memberOrders(@Parent() member: MemberDto) {
+    const orders = await this.orderService.findMemberOrders(member.id);
+    return orders.map(order => OrderDto.fromModel(order));
   }
 
   @ResolveField(() => [TransactionDto])

@@ -1,20 +1,27 @@
+import Link from "next/link";
+
 import Avatar from "@/atoms/avatar";
 import TrendIcon from "@/atoms/trend-icon";
 import { Member } from "@/types/member";
 import { formatCents } from "@/utils/currency";
 
-export interface SimpleStockItemProps {
+export interface MemberItemProps {
+  leagueId: string;
   member: Member;
   isUser: boolean;
 }
 
-const MemberItem = ({ member, isUser }: SimpleStockItemProps) => {
+const MemberItem = ({ leagueId, member, isUser }: MemberItemProps) => {
   return (
     <li className="flex items-center py-4 px-5 gap-4 bg-gray-200 rounded-xl cursor-pointer hover:bg-gray-300">
-      <Avatar url={member.picture} hightlight={isUser} />
+      <Avatar url={member.user.picture} hightlight={isUser} />
       <div className="grow flex flex-col truncate">
-        <span className="font-bold text-lg leading-snug truncate">{member.companyName}</span>
-        <span className="font-medium text-sm text-gray-500 leading-snug truncate">{member.name}</span>
+        <span className="font-bold text-lg leading-snug truncate">
+          <Link href={{ pathname: "/leagues/[id]/members/[memberId]", query: { id: leagueId, memberId: member.id } }}>
+            {member.companyName}
+          </Link>
+        </span>
+        <span className="font-medium text-sm text-gray-500 leading-snug truncate">{member.user.name}</span>
       </div>
       <TrendIcon trend="up" />
       <span className="min-w-[150px] text-right font-bold text-lg whitespace-nowrap">

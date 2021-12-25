@@ -18,9 +18,14 @@ const GET_ME = gql`
         id
         createdAt
         updatedAt
-        leagueId
-        leagueName
-        companyName
+        league {
+          id
+          name
+        }
+        member {
+          id
+          companyName
+        }
       }
     }
   }

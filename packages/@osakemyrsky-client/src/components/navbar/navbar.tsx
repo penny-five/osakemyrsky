@@ -58,8 +58,8 @@ const Navbar = ({ onSignIn, onSignOut }: NavbarProps) => {
             {user.memberships.map(membership => (
               <NavbarLeagueDropdownItem
                 key={membership.id}
-                leagueName={membership.leagueName}
-                onClick={() => onSelectActiveLeague(membership.leagueId)}
+                leagueName={membership.league.name}
+                onClick={() => onSelectActiveLeague(membership.league.id)}
               />
             ))}
           </NavbarLeagueDropdown>
@@ -86,9 +86,16 @@ const Navbar = ({ onSignIn, onSignOut }: NavbarProps) => {
       </div>
       {user && activeMembership && (
         <ul className="flex flex-row grow items-center px-8 w-full max-w-screen-desktop">
-          <NavbarTab target={`/leagues/${activeMembership.leagueId}`}>Liigapörssi</NavbarTab>
-          <NavbarTab target="/my-portfolio">Oma salkku</NavbarTab>
-          <NavbarTab target="/marketplace">Osta/myy osakkeita</NavbarTab>
+          <NavbarTab href={`/leagues/${activeMembership.league.id}`}>Liigapörssi</NavbarTab>
+          <NavbarTab
+            href={{
+              pathname: "/leagues/[id]/members/[memberId]",
+              query: { id: activeMembership.league.id, memberId: activeMembership.member.id }
+            }}
+          >
+            Oma salkku
+          </NavbarTab>
+          <NavbarTab href="/marketplace">Osta/myy osakkeita</NavbarTab>
         </ul>
       )}
     </nav>

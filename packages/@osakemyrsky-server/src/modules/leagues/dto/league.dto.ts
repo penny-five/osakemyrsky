@@ -7,13 +7,14 @@ registerEnumType(LeagueStatus, { name: "LeagueStatus" });
 
 @ObjectType("LeagueCreator")
 export class LeagueCreatorDto {
+  @Field(() => GraphQLUUID, { nullable: false })
+  id!: string;
+
   @Field({ nullable: false })
   name!: string;
 
   @Field(() => String, { nullable: true })
   picture!: string | null;
-
-  userId!: string;
 }
 
 @ObjectType("League")
@@ -52,7 +53,7 @@ export class LeagueDto {
     dto.endDate = model.endDate;
     dto.status = model.status;
     dto.creator = new LeagueCreatorDto();
-    dto.creator.userId = model.creator.userId;
+    dto.creator.id = model.creator.id;
     dto.creator.name = model.creator.name;
     dto.creator.picture = model.creator.picture;
     return dto;

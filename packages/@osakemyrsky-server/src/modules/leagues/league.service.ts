@@ -37,13 +37,25 @@ export class LeagueService {
     return res.data();
   }
 
+  async findMemberById(leagueId: string, memberId: string) {
+    const res = await this.firestore
+      .collection("leagues")
+      .doc(leagueId)
+      .collection("members")
+      .where("id", "==", memberId)
+      .withConverter(memberConverter)
+      .get();
+
+    return res.empty ? undefined : res.docs[0].data();
+  }
+
   async findMemberByUserId(leagueId: string, userId: string) {
     const res = await this.firestore
       .collection("leagues")
       .doc(leagueId)
       .collection("members")
       .withConverter(memberConverter)
-      .where("userId", "==", userId)
+      .where("user.id", "==", userId)
       .get();
 
     return res.empty ? undefined : res.docs[0].data();
@@ -101,9 +113,9 @@ export class LeagueService {
       endDate: params.endDate,
       status: LeagueStatus.UNKNOWN,
       creator: {
+        id: user.id!,
         name: user.name,
-        picture: user.picture,
-        userId: user.id!
+        picture: user.picture
       }
     });
 
@@ -149,16 +161,29 @@ export class LeagueService {
     await this.firestore.runTransaction<void>(async trx => {
       trx
         .create(memberRef, {
-          ...user,
-          userId: user.id!,
+          id: memberId,
+          league: {
+            id: league.id!,
+            name: league.name
+          },
+          user: {
+            id: user.id!,
+            name: user.name,
+            picture: user.picture
+          },
           companyName: params.companyName,
           balanceCents: 0,
           balanceUpdatedAt: new Date().toISOString()
         })
         .create(membershipRef, {
-          companyName: params.companyName,
-          leagueId: league.id!,
-          leagueName: league.name
+          league: {
+            id: league.id!,
+            name: league.name
+          },
+          member: {
+            id: memberId,
+            companyName: params.companyName
+          }
         });
     });
 

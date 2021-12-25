@@ -17,14 +17,16 @@ export const ActiveMembershipProvider = ({ children }: PropsWithChildren<unknown
 
   let activeMembership: Membership | null = null;
 
-  if (user != null && activeLeague != null) {
-    activeMembership = user.memberships.find(membership => membership.leagueId === activeLeague) ?? null;
+  if (user != null) {
+    if (activeLeague != null) {
+      activeMembership = user.memberships.find(membership => membership.league.id === activeLeague) ?? null;
+    }
 
     if (activeMembership == null) {
       activeMembership = user.memberships.at(0) ?? null;
 
       if (activeMembership != null) {
-        setActiveLeague(activeMembership.leagueId);
+        setActiveLeague(activeMembership.league.id);
       }
     }
   }

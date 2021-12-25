@@ -2,6 +2,7 @@ import { forwardRef, Module } from "@nestjs/common";
 
 import { DepositModule } from "../deposits/deposit.module";
 import { FirestoreModule } from "../firestore/firestore.module";
+import { OrderModule } from "../orders/order.module";
 import { StockModule } from "../stocks/stock.module";
 import { TransactionModule } from "../transactions/transaction.module";
 import { UserModule } from "../users/user.module";
@@ -14,6 +15,7 @@ import { LeagueService } from "./league.service";
     FirestoreModule,
     forwardRef(() => UserModule),
     forwardRef(() => StockModule),
+    forwardRef(() => OrderModule),
     DepositModule,
     TransactionModule
   ],
