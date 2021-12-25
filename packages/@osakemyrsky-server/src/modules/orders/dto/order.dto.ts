@@ -29,8 +29,11 @@ export class OrderStockDto {
   @Field({ nullable: false })
   name!: string;
 
-  @Field(() => String, { nullable: true })
+  @Field(() => String, { nullable: false })
   symbol!: string;
+
+  @Field(() => String, { nullable: false })
+  exchangeCountry!: string;
 }
 
 @ObjectType("Order")
@@ -86,6 +89,7 @@ export class OrderDto {
     dto.stock = new OrderStockDto();
     dto.stock.name = model.stock.name;
     dto.stock.symbol = model.stock.symbol;
+    dto.stock.exchangeCountry = model.stock.exchangeCountry;
     dto.stockPriceCents = model.stockPriceCents;
     dto.stockPriceString = `${(model.stockPriceCents / 100).toFixed(2)} €`;
     dto.stockCount = model.stockCount;

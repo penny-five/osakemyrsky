@@ -8,7 +8,6 @@ import { isBefore, isSameDay } from "../../utils/dates";
 import { Order, orderConverter, OrderStatus, OrderType } from "../firestore/models/order.model";
 import { TransactionType } from "../firestore/models/transaction.model";
 import { LeagueService } from "../leagues/league.service";
-import { NordnetClient } from "../nordnet/client";
 import { StockService } from "../stocks/stock.service";
 import { TransactionService } from "../transactions/transaction.service";
 
@@ -40,7 +39,6 @@ export class OrderService {
     private readonly firestore: Firestore,
     private readonly leagueService: LeagueService,
     private readonly transactionService: TransactionService,
-    private readonly nordnetClient: NordnetClient,
     private readonly stockService: StockService
   ) {}
 
@@ -106,7 +104,8 @@ export class OrderService {
       },
       stock: {
         name: stock.name,
-        symbol: stock.symbol
+        symbol: stock.symbol,
+        exchangeCountry: stock.exchangeCountry
       },
       stockPriceCents: params.stockPriceCents,
       stockCount: params.stockCount,
@@ -243,19 +242,7 @@ export class OrderService {
 
       if (currentCashCents >= order.stockPriceCents * order.stockCount) {
         await this.transactionService.commitTransaction({
-          leagueId: order.leagueId,
-          member: {
-            id: order.member.id,
-            userId: order.member.userId,
-            name: order.member.name,
-            picture: order.member.picture,
-            companyName: order.member.companyName
-          },
-          stock: {
-            name: order.stock.name,
-            symbol: order.stock.symbol
-          },
-          count: order.stockCount,
+          order,
           unitPriceCents: stock.priceCents,
           type: TransactionType.BUY
         });
@@ -284,19 +271,7 @@ export class OrderService {
 
     if (stock.priceCents >= order.stockPriceCents) {
       await this.transactionService.commitTransaction({
-        leagueId: order.leagueId,
-        member: {
-          id: order.member.id,
-          userId: order.member.userId,
-          name: order.member.name,
-          picture: order.member.picture,
-          companyName: order.member.companyName
-        },
-        stock: {
-          name: order.stock.name,
-          symbol: order.stock.symbol
-        },
-        count: order.stockCount,
+        order,
         unitPriceCents: stock.priceCents,
         type: TransactionType.SELL
       });

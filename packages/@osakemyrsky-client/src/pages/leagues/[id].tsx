@@ -43,6 +43,7 @@ const GET_LEAGUE = gql`
         stock {
           name
           symbol
+          exchangeCountry
         }
         count
         unitPriceCents

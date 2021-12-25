@@ -30,6 +30,9 @@ export class TransactionStockDto {
 
   @Field(() => String, { nullable: true })
   symbol!: string;
+
+  @Field(() => String, { nullable: false })
+  exchangeCountry!: string;
 }
 
 @ObjectType("Transaction")
@@ -76,6 +79,7 @@ export class TransactionDto {
     dto.stock = new TransactionStockDto();
     dto.stock.name = model.stock.name;
     dto.stock.symbol = model.stock.symbol;
+    dto.stock.exchangeCountry = model.stock.exchangeCountry;
     dto.type = model.type;
     dto.count = model.count;
     dto.unitPriceCents = model.unitPriceCents;

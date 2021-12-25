@@ -17,6 +17,7 @@ export interface Transaction {
   stock: {
     name: string;
     symbol: string;
+    exchangeCountry: string;
   };
   count: number;
   unitPriceCents: number;

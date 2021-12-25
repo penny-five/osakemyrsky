@@ -21,6 +21,7 @@ export class Transaction extends BaseModel {
   stock!: {
     name: string;
     symbol: string;
+    exchangeCountry: string;
   };
 
   type!: TransactionType;
@@ -49,7 +50,8 @@ export const transactionConverter: FirestoreDataConverter<Transaction> = {
     };
     transaction.stock = {
       name: (data.stock as DocumentData).name as string,
-      symbol: (data.stock as DocumentData).symbol as string
+      symbol: (data.stock as DocumentData).symbol as string,
+      exchangeCountry: (data.stock as DocumentData).exchangeCountry as string
     };
     transaction.type = data.type as TransactionType;
     transaction.count = data.count as number;
@@ -70,7 +72,8 @@ export const transactionConverter: FirestoreDataConverter<Transaction> = {
       },
       stock: {
         name: transaction.stock.name,
-        symbol: transaction.stock.symbol
+        symbol: transaction.stock.symbol,
+        exchangeCountry: transaction.stock.exchangeCountry
       },
       type: transaction.type,
       count: transaction.count,

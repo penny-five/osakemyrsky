@@ -17,7 +17,9 @@ const MemberItem = ({ member, isUser }: SimpleStockItemProps) => {
         <span className="font-medium text-sm text-gray-500 leading-snug truncate">{member.name}</span>
       </div>
       <TrendIcon trend="up" />
-      <span className="min-w-[150px] font-bold text-lg whitespace-nowrap">{formatCents(member.balanceCents)}</span>
+      <span className="min-w-[150px] text-right font-bold text-lg whitespace-nowrap">
+        {formatCents(member.balanceCents)}
+      </span>
     </li>
   );
 };

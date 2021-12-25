@@ -3,13 +3,11 @@ import { Injectable, Logger } from "@nestjs/common";
 import { v4 as uuid } from "uuid";
 
 import { compareDesc } from "../../utils/dates";
+import { Order } from "../firestore/models/order.model";
 import { transactionConverter, TransactionType } from "../firestore/models/transaction.model";
 
 export interface CommitTransactionParams {
-  leagueId: string;
-  member: { id: string; userId: string; name: string; picture: string | null; companyName: string };
-  stock: { name: string; symbol: string };
-  count: number;
+  order: Order;
   unitPriceCents: number;
   type: TransactionType;
 }
@@ -48,18 +46,18 @@ export class TransactionService {
 
     const transactionRef = this.firestore
       .collection("leagues")
-      .doc(params.leagueId)
+      .doc(params.order.leagueId)
       .collection("members")
-      .doc(params.member.id)
+      .doc(params.order.member.id)
       .collection("transactions")
       .withConverter(transactionConverter)
       .doc(id);
 
     await transactionRef.set({
-      leagueId: params.leagueId,
-      member: params.member,
-      stock: params.stock,
-      count: params.count,
+      leagueId: params.order.leagueId,
+      member: params.order.member,
+      stock: params.order.stock,
+      count: params.order.stockCount,
       unitPriceCents: params.unitPriceCents,
       type: params.type
     });

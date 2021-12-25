@@ -1,6 +1,7 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/outline";
 
 import Avatar from "@/atoms/avatar";
+import CountryFlag from "@/atoms/country-flag";
 import { Transaction, TransactionType } from "@/types/transaction";
 import { formatCurrency } from "@/utils/currency";
 import { formatTimestamp } from "@/utils/dates/display";
@@ -52,7 +53,10 @@ const TransactionItem = ({ transaction, isUser }: TransactionItemProps) => {
           </div>
         </div>
         <div className="flex flex-col text-right grow basis-1">
-          <span className="text-lg font-bold leading-snug">{transaction.stock.name}</span>
+          <div className="flex flex-row items-center justify-end gap-2">
+            <span className="text-lg font-bold leading-snug">{transaction.stock.name}</span>
+            <CountryFlag size="sm" countryCode={transaction.stock.exchangeCountry} />
+          </div>
           <span className="text-sm font-medium text-gray-500 leading-snug">{transaction.stock.symbol}</span>
         </div>
       </div>

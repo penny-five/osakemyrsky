@@ -28,6 +28,7 @@ export class Order extends BaseModel {
   stock!: {
     name: string;
     symbol: string;
+    exchangeCountry: string;
   };
 
   stockPriceCents!: number;
@@ -60,7 +61,8 @@ export const orderConverter: FirestoreDataConverter<Order> = {
     };
     order.stock = {
       name: (data.stock as DocumentData).name as string,
-      symbol: (data.stock as DocumentData).symbol as string
+      symbol: (data.stock as DocumentData).symbol as string,
+      exchangeCountry: (data.stock as DocumentData).exchangeCountry as string
     };
     order.stockPriceCents = data.stockPriceCents as number;
     order.stockCount = data.stockCount as number;
@@ -84,7 +86,8 @@ export const orderConverter: FirestoreDataConverter<Order> = {
       },
       stock: {
         name: order.stock.name,
-        symbol: order.stock.symbol
+        symbol: order.stock.symbol,
+        exchangeCountry: order.stock.exchangeCountry
       },
       stockPriceCents: order.stockPriceCents,
       stockCount: order.stockCount,
