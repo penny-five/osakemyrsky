@@ -29,7 +29,7 @@ const SellStocksForm = ({ stock, onSubmit }: SellStocksFormProps) => {
   } = useForm<SubmitSellOrderInput>({
     defaultValues: {
       count: 1,
-      price: stock.price || 1,
+      price: stock.priceCents != null ? stock.priceCents / 100 : 1,
       expirationDate: currentISODay()
     }
   });

@@ -1,8 +1,7 @@
 import { Field, ObjectType, registerEnumType } from "@nestjs/graphql";
 import { GraphQLDateTime, GraphQLPositiveInt, GraphQLUUID } from "graphql-scalars";
 
-import { Transaction } from "../../firestore/models/transaction.model";
-import { TransactionType } from "../transaction.service";
+import { Transaction, TransactionType } from "../../firestore/models/transaction.model";
 
 registerEnumType(TransactionType, { name: "TransactionType" });
 

@@ -1,6 +1,7 @@
 import Avatar from "@/atoms/avatar";
 import TrendIcon from "@/atoms/trend-icon";
 import { Member } from "@/types/member";
+import { formatCents } from "@/utils/currency";
 
 export interface SimpleStockItemProps {
   member: Member;
@@ -16,7 +17,7 @@ const MemberItem = ({ member, isUser }: SimpleStockItemProps) => {
         <span className="font-medium text-sm text-gray-500 leading-snug truncate">{member.name}</span>
       </div>
       <TrendIcon trend="up" />
-      <span className="font-bold text-lg whitespace-nowrap">100 000 €</span>
+      <span className="font-bold text-lg whitespace-nowrap">{formatCents(member.balanceCents)}</span>
     </li>
   );
 };

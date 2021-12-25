@@ -8,9 +8,13 @@ import { DocumentNotFoundError, LeagueInactiveError } from "../../common/errors"
 import { isAfter, isSameDay } from "../../utils/dates";
 import { GameConfig } from "../config/files/game";
 import { DepositService } from "../deposits/deposit.service";
+import { Deposit } from "../firestore/models/deposit.model";
 import { League, leagueConverter, LeagueStatus } from "../firestore/models/league.model";
 import { Member, memberConverter } from "../firestore/models/member.model";
 import { membershipConverter } from "../firestore/models/membership.model";
+import { Transaction, TransactionType } from "../firestore/models/transaction.model";
+import { StockService } from "../stocks/stock.service";
+import { TransactionService } from "../transactions/transaction.service";
 import { UserService } from "../users/user.service";
 
 export enum LeaguesOrderBy {
@@ -23,7 +27,9 @@ export class LeagueService {
     @Inject(GameConfig.KEY) private readonly gameConfig: ConfigType<typeof GameConfig>,
     private readonly firestore: Firestore,
     private readonly userService: UserService,
-    private readonly depositService: DepositService
+    private readonly depositService: DepositService,
+    private readonly transactionService: TransactionService,
+    private readonly stockService: StockService
   ) {}
 
   async findLeagueById(leagueId: string) {
@@ -145,7 +151,9 @@ export class LeagueService {
         .create(memberRef, {
           ...user,
           userId: user.id!,
-          companyName: params.companyName
+          companyName: params.companyName,
+          balanceCents: 0,
+          balanceUpdatedAt: new Date().toISOString()
         })
         .create(membershipRef, {
           companyName: params.companyName,
@@ -156,19 +164,64 @@ export class LeagueService {
 
     await this.depositService.placeDeposit(leagueId, memberId, this.gameConfig.initialDepositEuros * 100);
 
+    await this.refreshMemberBalance(leagueId, memberId);
+
     const res = await membershipRef.get();
     return res.data()!;
   }
 
   /**
-   * Returns the member current cash amoun in cents.
+   * Returns the member current cash amount in cents.
    */
   async getMemberCurrentCashAmount(leagueId: string, memberId: string) {
     const deposits = await this.depositService.getMemberDeposits(leagueId, memberId);
+    const transactions = await this.transactionService.getMemberTransactions(leagueId, memberId);
+    return this.computeDepositTotalValue(deposits) + this.computeTransactionTotalValue(transactions);
+  }
 
-    return deposits.reduce((sum, deposit) => {
-      return sum + deposit.valueCents;
-    }, 0);
+  async computeMemberBalance(leagueId: string, memberId: string) {
+    const deposits = await this.depositService.getMemberDeposits(leagueId, memberId);
+    const transactions = await this.transactionService.getMemberTransactions(leagueId, memberId);
+
+    const totalMemberDepositValue = this.computeDepositTotalValue(deposits);
+
+    const totalMemberTransactionValue = this.computeTransactionTotalValue(transactions);
+
+    const ownedStocksBySymbol = transactions.reduce((acc, transaction) => {
+      if (acc[transaction.stock.symbol] == null) {
+        acc[transaction.stock.symbol] = 0;
+      }
+
+      if (transaction.type === TransactionType.BUY) {
+        acc[transaction.stock.symbol] += transaction.count;
+      } else {
+        acc[transaction.stock.symbol] -= transaction.count;
+      }
+      return acc;
+    }, {} as Record<string, number>);
+
+    const currentPortfolioValue = (
+      await Promise.all(
+        Object.entries(ownedStocksBySymbol).map(async ([symbol, count]) => this.computeStockCurrentValue(symbol, count))
+      )
+    ).reduce((sum, value) => sum + value, 0);
+
+    return totalMemberDepositValue + totalMemberTransactionValue + currentPortfolioValue;
+  }
+
+  async refreshMemberBalance(leagueId: string, memberId: string) {
+    const balanceCents = await this.computeMemberBalance(leagueId, memberId);
+
+    await this.firestore
+      .collection("leagues")
+      .doc(leagueId)
+      .collection("members")
+      .doc(memberId)
+      .withConverter(memberConverter)
+      .update({
+        balanceCents,
+        balanceUpdatedAt: new Date().toISOString()
+      });
   }
 
   async isLeagueOngoing(leagueId: string) {
@@ -189,5 +242,31 @@ export class LeagueService {
 
   private hasLeagueStartedOn(league: League, date: Date | string) {
     return isAfter(date, league.startDate);
+  }
+
+  private computeTransactionTotalValue(transactions: Transaction[]) {
+    return transactions.reduce((total, transaction) => {
+      if (transaction.type === TransactionType.BUY) {
+        return total - transaction.count * transaction.unitPriceCents;
+      } else {
+        return total + transaction.count * transaction.unitPriceCents;
+      }
+    }, 0);
+  }
+
+  private computeDepositTotalValue(deposits: Deposit[]) {
+    return deposits.reduce((total, deposit) => {
+      return total + deposit.valueCents;
+    }, 0);
+  }
+
+  private async computeStockCurrentValue(symbol: string, count: number) {
+    if (count <= 0) {
+      return 0;
+    }
+
+    const stock = await this.stockService.findStockBySymbol(symbol);
+
+    return count * (stock?.priceCents ?? 0);
   }
 }

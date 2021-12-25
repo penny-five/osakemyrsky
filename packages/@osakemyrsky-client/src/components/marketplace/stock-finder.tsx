@@ -13,8 +13,8 @@ const SEARCH_STOCKS = gql`
       name
       symbol
       exchangeCountry
-      price
-      priceDiff
+      priceCents
+      priceDiffCents
       priceDiffPct
       tradingStatus
     }

@@ -9,7 +9,6 @@ import { Order, orderConverter, OrderStatus, OrderType } from "../firestore/mode
 import { TransactionType } from "../firestore/models/transaction.model";
 import { LeagueService } from "../leagues/league.service";
 import { NordnetClient } from "../nordnet/client";
-import { NordnetInstrument } from "../nordnet/client/types";
 import { StockService } from "../stocks/stock.service";
 import { TransactionService } from "../transactions/transaction.service";
 
@@ -25,6 +24,12 @@ export interface PlaceOrderParams {
   stockPriceCents: number;
   orderType: OrderType;
   expirationDate: string;
+}
+
+export enum OrderProcessingResult {
+  COMPLETED = "completed",
+  FAILED = "failed",
+  SKIPPED = "skipped"
 }
 
 @Injectable()
@@ -132,7 +137,7 @@ export class OrderService {
       "Start order processing"
     );
 
-    const pendingOrdersRes = await this.firestore
+    const { docs: ordersSnapshot } = await this.firestore
       .collectionGroup("orders")
       .withConverter(orderConverter)
       .where("status", "==", OrderStatus.PENDING)
@@ -141,13 +146,8 @@ export class OrderService {
     const activeOrdersSnapshot: FirebaseFirestore.QueryDocumentSnapshot<Order>[] = [];
     const expiredOrdersSnapshot: FirebaseFirestore.QueryDocumentSnapshot<Order>[] = [];
 
-    for (const doc of pendingOrdersRes.docs) {
-      const order = doc.data();
-      const now = new Date();
-
-      const isExpired = isBefore(order.expirationDate, now) && !isSameDay(order.expirationDate, now);
-
-      if (isExpired) {
+    for (const doc of ordersSnapshot) {
+      if (this.isExpired(doc.data())) {
         expiredOrdersSnapshot.push(doc);
       } else {
         activeOrdersSnapshot.push(doc);
@@ -169,32 +169,51 @@ export class OrderService {
       })
     );
 
-    const instrumentsBySymbol: Record<string, NordnetInstrument | undefined> = {};
-
     for (const doc of activeOrdersSnapshot) {
       const order = doc.data();
 
-      if (instrumentsBySymbol[order.stock.symbol] == null) {
-        const instrument = await this.nordnetClient.findInstrumentBySymbol(order.stock.symbol);
-        instrumentsBySymbol[order.stock.symbol] = instrument;
+      let result: OrderProcessingResult;
+
+      switch (order.type) {
+        case OrderType.BUY:
+          result = await this.processBuyOrder(order);
+          break;
+        case OrderType.SELL:
+          result = await this.processSellOrder(order);
+          break;
       }
-    }
 
-    for (const doc of activeOrdersSnapshot) {
-      const order = doc.data();
-      const instrument = instrumentsBySymbol[order.stock.symbol];
+      switch (result) {
+        case OrderProcessingResult.COMPLETED:
+          await doc.ref.update({
+            status: OrderStatus.COMPLETED
+          });
 
-      if (instrument != null) {
-        switch (order.type) {
-          case OrderType.BUY:
-            await this.processBuyOrder(doc, instrument);
-            break;
-          case OrderType.SELL:
-            await this.processSellOrder(doc, instrument);
-            break;
-        }
-      } else {
-        this.logger.warn({ stock: order.stock }, "Could not find instrument information");
+          await this.leagueService.refreshMemberBalance(order.leagueId, order.member.id);
+
+          this.logger.log(
+            {
+              order
+            },
+            "Order completed"
+          );
+
+          break;
+        case OrderProcessingResult.FAILED:
+          await doc.ref.update({
+            status: OrderStatus.FAILED
+          });
+
+          this.logger.log(
+            {
+              order
+            },
+            "Order failed"
+          );
+
+          break;
+        default:
+          break;
       }
     }
 
@@ -206,11 +225,20 @@ export class OrderService {
     );
   }
 
-  private async processBuyOrder(doc: FirebaseFirestore.QueryDocumentSnapshot<Order>, instrument: NordnetInstrument) {
-    const order = doc.data();
-    const instrumentPriceCents = (instrument.price_info.last.price || instrument.price_info.close.price) * 100;
+  private async processBuyOrder(order: Order): Promise<OrderProcessingResult> {
+    const stock = await this.stockService.findStockBySymbol(order.stock.symbol);
 
-    if (instrumentPriceCents <= order.stockPriceCents) {
+    if (stock == null) {
+      this.logger.warn({ stock: order.stock }, "Could not find instrument information");
+      return OrderProcessingResult.SKIPPED;
+    }
+
+    if (stock.priceCents == null) {
+      this.logger.warn({ stock }, "Could not find instrument price information");
+      return OrderProcessingResult.SKIPPED;
+    }
+
+    if (stock.priceCents <= order.stockPriceCents) {
       const currentCashCents = await this.leagueService.getMemberCurrentCashAmount(order.leagueId, order.member.id);
 
       if (currentCashCents >= order.stockPriceCents * order.stockCount) {
@@ -228,40 +256,33 @@ export class OrderService {
             symbol: order.stock.symbol
           },
           count: order.stockCount,
-          unitPriceCents: order.stockPriceCents,
+          unitPriceCents: stock.priceCents,
           type: TransactionType.BUY
         });
 
-        await doc.ref.update({
-          status: OrderStatus.COMPLETED
-        });
-
-        this.logger.log(
-          {
-            order
-          },
-          "Buy order completed"
-        );
+        return OrderProcessingResult.COMPLETED;
       } else {
-        await doc.ref.update({
-          status: OrderStatus.FAILED
-        });
-
-        this.logger.log(
-          {
-            order
-          },
-          "Buy order failed"
-        );
+        return OrderProcessingResult.FAILED;
       }
     }
+
+    return OrderProcessingResult.SKIPPED;
   }
 
-  private async processSellOrder(doc: FirebaseFirestore.QueryDocumentSnapshot<Order>, instrument: NordnetInstrument) {
-    const order = doc.data();
-    const instrumentPriceCents = (instrument.price_info.last.price || instrument.price_info.close.price) * 100;
+  private async processSellOrder(order: Order): Promise<OrderProcessingResult> {
+    const stock = await this.stockService.findStockBySymbol(order.stock.symbol);
 
-    if (instrumentPriceCents >= order.stockPriceCents) {
+    if (stock == null) {
+      this.logger.warn({ stock: order.stock }, "Could not find instrument information");
+      return OrderProcessingResult.SKIPPED;
+    }
+
+    if (stock.priceCents == null) {
+      this.logger.warn({ stock }, "Could not find instrument price information");
+      return OrderProcessingResult.SKIPPED;
+    }
+
+    if (stock.priceCents >= order.stockPriceCents) {
       await this.transactionService.commitTransaction({
         leagueId: order.leagueId,
         member: {
@@ -276,20 +297,18 @@ export class OrderService {
           symbol: order.stock.symbol
         },
         count: order.stockCount,
-        unitPriceCents: order.stockPriceCents,
+        unitPriceCents: stock.priceCents,
         type: TransactionType.SELL
       });
 
-      await doc.ref.update({
-        status: OrderStatus.COMPLETED
-      });
-
-      this.logger.log(
-        {
-          order
-        },
-        "Sell order completed"
-      );
+      return OrderProcessingResult.COMPLETED;
     }
+
+    return OrderProcessingResult.SKIPPED;
+  }
+
+  private isExpired(order: Order) {
+    const now = new Date();
+    return isBefore(order.expirationDate, now) && !isSameDay(order.expirationDate, now);
   }
 }

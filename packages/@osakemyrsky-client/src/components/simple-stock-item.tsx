@@ -2,6 +2,7 @@ import classNames from "classnames";
 
 import CountryFlag from "@/atoms/country-flag";
 import { Stock } from "@/types/stock";
+import { formatCents } from "@/utils/currency";
 
 export interface SimpleStockItemProps {
   stock: Stock;
@@ -24,13 +25,13 @@ const SimpleStockItem = ({ stock, onClick }: SimpleStockItemProps) => {
       <div className="flex flex-col items-end shrink-0">
         <span
           className={classNames("font-semibold text-base", {
-            "text-green-200": stock.priceDiff == null || stock.priceDiff >= 0,
-            "text-red-200": stock.priceDiff != null && stock.priceDiff < 0
+            "text-green-200": stock.priceDiffCents == null || stock.priceDiffCents >= 0,
+            "text-red-200": stock.priceDiffCents != null && stock.priceDiffCents < 0
           })}
         >
           {stock.priceDiffPct} %
         </span>
-        <span className="text-sm font-semibold">{stock.price} €</span>
+        <span className="text-sm font-semibold">{formatCents(stock.priceCents)}</span>
       </div>
     </li>
   );

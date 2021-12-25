@@ -7,4 +7,6 @@ export interface Member {
   companyName: string;
   leagueName: string;
   picture: string;
+  balanceCents: number;
+  balanceUpdatedAt: string;
 }

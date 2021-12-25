@@ -75,6 +75,15 @@ This stops and destroys all containers and volumes.
 
 TODO
 
+## Improvement ideas
+
+Here I list various improvement ideas.
+
+## Technical
+
+- Replace `class-validator` with `zod` (https://github.com/colinhacks/zod) on server
+- Use ESM on server (see https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c)
+
 ## License
 
 MIT.

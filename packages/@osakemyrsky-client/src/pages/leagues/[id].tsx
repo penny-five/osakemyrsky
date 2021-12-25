@@ -26,6 +26,8 @@ const GET_LEAGUE = gql`
         name
         companyName
         picture
+        balanceCents
+        balanceUpdatedAt
       }
 
       transactions {

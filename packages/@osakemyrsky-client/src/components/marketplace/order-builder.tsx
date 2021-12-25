@@ -8,10 +8,11 @@ import Tab from "@/components/tab/tab";
 import TabContainer from "@/components/tab/tab-container";
 import { OrderType } from "@/types/order";
 import { Stock } from "@/types/stock";
+import { formatCents } from "@/utils/currency";
 
 export interface OrderBuilderInput {
   symbol: string;
-  price: number;
+  priceCents: number;
   count: number;
   expirationDate: string;
   type: OrderType;
@@ -25,16 +26,20 @@ export interface OrderBuilderProps {
 const OrderBuilder = ({ stock, onSubmit }: OrderBuilderProps) => {
   const onSubmitBuyOrder = (order: SubmitBuyOrderInput) => {
     onSubmit({
-      ...order,
       symbol: stock.symbol,
+      priceCents: order.price * 100,
+      count: order.count,
+      expirationDate: order.expirationDate,
       type: OrderType.BUY
     });
   };
 
   const onSubmitSellOrder = (order: SubmitSellOrderInput) => {
     onSubmit({
-      ...order,
       symbol: stock.symbol,
+      priceCents: order.price * 100,
+      count: order.count,
+      expirationDate: order.expirationDate,
       type: OrderType.SELL
     });
   };
@@ -46,7 +51,7 @@ const OrderBuilder = ({ stock, onSubmit }: OrderBuilderProps) => {
         <Heading level={3} className="grow truncate">
           {stock.name}
         </Heading>
-        <span className="text-xl font-bold whitespace-nowrap">{stock.price} €</span>
+        <span className="text-xl font-bold whitespace-nowrap">{formatCents(stock.priceCents)}</span>
       </div>
       <span className="text-xs font-medium text-gray-500 truncate">{stock.symbol} / MARKET INFORMATION</span>
       <StockPriceChart />

@@ -10,6 +10,10 @@ export class Member extends BaseModel {
   picture!: string | null;
 
   companyName!: string;
+
+  balanceCents!: number;
+
+  balanceUpdatedAt!: string;
 }
 
 export const memberConverter: FirestoreDataConverter<Member> = {
@@ -25,6 +29,8 @@ export const memberConverter: FirestoreDataConverter<Member> = {
     member.name = data.name as string;
     member.picture = data.picture as string;
     member.companyName = data.companyName as string;
+    member.balanceCents = data.balanceCents as number;
+    member.balanceUpdatedAt = data.balanceUpdatedAt as string;
 
     return member;
   },
@@ -34,7 +40,9 @@ export const memberConverter: FirestoreDataConverter<Member> = {
       userId: member.userId,
       name: member.name,
       picture: member.picture,
-      companyName: member.companyName
+      companyName: member.companyName,
+      balanceCents: member.balanceCents,
+      balanceUpdatedAt: member.balanceUpdatedAt
     };
   }
 };

@@ -45,7 +45,7 @@ export class LeagueResolver {
 
   @ResolveField(() => [TransactionDto])
   async transactions(@Parent() league: LeagueDto) {
-    const transactions = await this.transactionService.findLeagueTransactions(league.id);
+    const transactions = await this.transactionService.getLeagueTransactions(league.id);
     return transactions.map(transaction => TransactionDto.fromModel(transaction));
   }
 

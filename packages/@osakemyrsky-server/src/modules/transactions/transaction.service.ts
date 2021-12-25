@@ -2,12 +2,7 @@ import { Firestore } from "@google-cloud/firestore";
 import { Injectable, Logger } from "@nestjs/common";
 import { v4 as uuid } from "uuid";
 
-import { transactionConverter } from "../firestore/models/transaction.model";
-
-export enum TransactionType {
-  BUY = "BUY",
-  SELL = "SELL"
-}
+import { transactionConverter, TransactionType } from "../firestore/models/transaction.model";
 
 export interface CommitTransactionParams {
   leagueId: string;
@@ -24,7 +19,20 @@ export class TransactionService {
 
   constructor(private readonly firestore: Firestore) {}
 
-  async findLeagueTransactions(leagueId: string) {
+  async getMemberTransactions(leagueId: string, memberId: string) {
+    const res = await this.firestore
+      .collection("leagues")
+      .doc(leagueId)
+      .collection("members")
+      .doc(memberId)
+      .collection("transactions")
+      .withConverter(transactionConverter)
+      .get();
+
+    return res.docs.map(doc => doc.data());
+  }
+
+  async getLeagueTransactions(leagueId: string) {
     const res = await this.firestore
       .collectionGroup("transactions")
       .where("leagueId", "==", leagueId)

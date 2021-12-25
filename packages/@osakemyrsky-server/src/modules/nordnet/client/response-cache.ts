@@ -1,5 +1,5 @@
+import QuickLRU from "@alloc/quick-lru";
 import { Response } from "got-scraping";
-import QuickLRU from "quick-lru";
 import ResponseLike from "responselike";
 
 export class NordnetRequestCache {

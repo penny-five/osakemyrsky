@@ -26,8 +26,8 @@ export class StockService {
     dto.name = instrument.instrument_info.name;
     dto.symbol = instrument.instrument_info.symbol;
     dto.exchangeCountry = instrument.exchange_info.exchange_country;
-    dto.price = instrument.price_info.last.price || instrument.price_info.close.price;
-    dto.priceDiff = instrument.price_info.diff?.diff ?? 0.0;
+    dto.priceCents = Math.floor((instrument.price_info.last.price || instrument.price_info.close.price) * 100);
+    dto.priceDiffCents = Math.floor((instrument.price_info.diff?.diff ?? 0.0) * 100);
     dto.priceDiffPct = instrument.price_info.diff_pct ?? 0.0;
 
     switch (instrument.status_info.trading_status) {

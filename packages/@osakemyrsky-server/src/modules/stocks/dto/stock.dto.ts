@@ -21,10 +21,10 @@ export class Stock {
   exchangeCountry!: string;
 
   @Field(() => GraphQLFloat, { nullable: true })
-  price!: number | null;
+  priceCents!: number | null;
 
   @Field(() => Float, { nullable: true })
-  priceDiff!: number | null;
+  priceDiffCents!: number | null;
 
   @Field(() => Float, { nullable: true })
   priceDiffPct!: number | null;

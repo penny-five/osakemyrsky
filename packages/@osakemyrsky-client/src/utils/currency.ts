@@ -6,3 +6,7 @@ const formatter = Intl.NumberFormat("fi-FI", {
 export const formatCurrency = (value: number) => {
   return formatter.format(value);
 };
+
+export const formatCents = (cents: number | null) => {
+  return cents != null ? formatCurrency(cents / 100) : "- €";
+};

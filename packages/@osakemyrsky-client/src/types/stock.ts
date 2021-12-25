@@ -11,8 +11,8 @@ export interface Stock {
   name: string;
   symbol: string;
   exchangeCountry: string;
-  price: number | null;
-  priceDiff: number | null;
+  priceCents: number | null;
+  priceDiffCents: number | null;
   priceDiffPct: number | null;
   tradingStatus: StockTradingStatus | null;
 }
