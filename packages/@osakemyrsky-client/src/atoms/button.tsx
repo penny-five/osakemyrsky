@@ -5,29 +5,34 @@ export type ButtonPriority = "primary" | "secondary";
 
 export type ButtonVariant = "default" | "text";
 
-export interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
+export type ButtonProps = {
   priority?: ButtonPriority;
   variant?: ButtonVariant;
-  type?: "button" | "submit";
   icon?: JSX.Element;
-  form?: string;
-}
+} & (React.ButtonHTMLAttributes<HTMLButtonElement> | React.AnchorHTMLAttributes<HTMLAnchorElement>);
 
-const Button = ({
-  children,
-  priority = "primary",
-  variant = "default",
-  disabled = false,
-  type = "button",
-  icon,
-  ...props
-}: ButtonProps) => {
+const isButtonProps = (props: ButtonProps): props is React.ButtonHTMLAttributes<HTMLButtonElement> => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-explicit-any
+  return (props as any).href == null;
+};
+
+const Button = ({ children, priority = "primary", variant = "default", icon, ...props }: ButtonProps) => {
+  let Tag: "a" | "button";
+  let disabled = false;
+
+  if (isButtonProps(props)) {
+    Tag = "button";
+    disabled = props.disabled ?? false;
+  } else {
+    Tag = "a";
+  }
+
   return (
-    <button
-      {...{ type, ...props }}
+    <Tag
+      {...(props as React.HtmlHTMLAttributes<unknown>)}
       className={classNames(
         props.className,
-        "flex items-center py-4 px-6  font-bold whitespace-nowrap",
+        "flex items-center py-4 px-6 font-bold whitespace-nowrap",
         "border-1 rounded-lg border-transparent transition-colors focus:ring-2 focus:ring-blue-200",
         {
           "pl-4": icon != null,
@@ -51,7 +56,7 @@ const Button = ({
         </span>
       )}
       {children}
-    </button>
+    </Tag>
   );
 };
 

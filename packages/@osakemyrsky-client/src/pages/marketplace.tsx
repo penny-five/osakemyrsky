@@ -71,7 +71,7 @@ const MyPortfolio = () => {
       />
       <div className="px-10 pb-8">
         <Panel title="Hae osakkeita">
-          <div className="grid grid-cols-[400px,1px,1fr] gap-8 min-h-[800px]">
+          <div className="grid grid-cols-[400px,1px,1fr] gap-8 min-h-[800px] w-full">
             <div>
               <StockFinder onSelect={stock => setSelectedStock(stock)} />
             </div>

@@ -20,12 +20,12 @@ export interface OrderBuilderInput {
 
 export interface OrderBuilderProps {
   stock: Stock;
-  onSubmit: (order: OrderBuilderInput) => void;
+  onSubmit: (order: OrderBuilderInput) => Promise<void>;
 }
 
 const OrderBuilder = ({ stock, onSubmit }: OrderBuilderProps) => {
-  const onSubmitBuyOrder = (order: SubmitBuyOrderInput) => {
-    onSubmit({
+  const onSubmitBuyOrder = async (order: SubmitBuyOrderInput) => {
+    await onSubmit({
       symbol: stock.symbol,
       priceCents: order.price * 100,
       count: order.count,
@@ -34,8 +34,8 @@ const OrderBuilder = ({ stock, onSubmit }: OrderBuilderProps) => {
     });
   };
 
-  const onSubmitSellOrder = (order: SubmitSellOrderInput) => {
-    onSubmit({
+  const onSubmitSellOrder = async (order: SubmitSellOrderInput) => {
+    await onSubmit({
       symbol: stock.symbol,
       priceCents: order.price * 100,
       count: order.count,

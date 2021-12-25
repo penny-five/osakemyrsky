@@ -1,5 +1,8 @@
 import { DownloadIcon } from "@heroicons/react/solid";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+
+import OrderSubmittedMessage from "./order-submitted-message";
 
 import Button from "@/atoms/button";
 import DateInput from "@/components/forms/date-input";
@@ -9,6 +12,7 @@ import { Stock } from "@/types/stock";
 import { currentISODay } from "@/utils/dates";
 
 export interface SubmitBuyOrderInput {
+  stock: Stock;
   count: number;
   price: number;
   expirationDate: string;
@@ -16,17 +20,23 @@ export interface SubmitBuyOrderInput {
 
 export interface BuyStocksFormProps {
   stock: Stock;
-  onSubmit: (order: SubmitBuyOrderInput) => void;
+  onSubmit: (order: SubmitBuyOrderInput) => Promise<void>;
 }
 
 const BuyStocksForm = ({ stock, onSubmit }: BuyStocksFormProps) => {
+  const [submittedOrder, setSubmittedOrder] = useState<SubmitBuyOrderInput | null>(null);
+
+  if (submittedOrder != null && submittedOrder.stock.symbol != stock.symbol) {
+    setSubmittedOrder(null);
+  }
+
   const {
     register,
     handleSubmit,
     getValues,
     watch,
     formState: { errors }
-  } = useForm<SubmitBuyOrderInput>({
+  } = useForm<Omit<SubmitBuyOrderInput, "stock">>({
     defaultValues: {
       count: 1,
       price: stock.priceCents != null ? stock.priceCents / 100 : 1,
@@ -36,6 +46,24 @@ const BuyStocksForm = ({ stock, onSubmit }: BuyStocksFormProps) => {
 
   watch("count");
   watch("price");
+
+  const onSubmitWrapper = async (order: Omit<SubmitBuyOrderInput, "stock">) => {
+    await onSubmit({ ...order, stock });
+    setSubmittedOrder({ ...order, stock });
+  };
+
+  if (submittedOrder != null) {
+    return (
+      <div className="py-4">
+        <OrderSubmittedMessage
+          message="Ostotoimeksianto lähetetty"
+          count={submittedOrder.count}
+          priceCents={submittedOrder.price}
+          expirationDate={submittedOrder.expirationDate}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="grid grid-cols-[5fr,4fr] gap-8 py-6">
@@ -47,8 +75,7 @@ const BuyStocksForm = ({ stock, onSubmit }: BuyStocksFormProps) => {
         </p>
         <p>Näet kaikki osto- ja myyntitoimeksiantosi omasta salkustasi.</p>
       </div>
-
-      <form id="buyStocks" className="flex flex-col items-stretch" onSubmit={handleSubmit(onSubmit)}>
+      <form id="buyStocks" className="flex flex-col items-stretch" onSubmit={handleSubmit(onSubmitWrapper)}>
         <FormInput
           id="expirationDate"
           label="Voimassa"
