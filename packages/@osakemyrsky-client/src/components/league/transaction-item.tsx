@@ -18,14 +18,14 @@ const TransactionItem = ({ transaction, isUser }: TransactionItemProps) => {
         {formatTimestamp(transaction.createdAt)}
       </time>
       <div className="flex flex-row py-3 px-8 basis-0">
-        <div className="flex flex-row items-center gap-4 grow basis-1">
+        <div className="flex flex-row items-center gap-4 grow basis-1 shrink-0">
           <Avatar url={transaction.member.picture} hightlight={isUser} />
           <div className="flex flex-col">
             <span className="text-lg font-bold leading-snug">{transaction.member.companyName}</span>
             <span className="text-sm font-medium text-gray-500 leading-snug">{transaction.member.name}</span>
           </div>
         </div>
-        <div className="flex flex-row">
+        <div className="flex flex-row shrink-0">
           <div className="flex flex-col items-center gap-1">
             {transaction.type === TransactionType.BUY ? (
               <span className="text-green-200">
@@ -52,9 +52,9 @@ const TransactionItem = ({ transaction, isUser }: TransactionItemProps) => {
             </span>
           </div>
         </div>
-        <div className="flex flex-col text-right grow basis-1">
+        <div className="flex flex-col text-right grow basis-1 shrink truncate">
           <div className="flex flex-row items-center justify-end gap-2">
-            <span className="text-lg font-bold leading-snug">{transaction.stock.name}</span>
+            <span className="text-lg font-bold leading-snug truncate">{transaction.stock.name}</span>
             <CountryFlag size="sm" countryCode={transaction.stock.exchangeCountry} />
           </div>
           <span className="text-sm font-medium text-gray-500 leading-snug">{transaction.stock.symbol}</span>
