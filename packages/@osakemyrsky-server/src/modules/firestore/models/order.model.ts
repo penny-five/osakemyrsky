@@ -1,5 +1,7 @@
 import { DocumentData, FirestoreDataConverter, Timestamp } from "@google-cloud/firestore";
 
+import { formatISODate } from "../../../utils/dates";
+
 import { BaseModel } from "./base";
 
 export enum OrderType {
@@ -68,7 +70,7 @@ export const orderConverter: FirestoreDataConverter<Order> = {
     order.stockCount = data.stockCount as number;
     order.type = data.type as OrderType;
     order.status = data.status as OrderStatus;
-    order.expirationDate = (data.expirationDate as Timestamp).toDate().toISOString();
+    order.expirationDate = formatISODate((data.expirationDate as Timestamp).toDate());
 
     return order;
   },

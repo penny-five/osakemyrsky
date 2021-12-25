@@ -3,6 +3,13 @@ export enum OrderType {
   SELL = "SELL"
 }
 
+export enum OrderStatus {
+  PENDING = "PENDING",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
+  EXPIRED = "EXPIRED"
+}
+
 export interface Order {
   id: string;
   createdAt: string;
@@ -23,4 +30,5 @@ export interface Order {
   stockCount: number;
   expirationDate: string;
   type: OrderType;
+  status: OrderStatus;
 }

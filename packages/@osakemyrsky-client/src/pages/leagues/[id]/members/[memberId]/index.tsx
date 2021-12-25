@@ -33,6 +33,7 @@ const GET_MEMBER = gql`
       stocks {
         symbol
         name
+        exchangeCountry
         count
       }
 
@@ -40,8 +41,14 @@ const GET_MEMBER = gql`
         stock {
           symbol
           name
+          exchangeCountry
         }
+        stockPriceCents
+        stockPriceString
+        stockCount
+        expirationDate
         type
+        status
       }
     }
   }

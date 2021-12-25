@@ -104,10 +104,14 @@ export class TransactionService {
             exchangeCountry: transactions[0].stock.exchangeCountry
           },
           count: transactions.reduce((total, transaction) => {
-            return total + (transaction.type === TransactionType.BUY ? transaction.count : -transaction.count);
+            if (transaction.type === TransactionType.BUY) {
+              return total + transaction.count;
+            }
+
+            return total - transaction.count;
           }, 0)
         };
       })
-      .filter(snapshot => snapshot.count <= 0);
+      .filter(snapshot => snapshot.count > 0);
   }
 }

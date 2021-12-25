@@ -23,5 +23,6 @@ export class MemberStockDto {
     dto.symbol = snapshot.stock.symbol;
     dto.exchangeCountry = snapshot.stock.exchangeCountry;
     dto.count = snapshot.count;
+    return dto;
   }
 }
