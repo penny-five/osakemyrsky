@@ -11,7 +11,7 @@ const MemberList = ({ members }: MemberListProps) => {
   const { user } = useUser();
 
   return (
-    <ul className="flex flex-col w-full items-stretch">
+    <ul className="flex flex-col w-full items-stretch gap-4">
       {members.map(member => (
         <MemberItem key={member.id} member={member} isUser={user?.id === member.userId} />
       ))}
