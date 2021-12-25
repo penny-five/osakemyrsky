@@ -19,6 +19,10 @@ export const ActiveMembershipProvider = ({ children }: PropsWithChildren<unknown
 
   if (user != null && activeLeague != null) {
     activeMembership = user.memberships.find(membership => membership.leagueId === activeLeague) ?? null;
+
+    if (activeMembership == null) {
+      activeMembership = user.memberships.at(0) ?? null;
+    }
   }
 
   return <ActiveMembershipContext.Provider value={{ activeMembership }}>{children}</ActiveMembershipContext.Provider>;
