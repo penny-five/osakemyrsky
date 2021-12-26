@@ -5,6 +5,7 @@ import { v4 as uuid } from "uuid";
 import { compareDesc } from "../../utils/dates";
 import { Order } from "../firestore/models/order.model";
 import { Transaction, transactionConverter, TransactionType } from "../firestore/models/transaction.model";
+import { StockService } from "../stocks/stock.service";
 
 export interface CommitTransactionParams {
   order: Order;
@@ -17,6 +18,7 @@ export interface MemberStockSnapshot {
     symbol: string;
     name: string;
     exchangeCountry: string;
+    priceCents: number;
   };
   count: number;
 }
@@ -25,7 +27,7 @@ export interface MemberStockSnapshot {
 export class TransactionService {
   private readonly logger = new Logger(TransactionService.name);
 
-  constructor(private readonly firestore: Firestore) {}
+  constructor(private readonly firestore: Firestore, private readonly stockService: StockService) {}
 
   async getMemberTransactions(leagueId: string, memberId: string) {
     const res = await this.firestore
@@ -95,7 +97,7 @@ export class TransactionService {
       return acc;
     }, {} as Record<string, Transaction[]>);
 
-    return Object.entries(transactionsBySymbol)
+    const ownedStocks = Object.entries(transactionsBySymbol)
       .map(([symbol, transactions]) => {
         return {
           stock: {
@@ -113,5 +115,16 @@ export class TransactionService {
         };
       })
       .filter(snapshot => snapshot.count > 0);
+
+    const ownedStocksWithPrices = await Promise.all(
+      ownedStocks.map(async ({ stock, count }) => {
+        const instrument = await this.stockService.findStockBySymbol(stock.symbol);
+        return { stock: { ...stock, priceCents: instrument?.priceCents ?? 0 }, count };
+      })
+    );
+
+    return ownedStocksWithPrices.sort((first, second) => {
+      return second.count * second.stock.priceCents - first.count * first.stock.priceCents;
+    });
   }
 }

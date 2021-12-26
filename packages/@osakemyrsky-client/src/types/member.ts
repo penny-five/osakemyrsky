@@ -1,3 +1,4 @@
+import { MemberStock } from "./member-stock";
 import { Order } from "./order";
 
 export interface Member {
@@ -17,4 +18,5 @@ export interface Member {
   balanceCents: number;
   balanceUpdatedAt: string;
   orders: Order[];
+  stocks: MemberStock[];
 }

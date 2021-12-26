@@ -36,7 +36,7 @@ const OrderItem = ({ order }: OrderItemProps) => {
             <span className="text-lg font-bold leading-snug truncate">{order.stock.name}</span>
             <CountryFlag size="sm" countryCode={order.stock.exchangeCountry} />
           </div>
-          <span className="text-sm font-medium text-gray-500 leading-snug">{order.stock.symbol}</span>
+          <span className="text-xs font-medium text-gray-500 leading-snug">{order.stock.symbol}</span>
         </div>
       </div>
       <div className="flex flex-row py-3 px-4 basis-0">
