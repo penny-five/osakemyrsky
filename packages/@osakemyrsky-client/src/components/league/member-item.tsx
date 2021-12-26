@@ -6,18 +6,22 @@ import { Member } from "@/types/member";
 import { formatCents } from "@/utils/currency";
 
 export interface MemberItemProps {
-  leagueId: string;
   member: Member;
   isUser: boolean;
 }
 
-const MemberItem = ({ leagueId, member, isUser }: MemberItemProps) => {
+const MemberItem = ({ member, isUser }: MemberItemProps) => {
   return (
     <li className="flex items-center py-4 px-5 gap-4 bg-gray-200 rounded-xl cursor-pointer hover:bg-gray-300">
       <Avatar url={member.user.picture} hightlight={isUser} />
       <div className="grow flex flex-col truncate">
         <span className="font-bold text-lg leading-snug truncate">
-          <Link href={{ pathname: "/leagues/[id]/members/[memberId]", query: { id: leagueId, memberId: member.id } }}>
+          <Link
+            href={{
+              pathname: "/leagues/[id]/members/[memberId]",
+              query: { id: member.league.id, memberId: member.id }
+            }}
+          >
             {member.companyName}
           </Link>
         </span>

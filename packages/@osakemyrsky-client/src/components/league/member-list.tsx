@@ -8,13 +8,13 @@ export interface MemberListProps {
   members: Member[];
 }
 
-const MemberList = ({ leagueId, members }: MemberListProps) => {
+const MemberList = ({ members }: MemberListProps) => {
   const { user } = useUser();
 
   return (
     <ul className="flex flex-col w-full items-stretch gap-4">
       {members.map(member => (
-        <MemberItem key={member.id} leagueId={leagueId} member={member} isUser={user?.id === member.user.id} />
+        <MemberItem key={member.id} member={member} isUser={user?.id === member.user.id} />
       ))}
     </ul>
   );

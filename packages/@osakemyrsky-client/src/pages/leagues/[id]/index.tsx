@@ -7,7 +7,7 @@ import Panel from "@/atoms/panel";
 import PanelColumn from "@/atoms/panel-column";
 import LeagueStatusBadge from "@/components/league-status-badge";
 import MemberList from "@/components/league/member-list";
-import TransactionList from "@/components/league/transaction.list";
+import TransactionList from "@/components/league/transaction-list";
 import PageHeader from "@/components/page-header";
 import { useSession } from "@/providers/session";
 import { useUser } from "@/providers/user";
@@ -28,8 +28,12 @@ const GET_LEAGUE = gql`
       members {
         id
         user {
+          id
           name
           picture
+        }
+        league {
+          id
         }
         companyName
         balanceCents

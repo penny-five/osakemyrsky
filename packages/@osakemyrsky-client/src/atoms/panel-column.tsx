@@ -18,7 +18,7 @@ const PanelColumn = ({ children, title }: PanelProps) => {
       )}
     >
       {title != null && (
-        <div className="flex mb-4">
+        <div className="flex mb-6">
           <Heading level={3}>{title}</Heading>
         </div>
       )}

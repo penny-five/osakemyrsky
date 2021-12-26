@@ -24,6 +24,7 @@ export interface Order {
   stock: {
     name: string;
     symbol: string;
+    exchangeCountry: string;
   };
   stockPriceCents: number;
   stockPriceString: string;

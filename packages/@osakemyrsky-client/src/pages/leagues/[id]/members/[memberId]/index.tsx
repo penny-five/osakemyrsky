@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 
 import Panel from "@/atoms/panel";
+import OrderList from "@/components/member/order-list";
 import PageHeader from "@/components/page-header";
 import { useSession } from "@/providers/session";
 import { useUser } from "@/providers/user";
@@ -38,11 +39,20 @@ const GET_MEMBER = gql`
       }
 
       orders {
+        id
+        createdAt
+        updatedAt
+
         stock {
           symbol
           name
           exchangeCountry
         }
+
+        member {
+          picture
+        }
+
         stockPriceCents
         stockPriceString
         stockCount
@@ -100,7 +110,9 @@ const LeagueMember = () => {
       <div className="flex flex-col gap-10 px-10 pb-8">
         <Panel title="Salkun kehitys"></Panel>
         <Panel title="Omistukset"></Panel>
-        <Panel title="Toimeksiannot"></Panel>
+        <Panel title="Toimeksiannot">
+          <OrderList orders={data.member.orders} />
+        </Panel>
       </div>
     </div>
   );

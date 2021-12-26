@@ -28,14 +28,9 @@ const TransactionItem = ({ transaction, isUser }: TransactionItemProps) => {
         <div className="flex flex-row shrink-0">
           <div className="flex flex-col items-center gap-1">
             {transaction.type === TransactionType.BUY ? (
-              <span className="text-green-200">
-                {" "}
-                <ArrowLeftIcon width={30} />
-              </span>
+              <ArrowLeftIcon width={30} className="text-green-200" />
             ) : (
-              <span className="text-blue-200">
-                <ArrowRightIcon width={30} />
-              </span>
+              <ArrowRightIcon width={30} className="text-blue-200" />
             )}
             <span className="text-xs font-bold uppercase text-center w-[50px]">
               {transaction.type === TransactionType.BUY ? "osto" : "myynti"}

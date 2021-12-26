@@ -1,3 +1,5 @@
+import { Order } from "./order";
+
 export interface Member {
   id: string;
   createdAt: string;
@@ -14,4 +16,5 @@ export interface Member {
   companyName: string;
   balanceCents: number;
   balanceUpdatedAt: string;
+  orders: Order[];
 }

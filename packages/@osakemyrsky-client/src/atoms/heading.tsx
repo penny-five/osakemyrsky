@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import React from "react";
 
-export type HeadingLevel = 1 | 2 | 3;
+export type HeadingLevel = 1 | 2 | 3 | 4;
 
 export interface HeadingProps extends React.HTMLProps<HTMLHeadingElement> {
   children?: React.ReactNode;
@@ -19,7 +19,8 @@ const Heading = ({ children, className, level = 1, ...props }: HeadingProps) => 
       className={classNames(className, {
         "text-4xl font-bold text-black-100": level === 1,
         "text-6xl font-bold text-black-100": level === 2,
-        "text-xl font-extrabold text-black-100": level === 3
+        "text-xl font-extrabold text-black-100": level === 3,
+        "text-lg font-extrabold text-black-100 my-4 leading-normal": level === 4
       })}
     >
       {children}
