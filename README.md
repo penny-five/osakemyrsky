@@ -1,9 +1,5 @@
 # Osakemyrsky
 
-![verify workflow](https://github.com/penny-five/osakemyrsky/actions/workflows/verify.yml/badge.svg)
-
-<br>
-
 <div align="center">
   <img height="40" width="50" src="https://cdn.svgporn.com/logos/typescript-icon.svg"/>
   <img height="40" width="50" src="https://cdn.svgporn.com/logos/nextjs-icon.svg"/>
@@ -16,6 +12,8 @@
 </div>
 
 <br>
+
+![verify workflow](https://github.com/penny-five/osakemyrsky/actions/workflows/verify.yml/badge.svg)
 
 Browser based game where players compete in the stock market. Uses actual stock price data.
 
