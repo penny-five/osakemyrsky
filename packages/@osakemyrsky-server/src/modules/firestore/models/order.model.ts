@@ -1,4 +1,4 @@
-import { DocumentData, FirestoreDataConverter, Timestamp } from "@google-cloud/firestore";
+import { FirestoreDataConverter, Timestamp } from "@google-cloud/firestore";
 
 import { formatISODate } from "../../../utils/dates";
 
@@ -16,22 +16,32 @@ export enum OrderStatus {
   EXPIRED = "EXPIRED"
 }
 
+export class OrderMember {
+  id!: string;
+
+  userId!: string;
+
+  name!: string;
+
+  picture!: string | null;
+
+  companyName!: string;
+}
+
+export class OrderStock {
+  name!: string;
+
+  symbol!: string;
+
+  exchangeCountry!: string;
+}
+
 export class Order extends BaseModel {
   leagueId!: string;
 
-  member!: {
-    id: string;
-    userId: string;
-    name: string;
-    picture: string | null;
-    companyName: string;
-  };
+  member!: OrderMember;
 
-  stock!: {
-    name: string;
-    symbol: string;
-    exchangeCountry: string;
-  };
+  stock!: OrderStock;
 
   stockPriceCents!: number;
 
@@ -54,18 +64,8 @@ export const orderConverter: FirestoreDataConverter<Order> = {
     order.createdAt = snapshot.createTime.toDate().toISOString();
     order.updatedAt = snapshot.updateTime.toDate().toISOString();
     order.leagueId = data.leagueId as string;
-    order.member = {
-      id: (data.member as DocumentData).id as string,
-      userId: (data.member as DocumentData).userId as string,
-      name: (data.member as DocumentData).name as string,
-      picture: (data.member as DocumentData).picture as string,
-      companyName: (data.member as DocumentData).companyName as string
-    };
-    order.stock = {
-      name: (data.stock as DocumentData).name as string,
-      symbol: (data.stock as DocumentData).symbol as string,
-      exchangeCountry: (data.stock as DocumentData).exchangeCountry as string
-    };
+    order.member = data.member as OrderMember;
+    order.stock = data.stock as OrderStock;
     order.stockPriceCents = data.stockPriceCents as number;
     order.stockCount = data.stockCount as number;
     order.type = data.type as OrderType;
@@ -75,7 +75,7 @@ export const orderConverter: FirestoreDataConverter<Order> = {
     return order;
   },
 
-  toFirestore: function (order: Order): DocumentData {
+  toFirestore: function (order: Order) {
     return {
       id: order.id,
       leagueId: order.leagueId,

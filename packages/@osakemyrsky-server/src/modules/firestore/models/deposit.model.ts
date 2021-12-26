@@ -1,4 +1,4 @@
-import { DocumentData, FirestoreDataConverter } from "@google-cloud/firestore";
+import { FirestoreDataConverter } from "@google-cloud/firestore";
 
 import { BaseModel } from "./base";
 
@@ -20,7 +20,7 @@ export const depositConverter: FirestoreDataConverter<Deposit> = {
     return deposit;
   },
 
-  toFirestore: function (deposit: Deposit): DocumentData {
+  toFirestore: function (deposit: Deposit) {
     return {
       valueCents: deposit.valueCents
     };

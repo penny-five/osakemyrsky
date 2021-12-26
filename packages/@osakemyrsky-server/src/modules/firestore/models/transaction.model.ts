@@ -1,4 +1,4 @@
-import { DocumentData, FirestoreDataConverter } from "@google-cloud/firestore";
+import { FirestoreDataConverter } from "@google-cloud/firestore";
 
 import { BaseModel } from "./base";
 
@@ -7,22 +7,32 @@ export enum TransactionType {
   SELL = "SELL"
 }
 
+export class TransactionMember {
+  id!: string;
+
+  userId!: string;
+
+  name!: string;
+
+  picture!: string | null;
+
+  companyName!: string;
+}
+
+export class TransactionStock {
+  name!: string;
+
+  symbol!: string;
+
+  exchangeCountry!: string;
+}
+
 export class Transaction extends BaseModel {
   leagueId!: string;
 
-  member!: {
-    id: string;
-    userId: string;
-    name: string;
-    picture: string | null;
-    companyName: string;
-  };
+  member!: TransactionMember;
 
-  stock!: {
-    name: string;
-    symbol: string;
-    exchangeCountry: string;
-  };
+  stock!: TransactionStock;
 
   type!: TransactionType;
 
@@ -41,18 +51,8 @@ export const transactionConverter: FirestoreDataConverter<Transaction> = {
     transaction.createdAt = snapshot.createTime.toDate().toISOString();
     transaction.updatedAt = snapshot.updateTime.toDate().toISOString();
     transaction.leagueId = data.leagueId as string;
-    transaction.member = {
-      id: (data.member as DocumentData).id as string,
-      userId: (data.member as DocumentData).userId as string,
-      name: (data.member as DocumentData).name as string,
-      picture: (data.member as DocumentData).picture as string,
-      companyName: (data.member as DocumentData).companyName as string
-    };
-    transaction.stock = {
-      name: (data.stock as DocumentData).name as string,
-      symbol: (data.stock as DocumentData).symbol as string,
-      exchangeCountry: (data.stock as DocumentData).exchangeCountry as string
-    };
+    transaction.member = data.member as TransactionMember;
+    transaction.stock = data.stock as TransactionStock;
     transaction.type = data.type as TransactionType;
     transaction.count = data.count as number;
     transaction.unitPriceCents = data.unitPriceCents as number;
@@ -60,7 +60,7 @@ export const transactionConverter: FirestoreDataConverter<Transaction> = {
     return transaction;
   },
 
-  toFirestore: function (transaction: Transaction): DocumentData {
+  toFirestore: function (transaction: Transaction) {
     return {
       leagueId: transaction.leagueId,
       member: {

@@ -1,18 +1,25 @@
-import { DocumentData, FirestoreDataConverter } from "@google-cloud/firestore";
+import { FirestoreDataConverter } from "@google-cloud/firestore";
 
 import { BaseModel } from "./base";
 
-export class Member extends BaseModel {
-  league!: {
-    id: string;
-    name: string;
-  };
+export class MemberLeague {
+  id!: string;
 
-  user!: {
-    id: string;
-    name: string;
-    picture: string | null;
-  };
+  name!: string;
+}
+
+export class MemberUser {
+  id!: string;
+
+  name!: string;
+
+  picture!: string | null;
+}
+
+export class Member extends BaseModel {
+  league!: MemberLeague;
+
+  user!: MemberUser;
 
   companyName!: string;
 
@@ -30,15 +37,8 @@ export const memberConverter: FirestoreDataConverter<Member> = {
     member.id = (data.id as string) || snapshot.id;
     member.createdAt = snapshot.createTime.toDate().toISOString();
     member.updatedAt = snapshot.updateTime.toDate().toISOString();
-    member.league = {
-      id: (data.league as DocumentData).id as string,
-      name: (data.league as DocumentData).name as string
-    };
-    member.user = {
-      id: (data.user as DocumentData).id as string,
-      name: (data.user as DocumentData).name as string,
-      picture: (data.user as DocumentData).picture as string
-    };
+    member.league = data.league as MemberLeague;
+    member.user = data.user as MemberUser;
     member.companyName = data.companyName as string;
     member.balanceCents = data.balanceCents as number;
     member.balanceUpdatedAt = data.balanceUpdatedAt as string;
@@ -46,7 +46,7 @@ export const memberConverter: FirestoreDataConverter<Member> = {
     return member;
   },
 
-  toFirestore: function (member: Member): DocumentData {
+  toFirestore: function (member: Member) {
     return {
       id: member.id,
       league: {

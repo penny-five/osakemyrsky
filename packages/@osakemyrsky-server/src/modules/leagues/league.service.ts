@@ -9,7 +9,7 @@ import { isAfter, isSameDay } from "../../utils/dates";
 import { GameConfig } from "../config/files/game";
 import { DepositService } from "../deposits/deposit.service";
 import { Deposit } from "../firestore/models/deposit.model";
-import { League, leagueConverter, LeagueStatus } from "../firestore/models/league.model";
+import { League, leagueConverter } from "../firestore/models/league.model";
 import { Member, memberConverter } from "../firestore/models/member.model";
 import { membershipConverter } from "../firestore/models/membership.model";
 import { Transaction, TransactionType } from "../firestore/models/transaction.model";
@@ -111,7 +111,6 @@ export class LeagueService {
       name: params.name,
       startDate: params.startDate,
       endDate: params.endDate,
-      status: LeagueStatus.UNKNOWN,
       creator: {
         id: user.id!,
         name: user.name,

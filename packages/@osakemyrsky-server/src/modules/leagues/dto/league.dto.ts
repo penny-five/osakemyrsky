@@ -1,9 +1,26 @@
 import { Field, ObjectType, registerEnumType } from "@nestjs/graphql";
 import { GraphQLDate, GraphQLDateTime, GraphQLUUID } from "graphql-scalars";
 
-import { League, LeagueStatus } from "../../firestore/models/league.model";
+import { isAfter, isBefore, isSameDay } from "../../../utils/dates";
+import { League } from "../../firestore/models/league.model";
+
+enum LeagueStatus {
+  STARTING = "STARTING",
+  ONGOING = "ONGOING",
+  ENDED = "ENDED"
+}
 
 registerEnumType(LeagueStatus, { name: "LeagueStatus" });
+
+const resolveLeagueStatus = (startDate: string, endDate: string, now = new Date()) => {
+  if (!isSameDay(now, startDate) && isBefore(now, startDate)) {
+    return LeagueStatus.STARTING;
+  }
+  if (!isSameDay(now, endDate) && isAfter(now, endDate)) {
+    return LeagueStatus.ENDED;
+  }
+  return LeagueStatus.ONGOING;
+};
 
 @ObjectType("LeagueCreator")
 export class LeagueCreatorDto {
@@ -51,7 +68,7 @@ export class LeagueDto {
     dto.name = model.name;
     dto.startDate = model.startDate;
     dto.endDate = model.endDate;
-    dto.status = model.status;
+    dto.status = resolveLeagueStatus(model.startDate, model.endDate);
     dto.creator = new LeagueCreatorDto();
     dto.creator.id = model.creator.id;
     dto.creator.name = model.creator.name;

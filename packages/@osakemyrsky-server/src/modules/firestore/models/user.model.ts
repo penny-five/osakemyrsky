@@ -1,4 +1,4 @@
-import { DocumentData, FirestoreDataConverter } from "@google-cloud/firestore";
+import { FirestoreDataConverter } from "@google-cloud/firestore";
 import { ObjectType } from "@nestjs/graphql";
 
 import { BaseModel } from "./base";
@@ -31,7 +31,7 @@ export const userConverter: FirestoreDataConverter<User> = {
     return user;
   },
 
-  toFirestore: function (user: User): DocumentData {
+  toFirestore: function (user: User) {
     return {
       sub: user.sub,
       name: user.name,
