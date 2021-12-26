@@ -11,6 +11,10 @@ export class GoogleServiceAccountAuthGuard extends AuthGuard("google-service-acc
       throw new UnauthorizedException({ message: "Invalid authentication token" });
     }
 
+    if (!payload) {
+      throw new UnauthorizedException({ message: "Invalid authentication token" });
+    }
+
     return payload;
   }
 }

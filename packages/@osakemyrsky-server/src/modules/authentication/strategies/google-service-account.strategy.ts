@@ -15,7 +15,7 @@ export class GoogleServiceAccountStrategy extends PassportStrategy(JwtStrategy, 
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ignoreExpiration: false,
+      ignoreExpiration: process.env.NODE_ENV === "development",
       issuer: "https://accounts.google.com",
       secretOrKeyProvider: passportJwtSecret({
         cache: true,
