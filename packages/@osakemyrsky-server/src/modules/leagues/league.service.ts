@@ -5,7 +5,7 @@ import { v4 as uuid } from "uuid";
 
 import { Editor } from "../../common/editor";
 import { DocumentNotFoundError, LeagueInactiveError } from "../../common/errors";
-import { isAfter, isSameDay } from "../../utils/dates";
+import { formatISODate, isAfter, isSameDay, isSameDayOrAfter } from "../../utils/dates";
 import { GameConfig } from "../config/files/game";
 import { DepositService } from "../deposits/deposit.service";
 import { Deposit } from "../firestore/models/deposit.model";
@@ -37,6 +37,23 @@ export class LeagueService {
     return res.data();
   }
 
+  async findAllLeagues(orderBy = LeaguesOrderBy.NAME) {
+    const res = await this.firestore.collection("leagues").withConverter(leagueConverter).orderBy(orderBy).get();
+    return res.docs.map(doc => doc.data());
+  }
+
+  async findActiveLeagues() {
+    const now = new Date();
+
+    const res = await this.firestore
+      .collection("leagues")
+      .withConverter(leagueConverter)
+      .where("startDate", "<=", now)
+      .get();
+
+    return res.docs.map(doc => doc.data()).filter(league => isSameDayOrAfter(league.endDate, now));
+  }
+
   async findMemberById(leagueId: string, memberId: string) {
     const res = await this.firestore
       .collection("leagues")
@@ -61,11 +78,6 @@ export class LeagueService {
     return res.empty ? undefined : res.docs[0].data();
   }
 
-  async findAll(orderBy = LeaguesOrderBy.NAME) {
-    const res = await this.firestore.collection("leagues").withConverter(leagueConverter).orderBy(orderBy).get();
-    return res.docs.map(doc => doc.data());
-  }
-
   async findUserMemberships(id: string) {
     const res = await this.firestore
       .collection("users")
@@ -88,6 +100,13 @@ export class LeagueService {
     return res.docs.map(doc => doc.data());
   }
 
+  /**
+   * Creates a new league using the provided params.
+   *
+   * @param params League params
+   * @param editor Editor information
+   * @returns Created league document
+   */
   async createLeague(params: Pick<League, "name" | "startDate" | "endDate">, editor: Editor) {
     if (isAfter(params.startDate, params.endDate)) {
       throw new Error("League end date cannot be before league start date");
@@ -122,6 +141,14 @@ export class LeagueService {
     return res.data()!;
   }
 
+  /**
+   * Registers a new league member using the provided params.
+   *
+   * @param leagueId League ID
+   * @param userId User ID
+   * @param params Registration params
+   * @returns Created membership document
+   */
   async registerMember(leagueId: string, userId: string, params: Pick<Member, "companyName">) {
     const league = await this.findLeagueById(leagueId);
 
@@ -172,7 +199,8 @@ export class LeagueService {
           },
           companyName: params.companyName,
           balanceCents: 0,
-          balanceUpdatedAt: new Date().toISOString()
+          balanceUpdatedAt: new Date().toISOString(),
+          balanceHistory: {}
         })
         .create(membershipRef, {
           league: {
@@ -203,6 +231,15 @@ export class LeagueService {
     return this.computeDepositTotalValue(deposits) + this.computeTransactionTotalValue(transactions);
   }
 
+  /**
+   * Computes up-to-date balance for a single league member.
+   *
+   * Takes into account any deposits, transactions and the current value of all owned stocks.
+   *
+   * @param leagueId League ID
+   * @param memberId Member ID
+   * @returns Member balance in cents
+   */
   async computeMemberBalance(leagueId: string, memberId: string) {
     const deposits = await this.depositService.getMemberDeposits(leagueId, memberId);
     const transactions = await this.transactionService.getMemberTransactions(leagueId, memberId);
@@ -233,8 +270,18 @@ export class LeagueService {
     return totalMemberDepositValue + totalMemberTransactionValue + currentPortfolioValue;
   }
 
+  /**
+   * Computes updated balance for a single league member.
+   *
+   * Also adds/updates an daily entry in `balanceHistory` record.
+   *
+   * @param leagueId League ID
+   * @param memberId Member ID
+   */
   async refreshMemberBalance(leagueId: string, memberId: string) {
     const balanceCents = await this.computeMemberBalance(leagueId, memberId);
+
+    const now = new Date();
 
     await this.firestore
       .collection("leagues")
@@ -244,20 +291,42 @@ export class LeagueService {
       .withConverter(memberConverter)
       .update({
         balanceCents,
-        balanceUpdatedAt: new Date().toISOString()
+        balanceUpdatedAt: now.toISOString(),
+        [`balanceHistory.${formatISODate(now)}` as never]: balanceCents
       });
   }
 
-  async isLeagueOngoing(leagueId: string) {
+  /**
+   * Computes and saves updated balance for each league member.
+   *
+   * @param leagueId League ID
+   */
+  async refreshLeagueBalances(leagueId: string) {
+    const members = await this.findLeagueMembers(leagueId);
+
+    for (const member of members) {
+      await this.refreshMemberBalance(leagueId, member.id!);
+    }
+  }
+
+  /**
+   * Checks if a league is ongoing on the given date. League is ongoing if
+   * all of the following are true:
+   * - League start date is before or on the same day as the given date
+   * - League end date is after or on the same day as the given date.
+   *
+   * @param leagueId League ID
+   * @param date Date to compare to. Uses current date if not defined
+   * @returns Boolean value depending on if the league is ongoing or not on the given date
+   */
+  async isLeagueOngoing(leagueId: string, date: string | Date = new Date()) {
     const league = await this.findLeagueById(leagueId);
 
     if (league == null) {
       return false;
     }
 
-    const now = new Date();
-
-    return this.hasLeagueStartedOn(league, now) && !this.hasLeagueEndedOn(league, now);
+    return this.hasLeagueStartedOn(league, date) && !this.hasLeagueEndedOn(league, date);
   }
 
   private hasLeagueEndedOn(league: League, date: Date | string) {

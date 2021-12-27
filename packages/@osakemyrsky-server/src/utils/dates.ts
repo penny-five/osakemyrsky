@@ -15,14 +15,22 @@ export const isAfter = (date: string | Date, compareTo: string | Date) => {
   return dateFns.isAfter(parse(date), parse(compareTo));
 };
 
-export const isSameDay = (first: string | Date, second: string | Date) => {
-  return dateFns.isSameDay(parse(first), parse(second));
+export const isSameDay = (date: string | Date, compareTo: string | Date) => {
+  return dateFns.isSameDay(parse(date), parse(compareTo));
 };
 
-export const compareAsc = (first: string | Date, second: string | Date) => {
-  return dateFns.compareAsc(parse(first), parse(second));
+export const isSameDayOrBefore = (date: string | Date, compareTo: string | Date) => {
+  return dateFns.isBefore(parse(date), parse(compareTo)) || dateFns.isSameDay(parse(date), parse(compareTo));
 };
 
-export const compareDesc = (first: string | Date, second: string | Date) => {
-  return dateFns.compareDesc(parse(first), parse(second));
+export const isSameDayOrAfter = (date: string | Date, compareTo: string | Date) => {
+  return dateFns.isAfter(parse(date), parse(compareTo)) || dateFns.isSameDay(parse(date), parse(compareTo));
+};
+
+export const compareAsc = (date: string | Date, compareTo: string | Date) => {
+  return dateFns.compareAsc(parse(date), parse(compareTo));
+};
+
+export const compareDesc = (date: string | Date, compareTo: string | Date) => {
+  return dateFns.compareDesc(parse(date), parse(compareTo));
 };

@@ -33,7 +33,7 @@ export class LeagueResolver {
 
   @Query(() => [LeagueDto])
   async leagues(@Args() args: GetLeaguesArgs) {
-    const leagues = await this.leagueService.findAll(args.orderBy);
+    const leagues = await this.leagueService.findAllLeagues(args.orderBy);
     return leagues.map(league => LeagueDto.fromModel(league));
   }
 

@@ -127,15 +127,6 @@ export class OrderService {
   }
 
   async processOrders() {
-    const taskId = uuid();
-
-    this.logger.log(
-      {
-        taskId
-      },
-      "Start order processing"
-    );
-
     const { docs: ordersSnapshot } = await this.firestore
       .collectionGroup("orders")
       .withConverter(orderConverter)
@@ -215,13 +206,6 @@ export class OrderService {
           break;
       }
     }
-
-    this.logger.log(
-      {
-        taskId
-      },
-      "End order processing"
-    );
   }
 
   private async processBuyOrder(order: Order): Promise<OrderProcessingResult> {

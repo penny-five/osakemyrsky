@@ -1,7 +1,8 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import { GraphQLInt } from "graphql";
-import { GraphQLDateTime, GraphQLUUID } from "graphql-scalars";
+import { GraphQLDate, GraphQLDateTime, GraphQLUUID } from "graphql-scalars";
 
+import { compareDesc } from "../../../utils/dates";
 import { Member } from "../../firestore/models/member.model";
 
 @ObjectType("MemberLeague")
@@ -11,6 +12,15 @@ export class MemberLeagueDto {
 
   @Field({ nullable: false })
   name!: string;
+}
+
+@ObjectType("MemberBalanceHistoryEntry")
+export class MemberBalanceHistoryEntry {
+  @Field(() => GraphQLDate, { nullable: false })
+  date!: string;
+
+  @Field(() => GraphQLInt, { nullable: false })
+  value!: number;
 }
 
 @ObjectType("MemberUser")
@@ -51,6 +61,9 @@ export class MemberDto {
   @Field(() => GraphQLDateTime, { nullable: false })
   balanceUpdatedAt!: string;
 
+  @Field(() => [MemberBalanceHistoryEntry], { nullable: false })
+  balanceHistory!: { date: string; value: number }[];
+
   static fromModel(model: Member) {
     const dto = new MemberDto();
     dto.id = model.id!;
@@ -66,6 +79,12 @@ export class MemberDto {
     dto.companyName = model.companyName;
     dto.balanceCents = model.balanceCents;
     dto.balanceUpdatedAt = model.balanceUpdatedAt;
+    dto.balanceHistory = Object.entries(model.balanceHistory)
+      .map(([date, value]) => ({
+        date,
+        value
+      }))
+      .sort((first, second) => compareDesc(first.date, second.date));
     return dto;
   }
 }

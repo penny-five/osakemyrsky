@@ -16,6 +16,10 @@ export class MemberUser {
   picture!: string | null;
 }
 
+export interface MemberBalanceHistory {
+  [date: string]: number;
+}
+
 export class Member extends BaseModel {
   league!: MemberLeague;
 
@@ -26,6 +30,8 @@ export class Member extends BaseModel {
   balanceCents!: number;
 
   balanceUpdatedAt!: string;
+
+  balanceHistory!: MemberBalanceHistory;
 }
 
 export const memberConverter: FirestoreDataConverter<Member> = {
@@ -42,6 +48,7 @@ export const memberConverter: FirestoreDataConverter<Member> = {
     member.companyName = data.companyName as string;
     member.balanceCents = data.balanceCents as number;
     member.balanceUpdatedAt = data.balanceUpdatedAt as string;
+    member.balanceHistory = data.balanceHistory as MemberBalanceHistory;
 
     return member;
   },
@@ -60,7 +67,8 @@ export const memberConverter: FirestoreDataConverter<Member> = {
       },
       companyName: member.companyName,
       balanceCents: member.balanceCents,
-      balanceUpdatedAt: member.balanceUpdatedAt
+      balanceUpdatedAt: member.balanceUpdatedAt,
+      balanceHistory: member.balanceHistory
     };
   }
 };
