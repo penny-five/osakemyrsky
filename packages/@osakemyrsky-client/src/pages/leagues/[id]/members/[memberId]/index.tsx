@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 
 import Panel from "@/atoms/panel";
+import ValueHistoryChart from "@/components/charts/value-history-chart";
 import OrderList from "@/components/member/order-list";
 import StockList from "@/components/member/stock-list";
 import PageHeader from "@/components/page-header";
@@ -31,6 +32,10 @@ const GET_MEMBER = gql`
 
       balanceUpdatedAt
       balanceCents
+      balanceHistory {
+        date
+        value
+      }
 
       stocks {
         symbol
@@ -110,8 +115,12 @@ const LeagueMember = () => {
         }
       />
       <div className="flex flex-col gap-10 px-10 pb-8">
-        <Panel title="Salkun kehitys"></Panel>
-        <Panel title="Omistukset">
+        <Panel title="Salkun kehitys">
+          <div className="w-full">
+            <ValueHistoryChart height={400} series={[{ name: "Salkun arvo", values: data.member.balanceHistory }]} />
+          </div>
+        </Panel>
+        <Panel title="Osakkeet">
           <StockList stocks={data.member.stocks} />
         </Panel>
         <Panel title="Toimeksiannot">

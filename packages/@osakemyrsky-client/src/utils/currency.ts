@@ -1,15 +1,19 @@
+export interface FormatCurrencyOptions {
+  numFractionDigits: number;
+}
+
 export const formatCurrency = (
   value: number,
-  { numFractionsDigits = 2 }: { numFractionsDigits?: number } = { numFractionsDigits: 2 }
+  { numFractionDigits = 2 }: FormatCurrencyOptions = { numFractionDigits: 2 }
 ) => {
   return Intl.NumberFormat("fi-FI", {
     style: "currency",
     currency: "EUR",
-    minimumFractionDigits: numFractionsDigits,
-    maximumFractionDigits: numFractionsDigits
+    minimumFractionDigits: numFractionDigits,
+    maximumFractionDigits: numFractionDigits
   }).format(value);
 };
 
-export const formatCents = (cents: number | null) => {
-  return cents != null ? formatCurrency(cents / 100) : "- €";
+export const formatCents = (cents: number | null, options?: FormatCurrencyOptions) => {
+  return cents != null ? formatCurrency(cents / 100, options) : "- €";
 };
