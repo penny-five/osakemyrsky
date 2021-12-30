@@ -24,7 +24,7 @@ import { TokenService } from "./token.service";
       provide: TokenService,
       useFactory(configService: ConfigService) {
         const config = configService.get<ConfigType<typeof IronConfig>>("iron")!;
-        const service = new TokenService(config.secret);
+        const service = new TokenService(config.password);
         return service;
       },
       inject: [ConfigService]

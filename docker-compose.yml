@@ -32,7 +32,7 @@ services:
       PORT: 8080
       NODE_ENV: development
       # Used for encrypting session cookies in local environment. DON'T USE IN PRODUCTION.
-      IRON_SECRET: d33c95209c4f54cc970f187d614a5bb2d1420a7aad4ffd0946350a91a5078568
+      IRON_PASSWORD: d33c95209c4f54cc970f187d614a5bb2d1420a7aad4ffd0946350a91a5078568
       FIRESTORE_HOST_URL: firebase-emulator
       FIRESTORE_HOST_PORT: 4040
       AUTH_GOOGLE_CLIENT_REDIRECT_URL: http://localhost:8000/auth/redirect/google

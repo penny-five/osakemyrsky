@@ -2,7 +2,7 @@ declare namespace NodeJS {
   export interface ProcessEnv {
     PORT: string;
     NODE_ENV: "development" | "production";
-    IRON_SECRET: string;
+    IRON_PASSWORD: string;
     FIRESTORE_HOST_URL?: string;
     FIRESTORE_HOST_PORT?: string;
     AUTH_GOOGLE_CLIENT_ID: string;

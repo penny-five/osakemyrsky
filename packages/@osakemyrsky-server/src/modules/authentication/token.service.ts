@@ -10,13 +10,13 @@ export interface SessionToken {
  */
 @Injectable()
 export class TokenService {
-  constructor(private readonly secret: string) {}
+  constructor(private readonly password: string) {}
 
   async seal(token: SessionToken) {
-    return Iron.seal(token, this.secret, Iron.defaults);
+    return Iron.seal(token, this.password, Iron.defaults);
   }
 
   async unseal(sealedToken: string): Promise<SessionToken> {
-    return Iron.unseal(sealedToken, this.secret, Iron.defaults).then(token => token as SessionToken);
+    return Iron.unseal(sealedToken, this.password, Iron.defaults).then(token => token as SessionToken);
   }
 }
