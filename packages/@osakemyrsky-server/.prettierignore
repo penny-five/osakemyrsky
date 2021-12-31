@@ -3,5 +3,5 @@
 .prettierignore
 .dockerignore
 .env.template
-Dockerfile.*
+Dockerfile*
 yarn.lock

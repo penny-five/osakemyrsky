@@ -20,6 +20,6 @@ COPY yarn.lock .
 
 RUN yarn install --production && yarn cache clean
 
-COPY --from=builder /build/dist .
+COPY --from=builder /build/dist src
 
 CMD ["yarn", "start"]

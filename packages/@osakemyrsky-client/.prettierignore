@@ -4,7 +4,7 @@
 .prettierignore
 .dockerignore
 .env.template
-Dockerfile.*
+Dockerfile*
 *.ico
 *.svg
 yarn.lock
