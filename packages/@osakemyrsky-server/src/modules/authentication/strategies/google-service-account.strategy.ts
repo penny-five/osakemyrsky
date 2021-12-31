@@ -26,8 +26,8 @@ export class GoogleServiceAccountStrategy extends PassportStrategy(JwtStrategy, 
     } as JwtStrategyOptions);
   }
 
-  validate(payload: JwtPayload): JwtPayload {
-    if (payload.sub != null && this.config.authorizedServiceAccounts.includes(payload.sub)) {
+  validate(payload: JwtPayload & { email?: string }): JwtPayload {
+    if (payload.email != null && this.config.authorizedServiceAccounts.includes(payload.email)) {
       return payload;
     }
 
