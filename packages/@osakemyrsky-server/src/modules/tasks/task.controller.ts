@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from "@nestjs/common";
+import { Controller, Post, UseGuards } from "@nestjs/common";
 
 import { GoogleServiceAccountAuthGuard } from "../authentication/guards/google-service-account.jwt.guard";
 
@@ -9,12 +9,12 @@ import { TaskService } from "./task.service";
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
-  @Get("/process-orders")
+  @Post("/process-orders")
   async processOrders() {
     await this.taskService.processOrders();
   }
 
-  @Get("/update-balances")
+  @Post("/update-balances")
   async updateBalances() {
     await this.taskService.updateBalances();
   }
