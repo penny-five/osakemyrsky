@@ -8,6 +8,10 @@ const config = {
   swcMinify: true,
   rewrites: async () => [
     {
+      source: "/auth/:path*",
+      destination: `/api/auth/:path*`
+    },
+    {
       source: "/leagues",
       destination: "/league-browser"
     }
