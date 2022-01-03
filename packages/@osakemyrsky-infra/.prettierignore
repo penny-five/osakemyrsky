@@ -1,3 +1,5 @@
+cdktf.out/**
+.gen/**
 .gitignore
 .prettierignore
 .env.template
