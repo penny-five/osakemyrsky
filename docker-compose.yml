@@ -3,33 +3,33 @@
 version: "3.8"
 
 services:
-  client:
-    container_name: osakemyrsky-client
+  frontend:
+    container_name: osakemyrsky-frontend
     build:
-      context: ./packages/@osakemyrsky-client
+      context: ./packages/@osakemyrsky-frontend
       dockerfile: Dockerfile.dev
     restart: always
     environment:
       PORT: 8080
       NODE_ENV: development
-      API_URL: http://server:8080
+      API_URL: http://backend:8080
       GOOGLE_APPLICATION_CREDENTIALS: /tmp/keys/google-application-credentials.json
     ports:
       - 127.0.0.1:8000:8080
     volumes:
-      - "./packages/@osakemyrsky-client/public:/app/public"
-      - "./packages/@osakemyrsky-client/styles:/app/styles"
-      - "./packages/@osakemyrsky-client/src:/app/src"
-      - "./packages/@osakemyrsky-client/typings:/app/typings"
-      - "./packages/@osakemyrsky-client/tailwind.config.js:/app/tailwind.config.js"
-      - "./packages/@osakemyrsky-server/google-application-credentials.json:/tmp/keys/google-application-credentials.json"
+      - "./packages/@osakemyrsky-frontend/public:/app/public"
+      - "./packages/@osakemyrsky-frontend/styles:/app/styles"
+      - "./packages/@osakemyrsky-frontend/src:/app/src"
+      - "./packages/@osakemyrsky-frontend/typings:/app/typings"
+      - "./packages/@osakemyrsky-frontend/tailwind.config.js:/app/tailwind.config.js"
+      - "./packages/@osakemyrsky-frontend/google-application-credentials.json:/tmp/keys/google-application-credentials.json"
     depends_on:
-      - server
+      - backend
 
-  server:
-    container_name: osakemyrsky-server
+  backend:
+    container_name: osakemyrsky-backend
     build:
-      context: ./packages/@osakemyrsky-server
+      context: ./packages/@osakemyrsky-backend
       dockerfile: Dockerfile.dev
     restart: always
     environment:
@@ -42,13 +42,13 @@ services:
       AUTH_GOOGLE_CLIENT_REDIRECT_URL: http://localhost:8000/auth/redirect/google
       GOOGLE_APPLICATION_CREDENTIALS: /tmp/keys/google-application-credentials.json
     env_file:
-      - "./packages/@osakemyrsky-server/.env"
+      - "./packages/@osakemyrsky-backend/.env"
     ports:
       - 127.0.0.1:8020:8080
     volumes:
-      - "./packages/@osakemyrsky-server/src:/app/src"
-      - "./packages/@osakemyrsky-server/typings:/app/typings"
-      - "./packages/@osakemyrsky-server/google-application-credentials.json:/tmp/keys/google-application-credentials.json"
+      - "./packages/@osakemyrsky-backend/src:/app/src"
+      - "./packages/@osakemyrsky-backend/typings:/app/typings"
+      - "./packages/@osakemyrsky-backend/google-application-credentials.json:/tmp/keys/google-application-credentials.json"
     depends_on:
       - firebase-emulator
 

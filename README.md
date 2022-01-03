@@ -48,8 +48,8 @@ Once this is done, fill in the missing values to each `.env` file.
 
 | Service                     | Address          |
 | --------------------------- | ---------------- |
-| @osakemyrsky/client         | `127.0.0.1:8000` |
-| @osakemyrsky/server         | `127.0.0.1:8020` |
+| @osakemyrsky/frontend       | `127.0.0.1:8000` |
+| @osakemyrsky/backend        | `127.0.0.1:8020` |
 | Firebase emulator UI        | `127.0.0.1:4000` |
 | Firebase Firestore emulator | `127.0.0.1:4040` |
 
@@ -97,21 +97,21 @@ http POST localhost:8020/tasks/update-balances
 
 ## Cloud environments
 
-### Creating the ops environment
+### Creating the ops project
 
-Ops project is used for environment specific Terraform state buckets and for building & storing artifacts that are shared between environments.
+The ops project is used for environment specific Terraform state buckets and for building & storing artifacts that are shared between environments.
 
 Use the following steps to setup the ops project:
 
 1. Create a new project on Google Cloud Platform
 
-2. Set the project ID as environment variable:
+2. Set project ID as environment variable:
 
    ```sh
    export GCP_OPS_PROJECT_ID=my-ops-project
    ```
 
-3. Run the setup script to setup the ops project:
+3. Run setup script to setup the ops project:
 
    ```sh
    chmod +x ./scripts/setup-ops-project.sh
@@ -126,7 +126,7 @@ Use the following steps to setup the ops project:
 
 ### Creating a new environment
 
-Use the following steps to initiate a new cloud environment (e.g. `dev`, `prod`):
+Use the following steps to create a new cloud environment (e.g. `dev`, `prod`):
 
 1. Create a new project on Google Cloud Platform
 
@@ -142,7 +142,7 @@ Use the following steps to initiate a new cloud environment (e.g. `dev`, `prod`)
    export GCP_OPS_PROJECT_ID=my-ops-project
    ```
 
-4. Run the setup script to setup the new environment:
+4. Run setup script to setup the new environment:
 
    ```sh
    chmod +x ./scripts/setup-env.sh
@@ -173,8 +173,8 @@ Here I list various improvement ideas.
 
 ### Technical
 
-- Replace `class-validator` with `zod` (https://github.com/colinhacks/zod) on `@osakemyrsky-server`
-- Use ESM on `@osakemyrsky-server` (see https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c)
+- Replace `class-validator` with `zod` (https://github.com/colinhacks/zod) on `@osakemyrsky-backend`
+- Use ESM on `@osakemyrsky-backend` (see https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c)
 
 ## License
 

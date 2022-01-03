@@ -1,7 +1,7 @@
 {
-  "name": "@osakemyrsky/server",
+  "name": "@osakemyrsky/backend",
   "version": "1.0.0",
-  "description": "Osakemyrsky server",
+  "description": "Osakemyrsky backend",
   "main": "src/index.js",
   "author": "penny-five",
   "license": "MIT",

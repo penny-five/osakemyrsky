@@ -1,7 +1,7 @@
 {
-  "name": "@osakemyrsky/client",
+  "name": "@osakemyrsky/frontend",
   "version": "1.0.0",
-  "description": "Osakemyrsky client",
+  "description": "Osakemyrsky frontend",
   "main": "index.js",
   "author": "penny-five",
   "license": "MIT",
