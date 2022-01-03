@@ -35,6 +35,7 @@
   },
   "scripts": {
     "precommit": "lint-staged",
+    "postinstall": "yarn tf:get",
     "audit-ci": "audit-ci --high --report-type=full",
     "prettier:write": "prettier --write .",
     "prettier:check": "prettier --check .",
