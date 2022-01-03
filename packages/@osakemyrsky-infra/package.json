@@ -39,7 +39,7 @@
     "audit-ci": "audit-ci --high --report-type=full",
     "prettier:write": "prettier --write .",
     "prettier:check": "prettier --check .",
-    "lint": "eslint \"src/**\"",
+    "lint": "eslint \"{src,typings}/**\"",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "tf": "cdktf",
     "tf:get": "cdktf get",
