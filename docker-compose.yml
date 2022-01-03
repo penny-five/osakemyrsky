@@ -13,6 +13,7 @@ services:
       PORT: 8080
       NODE_ENV: development
       API_URL: http://server:8080
+      GOOGLE_APPLICATION_CREDENTIALS: /tmp/keys/google-application-credentials.json
     ports:
       - 127.0.0.1:8000:8080
     volumes:
@@ -21,6 +22,9 @@ services:
       - "./packages/@osakemyrsky-client/src:/app/src"
       - "./packages/@osakemyrsky-client/typings:/app/typings"
       - "./packages/@osakemyrsky-client/tailwind.config.js:/app/tailwind.config.js"
+      - "./packages/@osakemyrsky-server/google-application-credentials.json:/tmp/keys/google-application-credentials.json"
+    depends_on:
+      - server
 
   server:
     container_name: osakemyrsky-server

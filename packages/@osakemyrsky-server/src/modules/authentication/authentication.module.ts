@@ -8,7 +8,6 @@ import { UserModule } from "../users/user.module";
 import { AuthenticationController } from "./authentication.controller";
 import { AuthenticationService } from "./authentication.service";
 import { IdentityProvider } from "./idp";
-import { GoogleServiceAccountStrategy } from "./strategies/google-service-account.strategy";
 import { SessionStrategy } from "./strategies/session.strategy";
 import { TokenService } from "./token.service";
 
@@ -19,7 +18,6 @@ import { TokenService } from "./token.service";
     AuthenticationService,
     TokenService,
     SessionStrategy,
-    GoogleServiceAccountStrategy,
     {
       provide: TokenService,
       useFactory(configService: ConfigService) {

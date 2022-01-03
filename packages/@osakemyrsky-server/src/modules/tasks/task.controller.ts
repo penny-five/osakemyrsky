@@ -1,11 +1,8 @@
-import { Controller, Post, UseGuards } from "@nestjs/common";
-
-import { GoogleServiceAccountAuthGuard } from "../authentication/guards/google-service-account.jwt.guard";
+import { Controller, Post } from "@nestjs/common";
 
 import { TaskService } from "./task.service";
 
 @Controller("/tasks")
-@UseGuards(GoogleServiceAccountAuthGuard)
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
