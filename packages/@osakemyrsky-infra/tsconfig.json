@@ -1,0 +1,12 @@
+{
+  "extends": "@tsconfig/node16/tsconfig.json",
+  "compilerOptions": {
+    "importHelpers": true,
+    "outDir": "dist",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "typeRoots": ["./node_modules/@types", "./typings"]
+  },
+  "include": ["./src/**/*.ts", "./gen/**/*.ts", "./typings/**/*.d.ts"]
+}

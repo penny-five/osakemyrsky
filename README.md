@@ -32,10 +32,11 @@ Very, very much **work in progress**.
 To get started, run:
 
 ```sh
-sh bootstrap.sh
+chmod +x ./scripts/bootstrap.sh
+./scripts/bootstrap.sh
 ```
 
-This performs the following things:
+The script does the following things:
 
 - Installs dependencies
 - Bootstraps the Lerna project
@@ -76,19 +77,95 @@ This stops and destroys all containers and volumes.
 
 ### Executing tasks
 
-To execute tasks locally, an authorized service account is required.
+To execute tasks locally, use a http client such as `curl` or `httpie`.
 
-1. Create a new service account
+### Processing orders
 
-2. Add service account ID to `AUTHORIZED_SERVICE_ACCOUNTS` environment variable on `@osakemyrsky-server`
+To invoke order processing task with `httpie` run:
 
-3. Generate ID token for the service account (see `https://cloud.google.com/iam/docs/reference/credentials/rest/v1/projects.serviceAccounts/generateIdToken`)
+```sh
+http POST localhost:8020/tasks/process-orders
+```
 
-4. Invoke a task endpoint (e.g. `GET http://localhost:8000/api/tasks/process-orders`) with the ID token set as bearer token
+### Updating balances
 
-## Production environment
+To invoke balance updating task with `httpie` run:
 
-TODO
+```sh
+http POST localhost:8020/tasks/update-balances
+```
+
+## Cloud environments
+
+### Creating the ops environment
+
+Ops project is used for environment specific Terraform state buckets and for building & storing artifacts that are shared between environments.
+
+Use the following steps to setup the ops project:
+
+1. Create a new project on Google Cloud Platform
+
+2. Set the project ID as environment variable:
+
+   ```sh
+   export GCP_OPS_PROJECT_ID=my-ops-project
+   ```
+
+3. Run the setup script to setup the ops project:
+
+   ```sh
+   chmod +x ./scripts/setup-ops-project.sh
+   ./scripts/setup-ops-project.sh
+   ```
+
+   The script does the following things:
+
+   - Enables all required APIs in the ops project
+   - Creates a new Docker repository in Artifact Registry
+   - Creates a service account (`image-builder@${GCP_OPS_PROJECT_ID}.iam.gserviceaccount.com`) that can be used creating new jobs in Cloud Build.
+
+### Creating a new environment
+
+Use the following steps to initiate a new cloud environment (e.g. `dev`, `prod`):
+
+1. Create a new project on Google Cloud Platform
+
+2. Set the project ID as environment variable:
+
+   ```sh
+   export GCP_ENV_PROJECT_ID=my-project
+   ```
+
+3. Set the ops project ID as environment variable:
+
+   ```sh
+   export GCP_OPS_PROJECT_ID=my-ops-project
+   ```
+
+4. Run the setup script to setup the new environment:
+
+   ```sh
+   chmod +x ./scripts/setup-env.sh
+   ./scripts/setup-env.sh
+   ```
+
+   The script does the following things:
+
+   - Enables all required APIs in the environment project
+   - Creates a Terraform state bucket in the ops project for the new environment
+   - Creates a Terraform service account in the environment project
+   - Grants the service account write access to the state bucket
+   - Grants the service account all required permissions
+
+#### Firestore single-field index exemptions
+
+It is currently [not possible](https://github.com/hashicorp/terraform-provider-google/issues/7593) to set Firestore single-field index exemptions via Firestore REST API or Terraform. Due to this limitation index exemptions have to be added manually for each environment from Google Cloud console. See https://console.cloud.google.com/firestore/indexes/singlefield.
+
+| Collection ID | Field path | Query scope      | Index     |
+| ------------- | ---------- | ---------------- | --------- |
+| transactions  | leagueId   | Collection group | Ascending |
+| orders        | member.id  | Collection group | Ascending |
+| orders        | status     | Collection group | Ascending |
 
 ## Improvement ideas
 

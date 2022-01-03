@@ -1,0 +1,6 @@
+{
+  "language": "typescript",
+  "app": "yarn app",
+  "terraformProviders": ["google@4.5.0", "random@3.1.0"],
+  "projectId": "d703ed05-9c5c-47fd-82f3-e7ccc5218f1e"
+}

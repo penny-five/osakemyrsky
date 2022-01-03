@@ -8,10 +8,9 @@ params+=("--project=${GCP_PROJECT_ID}")
 params+=("emulators:start")
 params+=("--export-on-exit ./.cache/${export_dir}")
 
-if [ -n "$import_dir" ]
-  then
-    params+=("--import ./.cache/${import_dir}")
-  fi
+if [ -n "$import_dir" ]; then
+  params+=("--import ./.cache/${import_dir}")
+fi
 
 echo "${params[@]}"
 

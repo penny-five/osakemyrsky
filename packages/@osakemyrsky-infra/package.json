@@ -1,0 +1,61 @@
+{
+  "name": "@osakemyrsky/infra",
+  "version": "1.0.0",
+  "description": "Osakemyrsky infra",
+  "main": "src/index.ts",
+  "author": "penny-five",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": "16"
+  },
+  "dependencies": {
+    "cdktf": "0.8.3",
+    "cdktf-cli": "0.8.3",
+    "constructs": "10.0.23"
+  },
+  "devDependencies": {
+    "@tsconfig/node16": "1.0.2",
+    "@types/node": "16.11.11",
+    "@typescript-eslint/eslint-plugin": "5.9.0",
+    "@typescript-eslint/parser": "5.9.0",
+    "audit-ci": "5.1.2",
+    "env-cmd": "10.1.0",
+    "eslint": "8.6.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-import-resolver-typescript": "2.5.0",
+    "eslint-plugin-import": "2.25.4",
+    "eslint-plugin-node": "11.1.0",
+    "lint-staged": "12.1.5",
+    "prettier": "2.5.1",
+    "rimraf": "3.0.2",
+    "ts-node": "10.4.0",
+    "ts-node-dev": "1.1.8",
+    "typescript": "4.5.4"
+  },
+  "scripts": {
+    "precommit": "lint-staged",
+    "audit-ci": "audit-ci --high --report-type=full",
+    "prettier:write": "prettier --write .",
+    "prettier:check": "prettier --check .",
+    "lint": "eslint \"src/**\"",
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "tf": "cdktf",
+    "tf:get": "cdktf get",
+    "tf:synth": "cdktf synth",
+    "tf:diff": "cdktf diff",
+    "tf:deploy": "cdktf deploy",
+    "dev": "ts-node-dev --respawn --transpile-only ./src/index.ts",
+    "build": "rimraf ./dist && tsc --project tsconfig.json",
+    "app": "env-cmd ts-node ./src/index.ts"
+  },
+  "lint-staged": {
+    "**/*.ts": [
+      "eslint",
+      "prettier --write"
+    ],
+    "**/*": [
+      "prettier --write"
+    ]
+  }
+}
