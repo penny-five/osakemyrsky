@@ -32,8 +32,8 @@ Very, very much **work in progress**.
 To get started, run:
 
 ```sh
-chmod +x ./scripts/bootstrap.sh
-./scripts/bootstrap.sh
+chmod +x ./scripts/bootstrap-local-env.sh
+./scripts/bootstrap-local-env.sh
 ```
 
 The script does the following things:
@@ -111,11 +111,11 @@ Use the following steps to setup the ops project:
    export GCP_OPS_PROJECT_ID=my-ops-project
    ```
 
-3. Run setup script to setup the ops project:
+3. Run bootstrap script to setup the ops project:
 
    ```sh
-   chmod +x ./scripts/setup-ops-project.sh
-   ./scripts/setup-ops-project.sh
+   chmod +x ./scripts/bootstrap-ops-project.sh
+   ./scripts/bootstrap-ops-project.sh
    ```
 
    The script does the following things:
@@ -142,11 +142,11 @@ Use the following steps to create a new cloud environment (e.g. `dev`, `prod`):
    export GCP_OPS_PROJECT_ID=my-ops-project
    ```
 
-4. Run setup script to setup the new environment:
+4. Run bootstrap script to setup the new environment:
 
    ```sh
-   chmod +x ./scripts/setup-env.sh
-   ./scripts/setup-env.sh
+   chmod +x ./scripts/bootstrap-env-project.sh
+   ./scripts/bootstrap-env-project.sh
    ```
 
    The script does the following things:
