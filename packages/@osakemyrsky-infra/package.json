@@ -12,13 +12,13 @@
   "dependencies": {
     "cdktf": "0.8.6",
     "cdktf-cli": "0.8.6",
-    "constructs": "10.0.28"
+    "constructs": "10.0.34"
   },
   "devDependencies": {
     "@tsconfig/node16": "1.0.2",
     "@types/node": "16.11.11",
-    "@typescript-eslint/eslint-plugin": "5.9.0",
-    "@typescript-eslint/parser": "5.9.0",
+    "@typescript-eslint/eslint-plugin": "5.9.1",
+    "@typescript-eslint/parser": "5.9.1",
     "audit-ci": "5.1.2",
     "env-cmd": "10.1.0",
     "eslint": "8.6.0",
