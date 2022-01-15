@@ -13,13 +13,15 @@ const AuthRedirect = ({ children }: { children: React.ReactNode }) => {
 
   if (isBrowser()) {
     if (session == null) {
-      if (!["/league-browser", "/leagues/[id]", "/create-league"].includes(router.pathname)) {
+      if (router.pathname !== "/") {
+        void router.push("/");
+      }
+    } else if (activeLeague == null) {
+      if (!["/league-browser", "/leagues/[id]"].includes(router.pathname)) {
         void router.push("/leagues");
       }
-    }
-
-    if (activeLeague == null) {
-      if (!["/league-browser", "/leagues/[id]", "/create-league"].includes(router.pathname)) {
+    } else {
+      if (router.pathname === "/") {
         void router.push("/leagues");
       }
     }

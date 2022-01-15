@@ -22,15 +22,15 @@ const OsakemyrskyApp = ({ Component, pageProps: { ...pageProps } }: AppProps) =>
       </Head>
       <SessionProvider>
         <UserProvider>
-          <ActiveLeagueProvider>
-            <AuthRedirect>
+          <AuthRedirect>
+            <ActiveLeagueProvider>
               <ActiveMembershipProvider>
                 <DefaultLayout>
                   <Component {...pageProps} />
                 </DefaultLayout>
               </ActiveMembershipProvider>
-            </AuthRedirect>
-          </ActiveLeagueProvider>
+            </ActiveLeagueProvider>
+          </AuthRedirect>
         </UserProvider>
       </SessionProvider>
     </ApolloProvider>

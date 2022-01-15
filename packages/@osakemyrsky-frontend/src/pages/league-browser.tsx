@@ -1,4 +1,5 @@
 import { gql, useApolloClient, useQuery } from "@apollo/client";
+import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -12,6 +13,7 @@ import { useActiveLeague } from "@/providers/active-league";
 import { useSession } from "@/providers/session";
 import { useUser } from "@/providers/user";
 import { League } from "@/types/league";
+import { buildTitle } from "@/utils/head";
 
 const GET_LEAGUES = gql`
   query GetLeagues {
@@ -97,6 +99,9 @@ const LeagueBrowser = () => {
 
   return (
     <div className="flex flex-col grow">
+      <Head>
+        <title>{buildTitle("Selaa liigoja")}</title>
+      </Head>
       <PageHeader
         title="Liigat"
         illustration={<Image src="/images/page-header-leagues.svg" alt="illustration" width="275px" height="275px" />}

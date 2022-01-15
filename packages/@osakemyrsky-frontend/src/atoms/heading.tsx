@@ -17,10 +17,10 @@ const Heading = ({ children, className, level = 1, ...props }: HeadingProps) => 
     <Tag
       {...props}
       className={classNames(className, {
-        "text-4xl font-bold text-black-100": level === 1,
-        "text-6xl font-bold text-black-100": level === 2,
-        "text-xl font-extrabold text-black-100": level === 3,
-        "text-lg font-extrabold text-black-100 my-4 leading-normal": level === 4
+        "text-4xl font-bold": level === 1,
+        "text-6xl font-bold": level === 2,
+        "text-xl font-extrabold": level === 3,
+        "text-lg font-extrabold my-4 leading-normal": level === 4
       })}
     >
       {children}

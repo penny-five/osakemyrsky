@@ -1,9 +1,10 @@
-import { ArchiveIcon } from "@heroicons/react/solid";
+import { LoginIcon } from "@heroicons/react/solid";
+import useScrollPosition from "@react-hook/window-scroll";
+import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
 import Button from "../../atoms/button";
-import Heading from "../../atoms/heading";
 
 import NavbarLeagueDropdown from "./navbar-league-dropdown";
 import NavbarLeagueDropdownItem from "./navbar-league-dropdown-item";
@@ -16,13 +17,18 @@ import { useActiveLeague } from "@/providers/active-league";
 import { useActiveMembership } from "@/providers/active-membership";
 import { useUser } from "@/providers/user";
 
+export type NavbarBehavior = "normal" | "sticky";
+
 export interface NavbarProps {
   onSignIn: () => void;
   onSignOut: () => void;
+  behavior?: NavbarBehavior;
 }
 
-const Navbar = ({ onSignIn, onSignOut }: NavbarProps) => {
+const Navbar = ({ onSignIn, onSignOut, behavior = "sticky" }: NavbarProps) => {
   const router = useRouter();
+
+  const scrollY = useScrollPosition();
 
   const { user, status } = useUser();
 
@@ -41,19 +47,39 @@ const Navbar = ({ onSignIn, onSignOut }: NavbarProps) => {
     setActiveLeague(leagueId);
   };
 
+  const showTranslucent = behavior === "sticky" && scrollY === 0;
+  const showLeagueDropdown = user != null && activeMembership != null;
+  const showTabs = user && activeMembership;
+
   return (
-    <nav className="flex flex-col items-center w-full bg-white border-b-1 border-gray-400 shadow-lg z-10">
-      <div className="flex grow items-end gap-4 pt-6 pb-4 px-8 w-full max-w-screen-desktop">
-        <div className="flex flex-row gap-3">
+    <nav
+      className={classNames("flex flex-col items-center w-full z-10 transition-colors", {
+        relative: behavior === "normal",
+        fixed: behavior === "sticky",
+        "bg-white border-b-1 border-gray-400 shadow-lg": !showTranslucent
+      })}
+    >
+      <div
+        className={classNames("flex grow items-center gap-4 pt-4 pb-3 px-8 w-full max-w-screen-desktop", {
+          "pb-4": !showTabs
+        })}
+      >
+        <div className="flex flex-row gap-5">
           <Logo />
           <Link href="/" passHref>
             <a className="flex items-center">
-              <Heading level={1}>Osakemyrsky</Heading>
+              <h1
+                className={classNames("text-4xl font-extrabold tracking-wide", {
+                  "text-white": showTranslucent
+                })}
+              >
+                Osakemyrsky
+              </h1>
             </a>
           </Link>
         </div>
         <span className="grow"></span>
-        {user && activeMembership ? (
+        {showLeagueDropdown && (
           <NavbarLeagueDropdown activeMembership={activeMembership}>
             {user.memberships.map(membership => (
               <NavbarLeagueDropdownItem
@@ -63,7 +89,8 @@ const Navbar = ({ onSignIn, onSignOut }: NavbarProps) => {
               />
             ))}
           </NavbarLeagueDropdown>
-        ) : (
+        )}
+        {user && !activeMembership && (
           <Link href="/leagues" passHref>
             <a>
               <Button variant="text" priority="primary">
@@ -79,12 +106,12 @@ const Navbar = ({ onSignIn, onSignOut }: NavbarProps) => {
             </NavbarUserDropdown>
           </div>
         ) : status === "unauthenticated" ? (
-          <Button priority="primary" icon={<ArchiveIcon />} onClick={onSignIn}>
+          <Button priority="primary" icon={<LoginIcon style={{ transform: "rotate(180deg)" }} />} onClick={onSignIn}>
             Kirjaudu sisään
           </Button>
         ) : null}
       </div>
-      {user && activeMembership && (
+      {showTabs && (
         <ul className="flex flex-row grow items-center px-8 w-full max-w-screen-desktop">
           <NavbarTab href={`/leagues/${activeMembership.league.id}`}>Liigapörssi</NavbarTab>
           <NavbarTab

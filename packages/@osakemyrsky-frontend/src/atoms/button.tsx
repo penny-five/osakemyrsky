@@ -32,7 +32,7 @@ const Button = ({ children, priority = "primary", variant = "default", icon, ...
       {...(props as React.HtmlHTMLAttributes<unknown>)}
       className={classNames(
         props.className,
-        "flex items-center py-4 px-6 font-bold whitespace-nowrap",
+        "flex items-center py-4 px-6 font-semibold whitespace-nowrap",
         "border-1 rounded-lg border-transparent transition-colors focus:ring-2 focus:ring-blue-200",
         {
           "pl-4": icon != null,
