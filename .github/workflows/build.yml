@@ -1,12 +1,11 @@
-name: Build
+name: build
 on:
   workflow_run:
     workflows:
       - "Verify"
     types:
-      - completed
+      - "completed"
     branches:
-      - "deploys"
       - "master"
 env:
   GCP_OPS_PROJECT_ID: "${{ secrets.GCP_OPS_PROJECT_ID }}"
@@ -24,9 +23,10 @@ jobs:
         working-directory: packages/@osakemyrsky-backend
         run: |
           gcloud builds submit \
-          --ignore-file=.dockerignore \
-          --project=${GCP_OPS_PROJECT_ID} \
-          --tag=europe-west1-docker.pkg.dev/${GCP_OPS_PROJECT_ID}/osakemyrsky/osakemyrsky-backend:${SHORT_SHA}
+            --ignore-file=.dockerignore \
+            --project=${GCP_OPS_PROJECT_ID} \
+            --tag=europe-west1-docker.pkg.dev/${GCP_OPS_PROJECT_ID}/osakemyrsky/osakemyrsky-backend:${SHORT_SHA}
+
   build-frontend:
     runs-on: ubuntu-18.04
     steps:
@@ -38,6 +38,6 @@ jobs:
         working-directory: packages/@osakemyrsky-frontend
         run: |
           gcloud builds submit \
-          --ignore-file=.dockerignore \
-          --project=${GCP_OPS_PROJECT_ID} \
-          --tag=europe-west1-docker.pkg.dev/${GCP_OPS_PROJECT_ID}/osakemyrsky/osakemyrsky-frontend:${SHORT_SHA}
+            --ignore-file=.dockerignore \
+            --project=${GCP_OPS_PROJECT_ID} \
+            --tag=europe-west1-docker.pkg.dev/${GCP_OPS_PROJECT_ID}/osakemyrsky/osakemyrsky-frontend:${SHORT_SHA}

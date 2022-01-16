@@ -1,4 +1,4 @@
-name: Verify
+name: verify
 on: push
 
 jobs:
@@ -15,6 +15,7 @@ jobs:
         run: yarn bootstrap
       - name: Run audit
         run: yarn audit-ci
+
   check-formatting:
     runs-on: ubuntu-18.04
     steps:
@@ -28,6 +29,7 @@ jobs:
         run: yarn bootstrap
       - name: Run prettier
         run: yarn prettier:check
+
   lint:
     runs-on: ubuntu-18.04
     steps:
@@ -41,6 +43,7 @@ jobs:
         run: yarn bootstrap
       - name: Run linters
         run: yarn lint
+
   typecheck:
     runs-on: ubuntu-18.04
     steps:
