@@ -10,6 +10,7 @@ enabled_apis=(
 builder_roles=(
   "roles/cloudbuild.builds.editor"
   "roles/serviceusage.serviceUsageConsumer"
+  "roles/storage.admin"
 )
 
 if [ -z "${GCP_OPS_PROJECT_ID}" ]; then
