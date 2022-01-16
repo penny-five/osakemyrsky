@@ -15,7 +15,7 @@ jobs:
         run: yarn bootstrap
       - name: Run audit
         run: yarn audit-ci
-  check_formatting:
+  check-formatting:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2

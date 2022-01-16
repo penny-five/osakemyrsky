@@ -1,10 +1,13 @@
 name: Build
 on:
   workflow_run:
-    workflows: ["Verify"]
-    types: [completed]
+    workflows:
+      - "Verify"
+    types:
+      - completed
     branches:
       - "deploys"
+      - "master"
 env:
   GCP_OPS_PROJECT_ID: "${{ secrets.GCP_OPS_PROJECT_ID }}"
   SHORT_SHA: "${git rev-parse --short $GITHUB_SHA}"
