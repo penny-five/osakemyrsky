@@ -7,8 +7,6 @@ on:
       - "completed"
     branches:
       - "master"
-env:
-  GCP_OPS_PROJECT_ID: "${{ secrets.GCP_OPS_PROJECT_ID }}"
 
 jobs:
   build-backend:
@@ -27,15 +25,15 @@ jobs:
         run: |
           gcloud builds submit \
             --ignore-file=.dockerignore \
-            --project=${GCP_OPS_PROJECT_ID} \
-            --tag=europe-west1-docker.pkg.dev/${GCP_OPS_PROJECT_ID}/osakemyrsky/osakemyrsky-backend:$(git rev-parse --short $GITHUB_SHA)
+            --tag=europe-west1-docker.pkg.dev/${{ steps.auth.outputs.project_id }}/osakemyrsky/osakemyrsky-backend:$(git rev-parse --short $GITHUB_SHA)
 
   build-frontend:
     runs-on: ubuntu-18.04
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v2
-      - uses: google-github-actions/auth@v0
+      - id: auth
+        uses: google-github-actions/auth@v0
         with:
           credentials_json: "${{ secrets.GCP_OPS_IMAGE_BUILDER_CREDENTIALS }}"
       - uses: google-github-actions/setup-gcloud@v0
@@ -46,5 +44,4 @@ jobs:
         run: |
           gcloud builds submit \
             --ignore-file=.dockerignore \
-            --project=${GCP_OPS_PROJECT_ID} \
-            --tag=europe-west1-docker.pkg.dev/${GCP_OPS_PROJECT_ID}/osakemyrsky/osakemyrsky-frontend:$(git rev-parse --short $GITHUB_SHA)
+            --tag=europe-west1-docker.pkg.dev/${{ steps.auth.outputs.project_id }}/osakemyrsky/osakemyrsky-frontend:$(git rev-parse --short $GITHUB_SHA)
