@@ -1,0 +1,40 @@
+name: build
+on:
+  workflow_run:
+    workflows:
+      - verify
+    branches:
+      - deploys
+env:
+  GCP_OPS_PROJECT_ID: "${{ secrets.GCP_OPS_PROJECT_ID }}"
+  BUILD_TAG: "${git rev-parse --short $GITHUB_SHA}"
+
+jobs:
+  build-backend:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: google-github-actions/auth@v0
+        with:
+          credentials_json: "${{ secrets.GCP_OPS_IMAGE_BUILDER_CREDENTIALS }}"
+      - name: Submit build
+        working-directory: packages/@osakemyrsky-backend
+        run: |
+          gcloud builds submit \
+          --ignore-file=.dockerignore \
+          --project=${GCP_OPS_PROJECT_ID} \
+          --tag=europe-west1-docker.pkg.dev/${GCP_OPS_PROJECT_ID}/osakemyrsky/osakemyrsky-backend:${BUILD_TAG}
+  build-frontend:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: google-github-actions/auth@v0
+        with:
+          credentials_json: "${{ secrets.GCP_OPS_IMAGE_BUILDER_CREDENTIALS }}"
+      - name: Submit build
+        working-directory: packages/@osakemyrsky-frontend
+        run: |
+          gcloud builds submit \
+          --ignore-file=.dockerignore \
+          --project=${GCP_OPS_PROJECT_ID} \
+          --tag=europe-west1-docker.pkg.dev/${GCP_OPS_PROJECT_ID}/osakemyrsky/osakemyrsky-frontend:${BUILD_TAG}
