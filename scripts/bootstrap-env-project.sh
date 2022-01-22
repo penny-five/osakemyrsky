@@ -51,11 +51,12 @@ gcloud iam service-accounts describe terraform@$GCP_ENV_PROJECT_ID.iam.gservicea
 if [ $? -eq 0 ]; then
   echo "Terraform service account already exists."
 else
-  # Create Terraform service account and grant access to Terraform state bucket
+  # Create Terraform service account
   gcloud iam service-accounts create terraform \
     --project="${GCP_ENV_PROJECT_ID}" \
     --display-name="Terraform service account"
 
+  # Grant admin access to Terraform state bucket
   gsutil iam ch serviceAccount:terraform@$GCP_ENV_PROJECT_ID.iam.gserviceaccount.com:admin gs://$GCP_ENV_PROJECT_ID-tfstate
 
   echo "Terraform service account created."

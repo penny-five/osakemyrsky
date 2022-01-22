@@ -36,6 +36,16 @@ else
   echo "Artifact Registry docker repository created."
 fi
 
+# Check if build logs bucket already exists
+gsutil -q ls gs://${GCP_OPS_PROJECT_ID}-build-logs >/dev/null 2>&1
+
+if [ $? -eq 0 ]; then
+  echo "Build logs bucket already exists."
+else
+  gsutil mb -b on -l "${region}" -p "${GCP_OPS_PROJECT_ID}" gs://$GCP_OPS_PROJECT_ID-build-logs
+  echo "Build logs bucket created."
+fi
+
 # Check if image-builder service account already exists
 gcloud iam service-accounts describe image-builder@$GCP_OPS_PROJECT_ID.iam.gserviceaccount.com \
   --project="${GCP_OPS_PROJECT_ID}" \
@@ -49,6 +59,9 @@ else
     --project="${GCP_OPS_PROJECT_ID}" \
     --display-name="Image builder service account"
   echo "image-builder service account created."
+
+  # Grant read access to build logs bucket
+  gsutil iam ch serviceAccount:image-builder@$GCP_OPS_PROJECT_ID.iam.gserviceaccount.com:objectViewer gs://$GCP_OPS_PROJECT_ID-build-logs
 fi
 
 # Grant all required roles for the image-builder service account

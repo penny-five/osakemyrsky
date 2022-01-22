@@ -25,6 +25,7 @@ jobs:
         run: |
           gcloud builds submit \
             --ignore-file=.dockerignore \
+            --gcs-log-dir=gs://${{ steps.auth.outputs.project_id }}-build-logs \
             --tag=europe-west1-docker.pkg.dev/${{ steps.auth.outputs.project_id }}/osakemyrsky/osakemyrsky-backend:$(git rev-parse --short $GITHUB_SHA)
 
   build-frontend:
